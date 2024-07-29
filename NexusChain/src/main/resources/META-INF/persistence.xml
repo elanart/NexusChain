@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="com.nxc_NexusChain_war_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.nxc.pojo.PurchaseOrder</class>
+    <class>com.nxc.pojo.Warehouse</class>
+    <class>com.nxc.pojo.TaxRate</class>
+    <class>com.nxc.pojo.Inventory</class>
+    <class>com.nxc.pojo.Product</class>
+    <class>com.nxc.pojo.SupplierRating</class>
+    <class>com.nxc.pojo.PurchaseOrderDetail</class>
+    <class>com.nxc.pojo.Pricing</class>
+    <class>com.nxc.pojo.Customer</class>
+    <class>com.nxc.pojo.Category</class>
+    <class>com.nxc.pojo.ShipmentCompany</class>
+    <class>com.nxc.pojo.Invoice</class>
+    <class>com.nxc.pojo.SaleOrderDetail</class>
+    <class>com.nxc.pojo.Supplier</class>
+    <class>com.nxc.pojo.SaleOrder</class>
+    <class>com.nxc.pojo.Shipment</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/nexuschain?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="123456789"/>
+    </properties>
+  </persistence-unit>
+</persistence>
