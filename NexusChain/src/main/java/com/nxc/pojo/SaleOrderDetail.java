@@ -4,6 +4,9 @@
  */
 package com.nxc.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Basic;
@@ -24,6 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author tuann
  */
+@Setter
+@Getter
 @Entity
 @Table(name = "sale_order_detail")
 @XmlRootElement
@@ -60,46 +65,6 @@ public class SaleOrderDetail implements Serializable {
         this.saleId = saleId;
     }
 
-    public String getSaleId() {
-        return saleId;
-    }
-
-    public void setSaleId(String saleId) {
-        this.saleId = saleId;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public Product getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Product productId) {
-        this.productId = productId;
-    }
-
-    public SaleOrder getSaleOrder() {
-        return saleOrder;
-    }
-
-    public void setSaleOrder(SaleOrder saleOrder) {
-        this.saleOrder = saleOrder;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -114,10 +79,7 @@ public class SaleOrderDetail implements Serializable {
             return false;
         }
         SaleOrderDetail other = (SaleOrderDetail) object;
-        if ((this.saleId == null && other.saleId != null) || (this.saleId != null && !this.saleId.equals(other.saleId))) {
-            return false;
-        }
-        return true;
+        return (this.saleId != null || other.saleId == null) && (this.saleId == null || this.saleId.equals(other.saleId));
     }
 
     @Override

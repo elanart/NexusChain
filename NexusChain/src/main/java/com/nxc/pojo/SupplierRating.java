@@ -4,6 +4,9 @@
  */
 package com.nxc.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -27,6 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author tuann
  */
+@Setter
+@Getter
 @Entity
 @Table(name = "supplier_rating")
 @XmlRootElement
@@ -69,54 +74,6 @@ public class SupplierRating implements Serializable {
         this.ratingId = ratingId;
     }
 
-    public String getRatingId() {
-        return ratingId;
-    }
-
-    public void setRatingId(String ratingId) {
-        this.ratingId = ratingId;
-    }
-
-    public Date getReviewDate() {
-        return reviewDate;
-    }
-
-    public void setReviewDate(Date reviewDate) {
-        this.reviewDate = reviewDate;
-    }
-
-    public String getCriteria() {
-        return criteria;
-    }
-
-    public void setCriteria(String criteria) {
-        this.criteria = criteria;
-    }
-
-    public BigDecimal getRating() {
-        return rating;
-    }
-
-    public void setRating(BigDecimal rating) {
-        this.rating = rating;
-    }
-
-    public String getComments() {
-        return comments;
-    }
-
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
-
-    public Supplier getSupplierId() {
-        return supplierId;
-    }
-
-    public void setSupplierId(Supplier supplierId) {
-        this.supplierId = supplierId;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -131,10 +88,7 @@ public class SupplierRating implements Serializable {
             return false;
         }
         SupplierRating other = (SupplierRating) object;
-        if ((this.ratingId == null && other.ratingId != null) || (this.ratingId != null && !this.ratingId.equals(other.ratingId))) {
-            return false;
-        }
-        return true;
+        return (this.ratingId != null || other.ratingId == null) && (this.ratingId == null || this.ratingId.equals(other.ratingId));
     }
 
     @Override

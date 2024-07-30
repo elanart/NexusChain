@@ -4,6 +4,9 @@
  */
 package com.nxc.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -26,6 +29,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author tuann
  */
+@Setter
+@Getter
 @Entity
 @Table(name = "invoice")
 @XmlRootElement
@@ -69,62 +74,6 @@ public class Invoice implements Serializable {
         this.id = id;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Date getInvoiceDate() {
-        return invoiceDate;
-    }
-
-    public void setInvoiceDate(Date invoiceDate) {
-        this.invoiceDate = invoiceDate;
-    }
-
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public Boolean getPaid() {
-        return paid;
-    }
-
-    public void setPaid(Boolean paid) {
-        this.paid = paid;
-    }
-
-    public PurchaseOrder getPurchaseId() {
-        return purchaseId;
-    }
-
-    public void setPurchaseId(PurchaseOrder purchaseId) {
-        this.purchaseId = purchaseId;
-    }
-
-    public SaleOrder getSaleId() {
-        return saleId;
-    }
-
-    public void setSaleId(SaleOrder saleId) {
-        this.saleId = saleId;
-    }
-
-    public TaxRate getTaxId() {
-        return taxId;
-    }
-
-    public void setTaxId(TaxRate taxId) {
-        this.taxId = taxId;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -139,10 +88,7 @@ public class Invoice implements Serializable {
             return false;
         }
         Invoice other = (Invoice) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override

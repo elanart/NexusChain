@@ -4,6 +4,9 @@
  */
 package com.nxc.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -22,6 +25,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author tuann
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "inventory")
 @XmlRootElement
@@ -54,38 +59,6 @@ public class Inventory implements Serializable {
         this.id = id;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Product getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Product productId) {
-        this.productId = productId;
-    }
-
-    public Warehouse getWarehouseId() {
-        return warehouseId;
-    }
-
-    public void setWarehouseId(Warehouse warehouseId) {
-        this.warehouseId = warehouseId;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -100,10 +73,7 @@ public class Inventory implements Serializable {
             return false;
         }
         Inventory other = (Inventory) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override

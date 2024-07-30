@@ -4,6 +4,9 @@
  */
 package com.nxc.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -24,6 +27,8 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author tuann
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "category")
 @XmlRootElement
@@ -64,37 +69,9 @@ public class Category implements Serializable {
         this.name = name;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     @XmlTransient
     public Set<Product> getProductSet() {
         return productSet;
-    }
-
-    public void setProductSet(Set<Product> productSet) {
-        this.productSet = productSet;
     }
 
     @Override
@@ -111,10 +88,7 @@ public class Category implements Serializable {
             return false;
         }
         Category other = (Category) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override

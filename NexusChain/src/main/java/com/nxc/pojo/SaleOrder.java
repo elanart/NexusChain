@@ -4,6 +4,9 @@
  */
 package com.nxc.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -31,6 +34,8 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author tuann
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "sale_order")
 @XmlRootElement
@@ -85,78 +90,14 @@ public class SaleOrder implements Serializable {
         this.status = status;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Date getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
     @XmlTransient
     public Set<Shipment> getShipmentSet() {
         return shipmentSet;
     }
 
-    public void setShipmentSet(Set<Shipment> shipmentSet) {
-        this.shipmentSet = shipmentSet;
-    }
-
-    public SaleOrderDetail getSaleOrderDetail() {
-        return saleOrderDetail;
-    }
-
-    public void setSaleOrderDetail(SaleOrderDetail saleOrderDetail) {
-        this.saleOrderDetail = saleOrderDetail;
-    }
-
-    public Customer getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Customer customerId) {
-        this.customerId = customerId;
-    }
-
-    public TaxRate getTaxId() {
-        return taxId;
-    }
-
-    public void setTaxId(TaxRate taxId) {
-        this.taxId = taxId;
-    }
-
     @XmlTransient
     public Set<Invoice> getInvoiceSet() {
         return invoiceSet;
-    }
-
-    public void setInvoiceSet(Set<Invoice> invoiceSet) {
-        this.invoiceSet = invoiceSet;
     }
 
     @Override
@@ -173,10 +114,7 @@ public class SaleOrder implements Serializable {
             return false;
         }
         SaleOrder other = (SaleOrder) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override

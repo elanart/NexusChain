@@ -4,6 +4,9 @@
  */
 package com.nxc.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Basic;
@@ -24,6 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author tuann
  */
+@Setter
+@Getter
 @Entity
 @Table(name = "purchase_order_detail")
 @XmlRootElement
@@ -60,46 +65,6 @@ public class PurchaseOrderDetail implements Serializable {
         this.purchaseId = purchaseId;
     }
 
-    public String getPurchaseId() {
-        return purchaseId;
-    }
-
-    public void setPurchaseId(String purchaseId) {
-        this.purchaseId = purchaseId;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public Product getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Product productId) {
-        this.productId = productId;
-    }
-
-    public PurchaseOrder getPurchaseOrder() {
-        return purchaseOrder;
-    }
-
-    public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
-        this.purchaseOrder = purchaseOrder;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -114,10 +79,7 @@ public class PurchaseOrderDetail implements Serializable {
             return false;
         }
         PurchaseOrderDetail other = (PurchaseOrderDetail) object;
-        if ((this.purchaseId == null && other.purchaseId != null) || (this.purchaseId != null && !this.purchaseId.equals(other.purchaseId))) {
-            return false;
-        }
-        return true;
+        return (this.purchaseId != null || other.purchaseId == null) && (this.purchaseId == null || this.purchaseId.equals(other.purchaseId));
     }
 
     @Override

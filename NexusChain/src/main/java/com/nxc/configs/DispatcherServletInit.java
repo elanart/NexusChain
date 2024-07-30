@@ -7,26 +7,25 @@ package com.nxc.configs;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**
- *
  * @author tuann
  */
 public class DispatcherServletInit extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-      return null;
+        return null;
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-       return new Class[] {
-           WebAppContextConfigs.class
-       };
+        return new Class[]{
+                WebAppContextConfigs.class
+        };
     }
 
     @Override
     protected String[] getServletMappings() {
-      return new String[] {"/"};
+        return new String[]{"/"};
     }
-    
+
 }
