@@ -4,6 +4,9 @@
  */
 package com.nxc.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -24,6 +27,8 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author tuann
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "shipment_company")
 @XmlRootElement
@@ -74,53 +79,9 @@ public class ShipmentCompany implements Serializable {
         this.rating = rating;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public String getContactInfo() {
-        return contactInfo;
-    }
-
-    public void setContactInfo(String contactInfo) {
-        this.contactInfo = contactInfo;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public BigDecimal getRating() {
-        return rating;
-    }
-
-    public void setRating(BigDecimal rating) {
-        this.rating = rating;
-    }
-
     @XmlTransient
     public Set<Shipment> getShipmentSet() {
         return shipmentSet;
-    }
-
-    public void setShipmentSet(Set<Shipment> shipmentSet) {
-        this.shipmentSet = shipmentSet;
     }
 
     @Override
@@ -137,10 +98,7 @@ public class ShipmentCompany implements Serializable {
             return false;
         }
         ShipmentCompany other = (ShipmentCompany) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override

@@ -4,6 +4,9 @@
  */
 package com.nxc.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -29,6 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author tuann
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "product")
 @XmlRootElement
@@ -93,69 +98,9 @@ public class Product implements Serializable {
         this.quantity = quantity;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
     @XmlTransient
     public Set<Supplier> getSupplierSet() {
         return supplierSet;
-    }
-
-    public void setSupplierSet(Set<Supplier> supplierSet) {
-        this.supplierSet = supplierSet;
-    }
-
-    public Category getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Category categoryId) {
-        this.categoryId = categoryId;
     }
 
     @XmlTransient
@@ -163,17 +108,9 @@ public class Product implements Serializable {
         return saleOrderDetailSet;
     }
 
-    public void setSaleOrderDetailSet(Set<SaleOrderDetail> saleOrderDetailSet) {
-        this.saleOrderDetailSet = saleOrderDetailSet;
-    }
-
     @XmlTransient
     public Set<Inventory> getInventorySet() {
         return inventorySet;
-    }
-
-    public void setInventorySet(Set<Inventory> inventorySet) {
-        this.inventorySet = inventorySet;
     }
 
     @XmlTransient
@@ -181,17 +118,9 @@ public class Product implements Serializable {
         return purchaseOrderDetailSet;
     }
 
-    public void setPurchaseOrderDetailSet(Set<PurchaseOrderDetail> purchaseOrderDetailSet) {
-        this.purchaseOrderDetailSet = purchaseOrderDetailSet;
-    }
-
     @XmlTransient
     public Set<Pricing> getPricingSet() {
         return pricingSet;
-    }
-
-    public void setPricingSet(Set<Pricing> pricingSet) {
-        this.pricingSet = pricingSet;
     }
 
     @Override
@@ -208,10 +137,7 @@ public class Product implements Serializable {
             return false;
         }
         Product other = (Product) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override

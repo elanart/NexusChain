@@ -4,6 +4,9 @@
  */
 package com.nxc.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -28,6 +31,8 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author tuann
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "supplier")
 @XmlRootElement
@@ -97,77 +102,9 @@ public class Supplier implements Serializable {
         this.name = name;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getContactInfo() {
-        return contactInfo;
-    }
-
-    public void setContactInfo(String contactInfo) {
-        this.contactInfo = contactInfo;
-    }
-
-    public String getPaymentTerms() {
-        return paymentTerms;
-    }
-
-    public void setPaymentTerms(String paymentTerms) {
-        this.paymentTerms = paymentTerms;
-    }
-
-    public BigDecimal getRating() {
-        return rating;
-    }
-
-    public void setRating(BigDecimal rating) {
-        this.rating = rating;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
     @XmlTransient
     public Set<Product> getProductSet() {
         return productSet;
-    }
-
-    public void setProductSet(Set<Product> productSet) {
-        this.productSet = productSet;
     }
 
     @XmlTransient
@@ -175,26 +112,14 @@ public class Supplier implements Serializable {
         return supplierRatingSet;
     }
 
-    public void setSupplierRatingSet(Set<SupplierRating> supplierRatingSet) {
-        this.supplierRatingSet = supplierRatingSet;
-    }
-
     @XmlTransient
     public Set<PurchaseOrder> getPurchaseOrderSet() {
         return purchaseOrderSet;
     }
 
-    public void setPurchaseOrderSet(Set<PurchaseOrder> purchaseOrderSet) {
-        this.purchaseOrderSet = purchaseOrderSet;
-    }
-
     @XmlTransient
     public Set<Pricing> getPricingSet() {
         return pricingSet;
-    }
-
-    public void setPricingSet(Set<Pricing> pricingSet) {
-        this.pricingSet = pricingSet;
     }
 
     @Override
@@ -211,10 +136,7 @@ public class Supplier implements Serializable {
             return false;
         }
         Supplier other = (Supplier) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override

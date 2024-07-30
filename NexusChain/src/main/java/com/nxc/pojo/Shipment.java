@@ -4,6 +4,9 @@
  */
 package com.nxc.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -25,6 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author tuann
  */
+@Setter
+@Getter
 @Entity
 @Table(name = "shipment")
 @XmlRootElement
@@ -83,70 +88,6 @@ public class Shipment implements Serializable {
         this.status = status;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Date getShipmentDate() {
-        return shipmentDate;
-    }
-
-    public void setShipmentDate(Date shipmentDate) {
-        this.shipmentDate = shipmentDate;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getTrackingNumber() {
-        return trackingNumber;
-    }
-
-    public void setTrackingNumber(String trackingNumber) {
-        this.trackingNumber = trackingNumber;
-    }
-
-    public Date getExpectedDelivery() {
-        return expectedDelivery;
-    }
-
-    public void setExpectedDelivery(Date expectedDelivery) {
-        this.expectedDelivery = expectedDelivery;
-    }
-
-    public PurchaseOrder getPurchaseId() {
-        return purchaseId;
-    }
-
-    public void setPurchaseId(PurchaseOrder purchaseId) {
-        this.purchaseId = purchaseId;
-    }
-
-    public SaleOrder getSaleId() {
-        return saleId;
-    }
-
-    public void setSaleId(SaleOrder saleId) {
-        this.saleId = saleId;
-    }
-
-    public ShipmentCompany getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(ShipmentCompany companyId) {
-        this.companyId = companyId;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -161,10 +102,7 @@ public class Shipment implements Serializable {
             return false;
         }
         Shipment other = (Shipment) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override

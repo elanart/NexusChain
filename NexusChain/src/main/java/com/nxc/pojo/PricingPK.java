@@ -4,6 +4,9 @@
  */
 package com.nxc.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -15,6 +18,8 @@ import javax.validation.constraints.Size;
  *
  * @author tuann
  */
+@Setter
+@Getter
 @Embeddable
 public class PricingPK implements Serializable {
 
@@ -37,22 +42,6 @@ public class PricingPK implements Serializable {
         this.supplierId = supplierId;
     }
 
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
-
-    public String getSupplierId() {
-        return supplierId;
-    }
-
-    public void setSupplierId(String supplierId) {
-        this.supplierId = supplierId;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -71,10 +60,7 @@ public class PricingPK implements Serializable {
         if ((this.productId == null && other.productId != null) || (this.productId != null && !this.productId.equals(other.productId))) {
             return false;
         }
-        if ((this.supplierId == null && other.supplierId != null) || (this.supplierId != null && !this.supplierId.equals(other.supplierId))) {
-            return false;
-        }
-        return true;
+        return (this.supplierId != null || other.supplierId == null) && (this.supplierId == null || this.supplierId.equals(other.supplierId));
     }
 
     @Override

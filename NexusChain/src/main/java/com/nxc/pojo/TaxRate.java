@@ -4,6 +4,9 @@
  */
 package com.nxc.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -24,6 +27,8 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author tuann
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "tax_rate")
 @XmlRootElement
@@ -61,37 +66,9 @@ public class TaxRate implements Serializable {
         this.id = id;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
-    public BigDecimal getRate() {
-        return rate;
-    }
-
-    public void setRate(BigDecimal rate) {
-        this.rate = rate;
-    }
-
     @XmlTransient
     public Set<PurchaseOrder> getPurchaseOrderSet() {
         return purchaseOrderSet;
-    }
-
-    public void setPurchaseOrderSet(Set<PurchaseOrder> purchaseOrderSet) {
-        this.purchaseOrderSet = purchaseOrderSet;
     }
 
     @XmlTransient
@@ -99,17 +76,9 @@ public class TaxRate implements Serializable {
         return saleOrderSet;
     }
 
-    public void setSaleOrderSet(Set<SaleOrder> saleOrderSet) {
-        this.saleOrderSet = saleOrderSet;
-    }
-
     @XmlTransient
     public Set<Invoice> getInvoiceSet() {
         return invoiceSet;
-    }
-
-    public void setInvoiceSet(Set<Invoice> invoiceSet) {
-        this.invoiceSet = invoiceSet;
     }
 
     @Override
@@ -126,10 +95,7 @@ public class TaxRate implements Serializable {
             return false;
         }
         TaxRate other = (TaxRate) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override

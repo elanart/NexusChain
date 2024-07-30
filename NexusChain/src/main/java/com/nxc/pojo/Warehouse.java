@@ -4,6 +4,9 @@
  */
 package com.nxc.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -23,6 +26,8 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author tuann
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "warehouse")
 @XmlRootElement
@@ -58,45 +63,9 @@ public class Warehouse implements Serializable {
         this.id = id;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public Integer getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(Integer capacity) {
-        this.capacity = capacity;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
     @XmlTransient
     public Set<Inventory> getInventorySet() {
         return inventorySet;
-    }
-
-    public void setInventorySet(Set<Inventory> inventorySet) {
-        this.inventorySet = inventorySet;
     }
 
     @Override
@@ -113,10 +82,7 @@ public class Warehouse implements Serializable {
             return false;
         }
         Warehouse other = (Warehouse) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override

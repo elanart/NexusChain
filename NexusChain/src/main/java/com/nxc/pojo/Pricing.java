@@ -4,6 +4,9 @@
  */
 package com.nxc.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -23,6 +26,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author tuann
  */
+@Setter
+@Getter
 @Entity
 @Table(name = "pricing")
 @XmlRootElement
@@ -61,46 +66,6 @@ public class Pricing implements Serializable {
         this.pricingPK = new PricingPK(productId, supplierId);
     }
 
-    public PricingPK getPricingPK() {
-        return pricingPK;
-    }
-
-    public void setPricingPK(PricingPK pricingPK) {
-        this.pricingPK = pricingPK;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public Date getEffectiveDate() {
-        return effectiveDate;
-    }
-
-    public void setEffectiveDate(Date effectiveDate) {
-        this.effectiveDate = effectiveDate;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public Supplier getSupplier() {
-        return supplier;
-    }
-
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -115,10 +80,7 @@ public class Pricing implements Serializable {
             return false;
         }
         Pricing other = (Pricing) object;
-        if ((this.pricingPK == null && other.pricingPK != null) || (this.pricingPK != null && !this.pricingPK.equals(other.pricingPK))) {
-            return false;
-        }
-        return true;
+        return (this.pricingPK != null || other.pricingPK == null) && (this.pricingPK == null || this.pricingPK.equals(other.pricingPK));
     }
 
     @Override
