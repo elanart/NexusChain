@@ -12,6 +12,10 @@
     <title>Trang chủ</title>
 </head>
 <body>
-    <h1>${title}</h1>
+    <ul>
+        <c:forEach items="${supplier}" var="s">
+            <li>${s.name}</li>
+        </c:forEach>
+    </ul>
 </body>
 </html>
