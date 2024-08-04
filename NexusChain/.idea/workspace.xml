@@ -9,56 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c083cbf9-aa8d-4c1d-83bd-dbaacb9a31a8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/jpa.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/configs/DispatcherServletInitializer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/configs/HibernateConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/configs/WebApplicationContextConfigs.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/controllers/CategoryController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/PricingId.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/SupplierProduct.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/SupplierProductId.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/repository/CategoryRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/repository/impl/CategoryRepositoryImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/service/CategoryService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/service/impl/CategoryServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/database.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/categories.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/nb-configuration.xml" beforeDir="false" afterPath="$PROJECT_DIR$/nb-configuration.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/configs/DispatcherServletInit.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/configs/WebAppContextConfigs.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/controllers/HomeController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Category.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Customer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Inventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Inventory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Invoice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Invoice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Pricing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Pricing.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/PricingPK.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/PurchaseOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/PurchaseOrder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/PurchaseOrderDetail.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/PurchaseOrderDetail.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/SaleOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/SaleOrder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/SaleOrderDetail.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/SaleOrderDetail.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Shipment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Shipment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/ShipmentCompany.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/ShipmentCompany.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Supplier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Supplier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/SupplierRating.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/SupplierRating.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/TaxRate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/TaxRate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Warehouse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Warehouse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/repository/SupplierRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/repository/impl/SupplierRepositoryImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/service/SupplierService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/service/impl/SupplierServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/databases.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/META-INF/context.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/META-INF/context.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/applicationContext.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/applicationContext.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/home.jsp" beforeDir="false" />
-    </list>
+    <list default="true" id="c083cbf9-aa8d-4c1d-83bd-dbaacb9a31a8" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -110,7 +61,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Tomcat Server.Tomcat 9.0.91.executor": "Run",
-    "git-widget-placeholder": "lan",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/Project/NexusChain/NexusChain",
@@ -235,7 +186,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1722409341081</updated>
-      <workItem from="1722409342809" duration="9147000" />
+      <workItem from="1722409342809" duration="9592000" />
     </task>
     <servers />
   </component>
