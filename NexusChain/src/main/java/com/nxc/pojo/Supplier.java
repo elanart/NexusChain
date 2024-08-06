@@ -1,11 +1,15 @@
 package com.nxc.pojo;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.nxc.enums.CriteriaEnum;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.LinkedHashSet;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 import javax.validation.constraints.Max;
@@ -13,57 +17,37 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Getter
-@Setter
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "supplier")
-public class Supplier {
-
+public class Supplier implements Serializable {
     @Id
-    @Column(name = "id", nullable = false, length = 50)
-    private UUID id;
+    private Long id;
 
-    @Column(name = "name", nullable = false)
-    @Size(min = 1, max = 50, message = "{supplier.name.errMsg}")
-    private String name;
-
-    @Column(name = "address")
-    @Size(min = 1, max = 50, message = "{supplier.address.errMsg}")
-    private String address;
-
-    @Column(name = "phone", length = 50)
-    @Size(min = 1, max = 50, message = "{supplier.phone.errMsg}")
-    private String phone;
-
-    @Column(name = "contact_info", length = 100)
-    @Size(min = 1, max = 50, message = "{supplier.contactInfo.errMsg}")
-    private String contactInfo;
-
-    @Column(name = "payment_terms", length = 100)
-    @Size(min = 1, max = 50, message = "{supplier.paymentTerms.errMsg}")
+    @Column(name = "payment_terms", length = 300)
     private String paymentTerms;
 
-    @Column(name = "rating", precision = 3, scale = 2)
-//    @Min( value = "1", message = "{supplier.rating.errMsg}");
-//    @Max(value = 5, message = "{supplier.rating.errMsg}");
+    @Column(name = "review_date", updatable = false)
+    private LocalDateTime reviewDate;
+
+    @Enumerated(EnumType.STRING)
+    private CriteriaEnum criterion;
+
+    @Column(precision = 3, scale = 2)
+
     private BigDecimal rating;
 
-    @Column(name = "active")
-    private Boolean active;
+    @Column(length = 300)
+    private String comment;
 
-    @OneToMany(mappedBy = "supplier")
-    private Set<Pricing> pricings = new LinkedHashSet<>();
+    @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
+    @MapsId
+    @OneToOne(optional = false)
+    private User user;
 
-    @OneToMany(mappedBy = "supplier")
-    private Set<PurchaseOrder> purchaseOrders = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "supplier")
-    private Set<SupplierProduct> supplierProducts = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "supplier")
-    private Set<SupplierRating> supplierRatings = new LinkedHashSet<>();
-    
-    public Supplier() {
-        this.id = UUID.randomUUID();
-    }
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "supplier")
+    private Set<SupplierProduct> supplierProducts;
 }

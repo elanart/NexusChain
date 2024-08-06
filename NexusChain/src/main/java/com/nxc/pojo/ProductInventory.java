@@ -13,8 +13,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "supplier_product")
-public class SupplierProduct implements Serializable {
+@Table(name = "product_inventory")
+public class ProductInventory implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,6 +24,6 @@ public class SupplierProduct implements Serializable {
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "supplier_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    private Supplier supplier;
+    @JoinColumn(name = "inventory_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    private Inventory inventory;
 }

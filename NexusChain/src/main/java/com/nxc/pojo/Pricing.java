@@ -1,34 +1,54 @@
 package com.nxc.pojo;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.time.Instant;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "pricing")
-public class Pricing {
-    @EmbeddedId
-    private PricingId id;
+public class Pricing implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @MapsId("productId")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "product_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false, referencedColumnName = "id")
     private Product product;
 
-    @MapsId("supplierId")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "supplier_id", nullable = false)
-    private Supplier supplier;
+    @ManyToOne
+    @JoinColumn(name = "supplier_id", nullable = false, referencedColumnName = "id")
+    private User supplier;
 
-    @Column(name = "price", precision = 10, scale = 2)
-    private BigDecimal price;
+    @ManyToOne
+    @JoinColumn(name = "shipment_id", referencedColumnName = "id")
+    private Shipment shipment;
 
-    @Column(name = "effective_date")
-    private Instant effectiveDate;
+    @ManyToOne
+    @JoinColumn(name = "warehouse_id", referencedColumnName = "id")
+    private Warehouse warehouse;
 
+    @Column(name = "created_date", updatable = false)
+    private LocalDateTime createdDate;
+
+    @Column(name = "updated_date", insertable = false)
+    private LocalDateTime updatedDate;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdDate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedDate = LocalDateTime.now();
+    }
 }

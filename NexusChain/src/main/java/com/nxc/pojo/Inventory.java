@@ -1,28 +1,48 @@
 package com.nxc.pojo;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Set;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "inventory")
-public class Inventory {
+public class Inventory implements Serializable {
     @Id
-    @Column(name = "id", nullable = false, length = 50)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name = "quantity")
     private Integer quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "warehouse_id")
+    @ManyToOne(cascade = { CascadeType.PERSIST })
+    @JoinColumn(name = "warehouse_id", referencedColumnName = "id", nullable = false)
     private Warehouse warehouse;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @Column(name = "created_date", updatable = false)
+    private LocalDateTime createdDate;
 
+    @Column(name = "updated_date", insertable = false)
+    private LocalDateTime updatedDate;
+
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "inventory")
+    private Set<ProductInventory> productInventories;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdDate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedDate = LocalDateTime.now();
+    }
 }

@@ -18,9 +18,10 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 @EnableTransactionManagement
 @ComponentScan(basePackages = {
-    "com.nxc.controllers",
-    "com.nxc.service",
-    "com.nxc.repository"
+        "com.nxc.controllers",
+        "com.nxc.service",
+        "com.nxc.repository",
+        "com.nxc.enums"
 })
 public class WebApplicationContextConfigs implements WebMvcConfigurer {
 
