@@ -1,40 +1,42 @@
 package com.nxc.pojo;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "invoice")
 public class Invoice {
     @Id
-    @Column(name = "id", nullable = false, length = 50)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "invoice_date")
-    private LocalDate invoiceDate;
+    private LocalDateTime invoiceDate;
 
     @Column(name = "total_amount", precision = 10, scale = 2)
     private BigDecimal totalAmount;
 
-    @Column(name = "paid")
     private Boolean paid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tax_id")
-    private TaxRate tax;
+    @ManyToOne(cascade = { CascadeType.PERSIST })
+    @JoinColumn(name = "tax_id", referencedColumnName = "id")
+    private Tax tax;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sale_id")
-    private SaleOrder sale;
+    @ManyToOne
+    @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)
+    private Order order;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "purchase_id")
-    private PurchaseOrder purchase;
-
+    @OneToOne
+    @JoinColumn(name = "shipment_id", referencedColumnName = "id")
+    private Shipment shipment;
 }

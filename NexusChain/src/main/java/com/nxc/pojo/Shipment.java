@@ -1,43 +1,54 @@
 package com.nxc.pojo;
 
-import lombok.Getter;
-import lombok.Setter;
-
+import com.nxc.enums.OrderStatusEnum;
 import javax.persistence.*;
-import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Set;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "shipment")
-public class Shipment {
+public class Shipment implements Serializable {
     @Id
-    @Column(name = "id", nullable = false, length = 50)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "shipment_date", nullable = false)
-    private LocalDate shipmentDate;
+    private LocalDateTime shipmentDate;
 
-    @Lob
-    @Column(name = "status", nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatusEnum status;
 
     @Column(name = "tracking_number", length = 100)
     private String trackingNumber;
 
     @Column(name = "expected_delivery")
-    private LocalDate expectedDelivery;
+    private LocalDateTime expectedDelivery;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id")
-    private ShipmentCompany company;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal cost;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sale_id")
-    private SaleOrder sale;
+    @ManyToOne(cascade = { CascadeType.PERSIST })
+    @JoinColumn(name = "carrier_id", referencedColumnName = "id", nullable = false)
+    private Carrier carrier;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "purchase_id")
-    private PurchaseOrder purchase;
+    @ManyToOne
+    @JoinColumn(name = "warehouse_id", referencedColumnName = "id", nullable = false)
+    private Warehouse warehouse;
 
+    @OneToOne(mappedBy = "shipment")
+    private Invoice invoice;
+
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "shipment")
+    private Set<Pricing> pricings;
 }

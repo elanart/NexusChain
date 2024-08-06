@@ -1,53 +1,47 @@
 package com.nxc.pojo;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.nxc.enums.CriteriaEnum;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.LinkedHashSet;
+import java.time.LocalDateTime;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "supplier")
-public class Supplier {
+public class Supplier implements Serializable {
     @Id
-    @Column(name = "id", nullable = false, length = 50)
-    private String id;
+    private Long id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "address")
-    private String address;
-
-    @Column(name = "phone", length = 50)
-    private String phone;
-
-    @Column(name = "contact_info", length = 100)
-    private String contactInfo;
-
-    @Column(name = "payment_terms", length = 100)
+    @Column(name = "payment_terms", length = 300)
     private String paymentTerms;
 
-    @Column(name = "rating", precision = 3, scale = 2)
+    @Column(name = "review_date", updatable = false)
+    private LocalDateTime reviewDate;
+
+    @Enumerated(EnumType.STRING)
+    private CriteriaEnum criterion;
+
+    @Column(precision = 3, scale = 2)
     private BigDecimal rating;
 
-    @Column(name = "active")
-    private Boolean active;
+    @Column(length = 300)
+    private String comment;
 
-    @OneToMany(mappedBy = "supplier")
-    private Set<Pricing> pricings = new LinkedHashSet<>();
+    @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
+    @MapsId
+    @OneToOne(optional = false)
+    private User user;
 
-    @OneToMany(mappedBy = "supplier")
-    private Set<PurchaseOrder> purchaseOrders = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "supplier")
-    private Set<SupplierProduct> supplierProducts = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "supplier")
-    private Set<SupplierRating> supplierRatings = new LinkedHashSet<>();
-
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "supplier")
+    private Set<SupplierProduct> supplierProducts;
 }

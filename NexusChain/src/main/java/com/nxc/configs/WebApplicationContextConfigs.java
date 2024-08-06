@@ -16,7 +16,8 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan(basePackages = {
         "com.nxc.controllers",
         "com.nxc.service",
-        "com.nxc.repository"
+        "com.nxc.repository",
+        "com.nxc.enums"
 })
 public class WebApplicationContextConfigs implements WebMvcConfigurer {
     @Override

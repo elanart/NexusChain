@@ -1,55 +1,54 @@
 package com.nxc.pojo;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "product")
-public class Product {
+public class Product implements Serializable {
     @Id
-    @Column(name = "id", nullable = false, length = 50)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(nullable = false, length = 100)
     private String name;
 
-    @Lob
-    @Column(name = "description")
     private String description;
 
-    @Column(name = "price", precision = 10, scale = 2)
+    @Column(precision = 10, scale = 2)
     private BigDecimal price;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(nullable = false)
     private Integer quantity;
 
-    @Column(name = "active")
-    private Boolean active;
+    @Builder.Default
+    @Column(name = "deleted")
+    private Boolean isDeleted = false;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @ManyToOne(cascade = { CascadeType.PERSIST })
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
-    @OneToMany(mappedBy = "product")
-    private Set<Inventory> inventories = new LinkedHashSet<>();
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "product")
+    private Set<SupplierProduct> supplierProducts;
 
-    @OneToMany(mappedBy = "product")
-    private Set<Pricing> pricings = new LinkedHashSet<>();
+    @OneToMany(cascade = { CascadeType.PERSIST }, mappedBy = "product")
+    private Set<OrderDetail> orderDetails;
 
-    @OneToMany(mappedBy = "product")
-    private Set<PurchaseOrderDetail> purchaseOrderDetails = new LinkedHashSet<>();
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "product")
+    private Set<ProductInventory> productInventories;
 
-    @OneToMany(mappedBy = "product")
-    private Set<SaleOrderDetail> saleOrderDetails = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "product")
-    private Set<SupplierProduct> supplierProducts = new LinkedHashSet<>();
-
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "product")
+    private Set<Pricing> pricings;
 }

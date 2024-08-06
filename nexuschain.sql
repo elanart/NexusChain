@@ -1,420 +1,487 @@
-use nexuschainscm;
+CREATE DATABASE  IF NOT EXISTS `nexuschain` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `nexuschain`;
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+--
+-- Host: localhost    Database: nexuschain
+-- ------------------------------------------------------
+-- Server version	8.1.0
 
-CREATE TABLE user(
-    id VARCHAR(50) PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    role NVARCHAR(50) NOT NULL,
-    active BOOLEAN DEFAULT TRUE
-);
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-CREATE TABLE supplier(
-    id VARCHAR(50) PRIMARY KEY,
-    name NVARCHAR(255) NOT NULL,
-    address NVARCHAR(255),
-    phone VARCHAR(50),
-    contact_info NVARCHAR(100),
-    payment_terms NVARCHAR(100),
-    rating DECIMAL(3, 2),
-    active BOOLEAN DEFAULT TRUE,
-    user_id VARCHAR(50) UNIQUE,
-    FOREIGN KEY (user_id) REFERENCES user(id)
-);
+--
+-- Table structure for table `account`
+--
 
-CREATE TABLE supplier_rating(
-    id VARCHAR(50) PRIMARY KEY,
-    review_date DATETIME,
-    criteria NVARCHAR(100),
-    rating DECIMAL(3, 2),
-    comments TEXT,
-    supplier_id VARCHAR(50) UNIQUE,
-    FOREIGN KEY (supplier_id) REFERENCES supplier(id)
-);
+DROP TABLE IF EXISTS `account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `account` (
+  `id` bigint NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(300) NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `FKnmcdy69g09oucre7atob6874f` FOREIGN KEY (`id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-CREATE TABLE customer(
-    id VARCHAR(50) PRIMARY KEY,
-    name NVARCHAR(255) NOT NULL,
-    address NVARCHAR(255),
-    phone VARCHAR(50),
-    contact_info NVARCHAR(100),
-    active BOOLEAN DEFAULT TRUE,
-    user_id VARCHAR(50) UNIQUE,
-    FOREIGN KEY (user_id) REFERENCES user(id)
-);
+--
+-- Dumping data for table `account`
+--
 
-CREATE TABLE category(
-    id VARCHAR(50) PRIMARY KEY,
-    name NVARCHAR(100) NOT NULL,
-    description TEXT
-);
+LOCK TABLES `account` WRITE;
+/*!40000 ALTER TABLE `account` DISABLE KEYS */;
+/*!40000 ALTER TABLE `account` ENABLE KEYS */;
+UNLOCK TABLES;
 
-CREATE TABLE product(
-    id VARCHAR(50) PRIMARY KEY,
-    name NVARCHAR(100) NOT NULL,
-    description TEXT, 
-    price DECIMAL(10, 2), 
-    quantity INT NOT NULL,
-    active BOOLEAN DEFAULT TRUE,
-    category_id VARCHAR(50),
-    FOREIGN KEY (category_id) REFERENCES category(id)
-);
+--
+-- Table structure for table `carrier`
+--
 
-CREATE TABLE supplier_product(
-    supplier_id VARCHAR(50),
-    product_id VARCHAR(50),
-    PRIMARY KEY(supplier_id, product_id),
-    FOREIGN KEY (supplier_id) REFERENCES supplier(id),
-    FOREIGN KEY (product_id) REFERENCES product(id)
-);
+DROP TABLE IF EXISTS `carrier`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `carrier` (
+  `rating` decimal(3,2) DEFAULT NULL,
+  `id` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `FKcusloqdh774oh98in78xfoo1k` FOREIGN KEY (`id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-CREATE TABLE tax_rate(
-    id VARCHAR(50) PRIMARY KEY,
-    region VARCHAR(100),
-    rate DECIMAL(5, 2)
-);
+--
+-- Dumping data for table `carrier`
+--
 
-CREATE TABLE invoice(
-    id VARCHAR(50) PRIMARY KEY,
-    invoice_date DATETIME NOT NULL,
-    total_amount DECIMAL(10, 2),
-    paid BOOLEAN DEFAULT FALSE,
-    tax_id VARCHAR(50),
-    FOREIGN KEY (tax_id) REFERENCES tax_rate(id)
-);
+LOCK TABLES `carrier` WRITE;
+/*!40000 ALTER TABLE `carrier` DISABLE KEYS */;
+/*!40000 ALTER TABLE `carrier` ENABLE KEYS */;
+UNLOCK TABLES;
 
-CREATE TABLE shipment_company(
-    id VARCHAR(50) PRIMARY KEY,
-    company_name NVARCHAR(255) NOT NULL,
-    contact_info NVARCHAR(255),
-    active BOOLEAN DEFAULT TRUE,
-    rating DECIMAL(5, 2),
-    user_id VARCHAR(50) UNIQUE,
-    FOREIGN KEY (user_id) REFERENCES user(id)
-);
+--
+-- Table structure for table `category`
+--
 
-CREATE TABLE shipment(
-    id VARCHAR(50) PRIMARY KEY,
-    shipment_date DATETIME NOT NULL,
-    status NVARCHAR(50) NOT NULL CHECK (status IN ('Shipped', 'In Transit', 'Delivered', 'Returned')),
-    tracking_number VARCHAR(100),
-    expected_delivery DATETIME,
-    company_id VARCHAR(50),
-    FOREIGN KEY (company_id) REFERENCES shipment_company(id)
-);
+DROP TABLE IF EXISTS `category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `category` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `description` varchar(255) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `category`
+--
 
+LOCK TABLES `category` WRITE;
+/*!40000 ALTER TABLE `category` DISABLE KEYS */;
+/*!40000 ALTER TABLE `category` ENABLE KEYS */;
+UNLOCK TABLES;
 
-CREATE TABLE purchase_order(
-    id VARCHAR(50) PRIMARY KEY,
-    order_date DATETIME,
-    status NVARCHAR(50) NOT NULL CHECK (status IN ('Pending', 'Completed', 'Cancelled')),
-    supplier_id VARCHAR(50),
-    invoice_id VARCHAR(50) UNIQUE,
-    shipment_id VARCHAR(50) UNIQUE,
-    FOREIGN KEY (supplier_id) REFERENCES supplier(id),
-    FOREIGN KEY (invoice_id) REFERENCES invoice(id),
-    FOREIGN KEY (shipment_id) REFERENCES shipment(id)
-);
+--
+-- Table structure for table `inventory`
+--
 
-CREATE TABLE purchase_order_detail(
-    id VARCHAR(50) PRIMARY KEY,
-    quantity INT NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    product_id VARCHAR(50),
-    purchase_id VARCHAR(50) UNIQUE,
-    FOREIGN KEY (product_id) REFERENCES product(id),
-    FOREIGN KEY (purchase_id) REFERENCES purchase_order(id)
-);
+DROP TABLE IF EXISTS `inventory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `inventory` (
+  `quantity` int DEFAULT NULL,
+  `created_date` datetime(6) DEFAULT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `updated_date` datetime(6) DEFAULT NULL,
+  `warehouse_id` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKix9yxgetau1y25hhnv42gsiok` (`warehouse_id`),
+  CONSTRAINT `FKix9yxgetau1y25hhnv42gsiok` FOREIGN KEY (`warehouse_id`) REFERENCES `warehouse` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-CREATE TABLE sale_order(
-    id VARCHAR(50) PRIMARY KEY,
-    order_date DATETIME,
-    status NVARCHAR(50) NOT NULL CHECK (status IN ('Pending', 'Completed', 'Cancelled')),
-    customer_id VARCHAR(50),
-    invoice_id VARCHAR(50) UNIQUE,
-    shipment_id VARCHAR(50) UNIQUE,
-    FOREIGN KEY (customer_id) REFERENCES customer(id),
-    FOREIGN KEY (invoice_id) REFERENCES invoice(id),
-    FOREIGN KEY (shipment_id) REFERENCES shipment(id)
-);
+--
+-- Dumping data for table `inventory`
+--
 
-CREATE TABLE sale_order_detail(
-    id VARCHAR(50) PRIMARY KEY,
-    quantity INT NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    product_id VARCHAR(50),
-    sale_id VARCHAR(50) UNIQUE,
-    FOREIGN KEY (sale_id) REFERENCES sale_order(id),
-    FOREIGN KEY (product_id) REFERENCES product(id)
-);
+LOCK TABLES `inventory` WRITE;
+/*!40000 ALTER TABLE `inventory` DISABLE KEYS */;
+/*!40000 ALTER TABLE `inventory` ENABLE KEYS */;
+UNLOCK TABLES;
 
-CREATE TABLE warehouse(
-    id VARCHAR(50) PRIMARY KEY,
-    location NVARCHAR(255),
-    capacity INT,
-    active BOOLEAN DEFAULT TRUE
-);
+--
+-- Table structure for table `invoice`
+--
 
-CREATE TABLE inventory(
-    id VARCHAR(50) PRIMARY KEY,
-    quantity INT NOT NULL,
-    warehouse_id VARCHAR(50),
-    product_id VARCHAR(50),
-    FOREIGN KEY (warehouse_id) REFERENCES warehouse(id),
-    FOREIGN KEY (product_id) REFERENCES product(id)
-);
+DROP TABLE IF EXISTS `invoice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `invoice` (
+  `paid` bit(1) DEFAULT NULL,
+  `total_amount` decimal(10,2) DEFAULT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `invoice_date` datetime(6) DEFAULT NULL,
+  `order_id` bigint NOT NULL,
+  `shipment_id` bigint DEFAULT NULL,
+  `tax_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UKifwc1o7l3llam0bmfe5nrbk0o` (`shipment_id`),
+  KEY `FKr27vrfyll0shs80upv1rmctie` (`order_id`),
+  KEY `FKb4ebyr2a18dw99dr2nufqt264` (`tax_id`),
+  CONSTRAINT `FKb4ebyr2a18dw99dr2nufqt264` FOREIGN KEY (`tax_id`) REFERENCES `tax` (`id`),
+  CONSTRAINT `FKp0wjajquhluu15w4iuau7jx9p` FOREIGN KEY (`shipment_id`) REFERENCES `shipment` (`id`),
+  CONSTRAINT `FKr27vrfyll0shs80upv1rmctie` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-CREATE TABLE pricing(
-    price DECIMAL(10, 2) NOT NULL,
-    effective_date DATETIME NOT NULL,
-    product_id VARCHAR(50),
-    supplier_id VARCHAR(50),
-    PRIMARY KEY(product_id, supplier_id),
-    FOREIGN KEY (product_id) REFERENCES product(id),
-    FOREIGN KEY (supplier_id) REFERENCES supplier(id)
-);
+--
+-- Dumping data for table `invoice`
+--
 
--- Insert unique users first
-INSERT INTO user (id, username, password, email, role, active) VALUES
-(UUID(), 'johndoe', 'password123', 'johndoe@example.com', 'Supplier', TRUE),
-(UUID(), 'janedoe', 'password456', 'janedoe@example.com', 'Customer', TRUE),
-(UUID(), 'shipco', 'password789', 'shipco@example.com', 'ShipmentCompany', TRUE),
-(UUID(), 'adminuser', 'adminpass', 'admin@example.com', 'Admin', TRUE),
-(UUID(), 'guestuser', 'guestpass', 'guest@example.com', 'Guest', TRUE);
+LOCK TABLES `invoice` WRITE;
+/*!40000 ALTER TABLE `invoice` DISABLE KEYS */;
+/*!40000 ALTER TABLE `invoice` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- Insert suppliers with unique user_ids
-INSERT INTO supplier (id, name, address, phone, contact_info, payment_terms, rating, active, user_id) VALUES
-(UUID(), 'Supplier A', '123 Elm St', '555-1234', 'contact@supplierA.com', 'Net 30', 4.5, TRUE, (SELECT id FROM user WHERE username='johndoe')),
-(UUID(), 'Supplier B', '456 Oak St', '555-5678', 'contact@supplierB.com', 'Net 45', 3.8, TRUE, (SELECT id FROM user WHERE username='adminuser'));
+--
+-- Table structure for table `order`
+--
 
--- Insert supplier ratings
-INSERT INTO supplier_rating (id, review_date, criteria, rating, comments, supplier_id) VALUES
-(UUID(), '2024-07-15', 'Product Quality', 4.7, 'Excellent quality!', (SELECT id FROM supplier WHERE name='Supplier A')),
-(UUID(), '2024-08-01', 'Delivery Timeliness', 4.0, 'Timely delivery but packaging could be improved.', (SELECT id FROM supplier WHERE name='Supplier B'));
+DROP TABLE IF EXISTS `order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order` (
+  `deleted` bit(1) DEFAULT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `order_date` datetime(6) DEFAULT NULL,
+  `user_id` bigint NOT NULL,
+  `status` enum('DELIVERED','IN_TRANSIT','RETURNED','SHIPPED') DEFAULT NULL,
+  `type` enum('INBOUND','OUTBOUND') DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKrcaf946w0bh6qj0ljiw3pwpnu` (`user_id`),
+  CONSTRAINT `FKrcaf946w0bh6qj0ljiw3pwpnu` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Insert customers with unique user_ids
-INSERT INTO customer (id, name, address, phone, contact_info, active, user_id) VALUES
-(UUID(), 'Customer X', '789 Pine St', '555-9999', 'contact@customerX.com', TRUE, (SELECT id FROM user WHERE username='janedoe')),
-(UUID(), 'Customer Y', '101 Maple St', '555-0000', 'contact@customerY.com', TRUE, (SELECT id FROM user WHERE username='guestuser'));
+--
+-- Dumping data for table `order`
+--
 
--- Insert categories
-INSERT INTO category (id, name, description) VALUES
-(UUID(), 'Electronics', 'All kinds of electronic gadgets'),
-(UUID(), 'Home Appliances', 'Appliances for home use');
+LOCK TABLES `order` WRITE;
+/*!40000 ALTER TABLE `order` DISABLE KEYS */;
+/*!40000 ALTER TABLE `order` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- Insert products
-INSERT INTO product (id, name, description, price, quantity, active, category_id) VALUES
-(UUID(), 'Smartphone', 'Latest model smartphone', 699.99, 100, TRUE, (SELECT id FROM category WHERE name='Electronics')),
-(UUID(), 'Washing Machine', 'Front-load washing machine', 499.99, 50, TRUE, (SELECT id FROM category WHERE name='Home Appliances'));
+--
+-- Table structure for table `order_detail`
+--
 
--- Insert supplier_products
-INSERT INTO supplier_product (supplier_id, product_id) VALUES
-((SELECT id FROM supplier WHERE name='Supplier A' LIMIT 1), (SELECT id FROM product WHERE name='Smartphone' LIMIT 1)),
-((SELECT id FROM supplier WHERE name='Supplier B' LIMIT 1), (SELECT id FROM product WHERE name='Washing Machine' LIMIT 1));
+DROP TABLE IF EXISTS `order_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order_detail` (
+  `price` decimal(10,2) DEFAULT NULL,
+  `quantity` int DEFAULT NULL,
+  `id` bigint NOT NULL,
+  `product_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKb8bg2bkty0oksa3wiq5mp5qnc` (`product_id`),
+  CONSTRAINT `FKb8bg2bkty0oksa3wiq5mp5qnc` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  CONSTRAINT `FKu71g7i21j2jl9or5jgrvjxda` FOREIGN KEY (`id`) REFERENCES `order` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Insert tax_rates
-INSERT INTO tax_rate (id, region, rate) VALUES
-(UUID(), 'Region A', 7.50),
-(UUID(), 'Region B', 5.00);
+--
+-- Dumping data for table `order_detail`
+--
 
--- Insert invoices
-INSERT INTO invoice (id, invoice_date, total_amount, paid, tax_id) VALUES
-(UUID(), '2024-08-01', 699.99, FALSE, (SELECT id FROM tax_rate WHERE region='Region A')),
-(UUID(), '2024-08-02', 499.99, TRUE, (SELECT id FROM tax_rate WHERE region='Region B'));
+LOCK TABLES `order_detail` WRITE;
+/*!40000 ALTER TABLE `order_detail` DISABLE KEYS */;
+/*!40000 ALTER TABLE `order_detail` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- Insert shipment_companies with unique user_ids
-INSERT INTO shipment_company (id, company_name, contact_info, active, rating, user_id) VALUES
-(UUID(), 'ShipCo Logistics', 'contact@shipco.com', TRUE, 4.2, (SELECT id FROM user WHERE username='shipco')),
-(UUID(), 'FastShip Inc.', 'contact@fastship.com', TRUE, 4.8, (SELECT id FROM user WHERE username='adminuser'));
+--
+-- Table structure for table `pricing`
+--
 
--- Insert shipments
-INSERT INTO shipment (id, shipment_date, status, tracking_number, expected_delivery, company_id) VALUES
-(UUID(), '2024-08-02', 'Shipped', 'TRACK1234', '2024-08-10', (SELECT id FROM shipment_company WHERE company_name='ShipCo Logistics')),
-(UUID(), '2024-08-03', 'In Transit', 'TRACK5678', '2024-08-12', (SELECT id FROM shipment_company WHERE company_name='FastShip Inc.'));
+DROP TABLE IF EXISTS `pricing`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `pricing` (
+  `created_date` datetime(6) DEFAULT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `product_id` bigint NOT NULL,
+  `shipment_id` bigint DEFAULT NULL,
+  `supplier_id` bigint NOT NULL,
+  `updated_date` datetime(6) DEFAULT NULL,
+  `warehouse_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK32fer4vv8nbdvnmgsbkfvuyjb` (`product_id`),
+  KEY `FK42vksr04k5qba38wf7x3a7pg9` (`shipment_id`),
+  KEY `FKqoqb50pjvrulow7etr8qw46wx` (`supplier_id`),
+  KEY `FKn2bl0l53p5t8wdhfh6ms1jbc6` (`warehouse_id`),
+  CONSTRAINT `FK32fer4vv8nbdvnmgsbkfvuyjb` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  CONSTRAINT `FK42vksr04k5qba38wf7x3a7pg9` FOREIGN KEY (`shipment_id`) REFERENCES `shipment` (`id`),
+  CONSTRAINT `FKn2bl0l53p5t8wdhfh6ms1jbc6` FOREIGN KEY (`warehouse_id`) REFERENCES `warehouse` (`id`),
+  CONSTRAINT `FKqoqb50pjvrulow7etr8qw46wx` FOREIGN KEY (`supplier_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Insert purchase_orders
-INSERT INTO purchase_order (id, order_date, status, supplier_id, invoice_id, shipment_id) VALUES
-(UUID(), '2024-08-01', 'Completed', (SELECT id FROM supplier WHERE name='Supplier A' LIMIT 1), (SELECT id FROM invoice WHERE total_amount=699.99 LIMIT 1), (SELECT id FROM shipment WHERE tracking_number='TRACK1234' LIMIT 1)),
-(UUID(), '2024-08-02', 'Pending', (SELECT id FROM supplier WHERE name='Supplier B' LIMIT 1), (SELECT id FROM invoice WHERE total_amount=499.99 LIMIT 1), (SELECT id FROM shipment WHERE tracking_number='TRACK5678' LIMIT 1));
+--
+-- Dumping data for table `pricing`
+--
 
--- Insert purchase_order_details
-INSERT INTO purchase_order_detail (id, quantity, price, product_id, purchase_id) VALUES
-(UUID(), 1, 699.99, (SELECT id FROM product WHERE name='Smartphone' LIMIT 1), (SELECT id FROM purchase_order WHERE order_date='2024-08-01' LIMIT 1)),
-(UUID(), 2, 499.99, (SELECT id FROM product WHERE name='Washing Machine' LIMIT 1), (SELECT id FROM purchase_order WHERE order_date='2024-08-02' LIMIT 1));
+LOCK TABLES `pricing` WRITE;
+/*!40000 ALTER TABLE `pricing` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pricing` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- Insert sale_orders
-INSERT INTO sale_order (id, order_date, status, customer_id, invoice_id, shipment_id) VALUES
-(UUID(), '2024-08-03', 'Completed', (SELECT id FROM customer WHERE name='Customer X' LIMIT 1), (SELECT id FROM invoice WHERE total_amount=699.99 LIMIT 1), (SELECT id FROM shipment WHERE tracking_number='TRACK1234' LIMIT 1)),
-(UUID(), '2024-08-04', 'Pending', (SELECT id FROM customer WHERE name='Customer Y' LIMIT 1), (SELECT id FROM invoice WHERE total_amount=499.99 LIMIT 1), (SELECT id FROM shipment WHERE tracking_number='TRACK5678' LIMIT 1));
+--
+-- Table structure for table `product`
+--
 
--- Insert sale_order_details
-INSERT INTO sale_order_detail (id, quantity, price, product_id, sale_id) VALUES
-(UUID(), 1, 699.99, (SELECT id FROM product WHERE name='Smartphone' LIMIT 1), (SELECT id FROM sale_order WHERE order_date='2024-08-03' LIMIT 1)),
-(UUID(), 2, 499.99, (SELECT id FROM product WHERE name='Washing Machine' LIMIT 1), (SELECT id FROM sale_order WHERE order_date='2024-08-04' LIMIT 1));
+DROP TABLE IF EXISTS `product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `product` (
+  `deleted` bit(1) DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT NULL,
+  `quantity` int NOT NULL,
+  `category_id` bigint DEFAULT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK1mtsbur82frn64de7balymq9s` (`category_id`),
+  CONSTRAINT `FK1mtsbur82frn64de7balymq9s` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Insert warehouses
-INSERT INTO warehouse (id, location, capacity, active) VALUES
-(UUID(), 'Warehouse A', 1000, TRUE),
-(UUID(), 'Warehouse B', 2000, TRUE);
+--
+-- Dumping data for table `product`
+--
 
--- Insert inventory
-INSERT INTO inventory (id, quantity, warehouse_id, product_id) VALUES
-(UUID(), 100, (SELECT id FROM warehouse WHERE location='Warehouse A' LIMIT 1), (SELECT id FROM product WHERE name='Smartphone' LIMIT 1)),
-(UUID(), 50, (SELECT id FROM warehouse WHERE location='Warehouse B' LIMIT 1), (SELECT id FROM product WHERE name='Washing Machine' LIMIT 1));
+LOCK TABLES `product` WRITE;
+/*!40000 ALTER TABLE `product` DISABLE KEYS */;
+/*!40000 ALTER TABLE `product` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- Insert pricing
-INSERT INTO pricing (price, effective_date, product_id, supplier_id) VALUES
-(699.99, '2024-08-01', (SELECT id FROM product WHERE name='Smartphone' LIMIT 1), (SELECT id FROM supplier WHERE name='Supplier A' LIMIT 1)),
-(499.99, '2024-08-02', (SELECT id FROM product WHERE name='Washing Machine' LIMIT 1), (SELECT id FROM supplier WHERE name='Supplier B' LIMIT 1));
+--
+-- Table structure for table `product_inventory`
+--
 
--- INSERT INTO user (id, username, password, email, role, active)
--- VALUES
--- (UUID(), 'sup1', '123456', 'supplier1@gmail.com', 'Supplier', TRUE),
--- (UUID(), 'sup2', '123456', 'supplier2@gmail.com', 'Supplier', TRUE),
--- (UUID(), 'cus1', '123456', 'customer1@gmail.com', 'Customer', TRUE),
--- (UUID(), 'cus2', '123456', 'customer2@gmail.com', 'Customer', TRUE),
--- (UUID(), 'ship1', '123456', 'shipment1@gmail.com', 'ShipmentCompany', TRUE),
--- (UUID(), 'ship2', '123456', 'shipment2@gmail.com', 'ShipmentCompany', TRUE),
--- (UUID(), 'sup3', '123456', 'supplier3@gmail.com', 'Supplier', FALSE),
--- (UUID(), 'cus3', '123456', 'customer3@gmail.com', 'Customer', TRUE),
--- (UUID(), 'ship3', '123456', 'shipment3@gmail.com', 'ShipmentCompany', TRUE),
--- (UUID(), 'admin', '123456', '2151050223lan@ou.edu.vn', 'Admin', TRUE);
+DROP TABLE IF EXISTS `product_inventory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `product_inventory` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `inventory_id` bigint NOT NULL,
+  `product_id` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKrp29y97hpxviprydwuh5ndrc8` (`inventory_id`),
+  KEY `FK8echmjvoete36r6q97dr6pl7j` (`product_id`),
+  CONSTRAINT `FK8echmjvoete36r6q97dr6pl7j` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  CONSTRAINT `FKrp29y97hpxviprydwuh5ndrc8` FOREIGN KEY (`inventory_id`) REFERENCES `inventory` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- INSERT INTO supplier (id, name, address, phone, contact_info, payment_terms, rating, active, user_id)
--- VALUES
--- (UUID(), 'Công ty TNHH Thực Phẩm Việt', '123 Đường Lê Lợi, Quận 1, TP. Hồ Chí Minh', '0901234567', 'Ngô Thùy Dung, ngothuydung@vietfood.vn', 'Trả sau 30 ngày', 4.5, TRUE, (SELECT id FROM user WHERE username = 'sup1')),
--- (UUID(), 'Công ty Cổ Phần Dược Phẩm Hòa Bình', '456 Đường Trần Hưng Đạo, Quận 5, TP. Hồ Chí Minh', '0912345678', 'Diệp Anh Việt, viet@hoabinhpharma.vn', 'Trả sau 60 ngày', 4.3, TRUE, (SELECT id FROM user WHERE username = 'sup2')),
--- (UUID(), 'Công ty TNHH Sản Xuất Áo Sơ Mi Việt', '789 Đường Nguyễn Văn Cừ, Quận 10, TP. Hồ Chí Minh', '0923456789', 'Đinh Quốc Tuấn, tuan@aosomiviet.vn', 'Trả trước 50%', 4.7, TRUE, (SELECT id FROM user WHERE username = 'sup3'));
+--
+-- Dumping data for table `product_inventory`
+--
 
--- INSERT INTO supplier_rating (rating_id, review_date, criteria, rating, comments, supplier_id)
--- VALUES
--- (UUID(), '2024-06-01', 'Chất lượng sản phẩm', 4.5, 'Sản phẩm đạt chất lượng tốt', (SELECT id FROM supplier WHERE name = 'Công ty TNHH Thực Phẩm Việt')),
--- (UUID(), '2024-06-02', 'Dịch vụ khách hàng', 4.2, 'Dịch vụ khách hàng nhanh chóng và thân thiện', (SELECT id FROM supplier WHERE name = 'Công ty Cổ Phần Dược Phẩm Hòa Bình')),
--- (UUID(), '2024-06-03', 'Thời gian giao hàng', 4.7, 'Giao hàng đúng hẹn', (SELECT id FROM supplier WHERE name = 'Công ty TNHH Sản Xuất Áo Sơ Mi Việt'));
+LOCK TABLES `product_inventory` WRITE;
+/*!40000 ALTER TABLE `product_inventory` DISABLE KEYS */;
+/*!40000 ALTER TABLE `product_inventory` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- INSERT INTO category (id, name, description)
--- VALUES
--- (UUID(), 'Thực phẩm', 'Các sản phẩm thực phẩm bao gồm đồ ăn, đồ uống, nguyên liệu nấu ăn.'),
--- (UUID(), 'Dược phẩm', 'Các sản phẩm dược phẩm bao gồm thuốc, thực phẩm chức năng, thiết bị y tế.'),
--- (UUID(), 'Thời trang', 'Các sản phẩm thời trang bao gồm quần áo, giày dép, phụ kiện.'),
--- (UUID(), 'Điện tử', 'Các sản phẩm điện tử bao gồm điện thoại, máy tính, thiết bị gia dụng.'),
--- (UUID(), 'Gia dụng', 'Các sản phẩm gia dụng bao gồm đồ nội thất, đồ gia đình, dụng cụ nấu ăn.'),
--- (UUID(), 'Văn phòng phẩm', 'Các sản phẩm văn phòng phẩm bao gồm bút, giấy, dụng cụ văn phòng.'),
--- (UUID(), 'Đồ chơi', 'Các sản phẩm đồ chơi bao gồm đồ chơi trẻ em, trò chơi giáo dục.'),
--- (UUID(), 'Mỹ phẩm', 'Các sản phẩm mỹ phẩm bao gồm trang điểm, chăm sóc da, chăm sóc tóc.'),
--- (UUID(), 'Thể thao', 'Các sản phẩm thể thao bao gồm dụng cụ thể thao, quần áo thể thao, giày thể thao.'),
--- (UUID(), 'Ô tô và xe máy', 'Các sản phẩm liên quan đến ô tô, xe máy, phụ kiện và bảo dưỡng.');
+--
+-- Table structure for table `shipment`
+--
 
--- INSERT INTO product (id, name, description, price, quantity, active, category_id)
--- VALUES
--- (UUID(), 'Gạo Jasmine', 'Gạo Jasmine nhập khẩu từ Thái Lan, chất lượng cao.', 50.00, 1000, TRUE, (SELECT id FROM category WHERE name = 'Thực phẩm')),
--- (UUID(), 'Vitamin C 1000mg', 'Thực phẩm chức năng Vitamin C 1000mg, hỗ trợ hệ miễn dịch.', 120.00, 500, TRUE, (SELECT id FROM category WHERE name = 'Dược phẩm')),
--- (UUID(), 'Áo Sơ Mi Nam', 'Áo sơ mi nam chất liệu cotton, màu trắng, kích cỡ L.', 300.00, 200, TRUE, (SELECT id FROM category WHERE name = 'Thời trang')),
--- (UUID(), 'Điện thoại Samsung Galaxy S21', 'Điện thoại thông minh Samsung Galaxy S21, bộ nhớ 128GB.', 15000.00, 50, TRUE, (SELECT id FROM category WHERE name = 'Điện tử')),
--- (UUID(), 'Bàn ăn gỗ', 'Bàn ăn gỗ tự nhiên, 6 ghế, màu nâu.', 2500.00, 30, TRUE, (SELECT id FROM category WHERE name = 'Gia dụng')),
--- (UUID(), 'Bút bi Parker', 'Bút bi Parker, mực đen, thiết kế sang trọng.', 150.00, 1000, TRUE, (SELECT id FROM category WHERE name = 'Văn phòng phẩm')),
--- (UUID(), 'Xe ô tô mô hình', 'Mô hình xe ô tô đồ chơi cho trẻ em, tỉ lệ 1:18.', 400.00, 300, TRUE, (SELECT id FROM category WHERE name = 'Đồ chơi')),
--- (UUID(), 'Kem dưỡng da ban đêm', 'Kem dưỡng da ban đêm chống lão hóa, 50ml.', 350.00, 150, TRUE, (SELECT id FROM category WHERE name = 'Mỹ phẩm')),
--- (UUID(), 'Giày thể thao Nike', 'Giày thể thao Nike Air Max, kích cỡ 42.', 1800.00, 80, TRUE, (SELECT id FROM category WHERE name = 'Thể thao')),
--- (UUID(), 'Dầu nhớt xe máy', 'Dầu nhớt cho xe máy, loại 1 lít.', 200.00, 500, TRUE, (SELECT id FROM category WHERE name = 'Ô tô và xe máy'));
+DROP TABLE IF EXISTS `shipment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `shipment` (
+  `cost` decimal(10,2) DEFAULT NULL,
+  `carrier_id` bigint NOT NULL,
+  `expected_delivery` datetime(6) DEFAULT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `shipment_date` datetime(6) NOT NULL,
+  `warehouse_id` bigint NOT NULL,
+  `tracking_number` varchar(100) DEFAULT NULL,
+  `status` enum('CANCELLED','COMPLETED','PENDING') DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKqx7fy955cdwxgc95y8tsf9dro` (`carrier_id`),
+  KEY `FKo086vq2dhtvxyq3udcblrr2pp` (`warehouse_id`),
+  CONSTRAINT `FKo086vq2dhtvxyq3udcblrr2pp` FOREIGN KEY (`warehouse_id`) REFERENCES `warehouse` (`id`),
+  CONSTRAINT `FKqx7fy955cdwxgc95y8tsf9dro` FOREIGN KEY (`carrier_id`) REFERENCES `carrier` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- INSERT INTO supplier_product (supplier_id, product_id)
--- VALUES
--- ((SELECT id FROM supplier WHERE name = 'Công ty TNHH Thực Phẩm Việt'), (SELECT id FROM product WHERE name = 'Gạo Jasmine')),
--- ((SELECT id FROM supplier WHERE name = 'Công ty Cổ Phần Dược Phẩm Hòa Bình'), (SELECT id FROM product WHERE name = 'Vitamin C 1000mg')),
--- ((SELECT id FROM supplier WHERE name = 'Công ty TNHH Sản Xuất Áo Sơ Mi Việt'), (SELECT id FROM product WHERE name = 'Áo Sơ Mi Nam')),
--- ((SELECT id FROM supplier WHERE name = 'Công ty Cổ Phần Dược Phẩm Hòa Bình'), (SELECT id FROM product WHERE name = 'Kem dưỡng da ban đêm'));
+--
+-- Dumping data for table `shipment`
+--
 
--- INSERT INTO tax_rate (id, region, rate)
--- VALUES
--- (UUID(), 'TP. Hồ Chí Minh', 10.00),
--- (UUID(), 'Hà Nội', 10.00),
--- (UUID(), 'Đà Nẵng', 10.00),
--- (UUID(), 'Cần Thơ', 10.00),
--- (UUID(), 'Hải Phòng', 10.00);
+LOCK TABLES `shipment` WRITE;
+/*!40000 ALTER TABLE `shipment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `shipment` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- INSERT INTO invoice (id, invoice_date, total_amount, paid, tax_id)
--- VALUES
--- (UUID(), '2024-07-01', 1650000.00, FALSE, (SELECT id FROM tax_rate WHERE region = 'TP. Hồ Chí Minh')),
--- (UUID(), '2024-07-02', 2750000.00, TRUE, (SELECT id FROM tax_rate WHERE region = 'Hà Nội')),
--- (UUID(), '2024-07-03', 3850000.00, FALSE, (SELECT id FROM tax_rate WHERE region = 'Đà Nẵng')),
--- (UUID(), '2024-07-04', 4950000.00, TRUE, (SELECT id FROM tax_rate WHERE region = 'Cần Thơ')),
--- (UUID(), '2024-07-05', 6050000.00, FALSE, (SELECT id FROM tax_rate WHERE region = 'Hải Phòng'), (SELECT id FROM sale_order WHERE order_date = '2024-06-05 14:00:00'), (SELECT id FROM purchase_order WHERE order_date = '2024-06-05 14:00:00'));
+--
+-- Table structure for table `supplier`
+--
 
+DROP TABLE IF EXISTS `supplier`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `supplier` (
+  `rating` decimal(3,2) DEFAULT NULL,
+  `id` bigint NOT NULL,
+  `review_date` datetime(6) DEFAULT NULL,
+  `comment` varchar(300) DEFAULT NULL,
+  `payment_terms` varchar(300) DEFAULT NULL,
+  `criterion` enum('Cost','Quality','Timely_Delivery') DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `FKroxgvrf6wv4y971660cgxpt46` FOREIGN KEY (`id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- INSERT INTO customer (id, name, address, phone, contact_info, active, user_id)
--- VALUES
--- (UUID(), 'Lê Quốc Danh', '123 Đường Lê Lợi, Quận 1, TP. Hồ Chí Minh', '0901234567', 'danh@gmail.com', TRUE, (SELECT id FROM user WHERE username = 'cus1')),
--- (UUID(), 'Nguyễn Anh Phúc', '456 Đường Trần Hưng Đạo, Quận 5, TP. Hồ Chí Minh', '0912345678', 'phuc@gmail.com', TRUE, (SELECT id FROM user WHERE username = 'cus2')),
--- (UUID(), 'Bùi Lê Khang', '789 Đường Nguyễn Văn Cừ, Quận 10, TP. Hồ Chí Minh', '0923456789', 'khang@gmail.com', TRUE, (SELECT id FROM user WHERE username = 'cus3'));
+--
+-- Dumping data for table `supplier`
+--
 
--- INSERT INTO purchase_order (id, order_date, status, supplier_id, invoice_id)
--- VALUES
--- (UUID(), '2024-06-01 10:00:00', 'Pending', (SELECT id FROM supplier WHERE name = 'Công ty TNHH Thực Phẩm Việt')),
--- (UUID(), '2024-06-02 11:00:00', 'Completed', (SELECT id FROM supplier WHERE name = 'Công ty Cổ Phần Dược Phẩm Hòa Bình')),
--- (UUID(), '2024-06-03 12:00:00', 'Cancelled', (SELECT id FROM supplier WHERE name = 'Công ty TNHH Sản Xuất Áo Sơ Mi Việt'));
+LOCK TABLES `supplier` WRITE;
+/*!40000 ALTER TABLE `supplier` DISABLE KEYS */;
+/*!40000 ALTER TABLE `supplier` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- INSERT INTO purchase_order_detail (purchase_id, quantity, price, product_id)
--- VALUES
--- ((SELECT id FROM purchase_order WHERE order_date = '2024-06-01 10:00:00'), 1000, 15000.00, (SELECT id FROM product WHERE name = 'Gạo Jasmine')),
--- ((SELECT id FROM purchase_order WHERE order_date = '2024-06-02 11:00:00'), 5000, 2000.00, (SELECT id FROM product WHERE name = 'Thuốc Paracetamol')),
--- ((SELECT id FROM purchase_order WHERE order_date = '2024-06-03 12:00:00'), 300, 300000.00, (SELECT id FROM product WHERE name = 'Áo sơ mi nam')),
--- ((SELECT id FROM purchase_order WHERE order_date = '2024-06-04 13:00:00'), 200, 500000.00, (SELECT id FROM product WHERE name = 'Nồi cơm điện')),
--- ((SELECT id FROM purchase_order WHERE order_date = '2024-06-05 14:00:00'), 150, 700000.00, (SELECT id FROM product WHERE name = 'Máy đo huyết áp'));
+--
+-- Table structure for table `supplier_product`
+--
 
--- INSERT INTO sale_order (id, order_date, status, total_amount, tax_id, customer_id)
--- VALUES
--- (UUID(), '2024-06-01 10:00:00', 'Pending', 1500000.00, (SELECT id FROM tax_rate WHERE region = 'TP. Hồ Chí Minh'), (SELECT id FROM customer WHERE name = 'Lê Quốc Danh')),
--- (UUID(), '2024-06-02 11:00:00', 'Completed', 2500000.00, (SELECT id FROM tax_rate WHERE region = 'Hà Nội'), (SELECT id FROM customer WHERE name = 'Nguyễn Anh Phúc')),
--- (UUID(), '2024-06-03 12:00:00', 'Cancelled', 3500000.00, (SELECT id FROM tax_rate WHERE region = 'Đà Nẵng'), (SELECT id FROM customer WHERE name = 'Bùi Lê Khang')),
--- (UUID(), '2024-06-04 13:00:00', 'Pending', 4500000.00, (SELECT id FROM tax_rate WHERE region = 'Cần Thơ'), (SELECT id FROM customer WHERE name = 'Nguyễn Thị Xuân Lan')),
--- (UUID(), '2024-06-05 14:00:00', 'Completed', 5500000.00, (SELECT id FROM tax_rate WHERE region = 'Hải Phòng'), (SELECT id FROM customer WHERE name = 'Nguyễn Thị Bích Liễu'));
+DROP TABLE IF EXISTS `supplier_product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `supplier_product` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `product_id` bigint NOT NULL,
+  `supplier_id` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKpa7c04lsyqaxrge5h8amxgj1m` (`product_id`),
+  KEY `FKielp9e4tvmqu204v3s6odp1tc` (`supplier_id`),
+  CONSTRAINT `FKielp9e4tvmqu204v3s6odp1tc` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`id`),
+  CONSTRAINT `FKpa7c04lsyqaxrge5h8amxgj1m` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- INSERT INTO sale_order_detail (sale_id, quantity, price, product_id)
--- VALUES
--- ((SELECT id FROM sale_order WHERE order_date = '2024-06-01 10:00:00'), 1000, 15000.00, (SELECT id FROM product WHERE name = 'Gạo Jasmine')),
--- ((SELECT id FROM sale_order WHERE order_date = '2024-06-02 11:00:00'), 5000, 2000.00, (SELECT id FROM product WHERE name = 'Thuốc Paracetamol')),
--- ((SELECT id FROM sale_order WHERE order_date = '2024-06-03 12:00:00'), 300, 300000.00, (SELECT id FROM product WHERE name = 'Áo sơ mi nam')),
--- ((SELECT id FROM sale_order WHERE order_date = '2024-06-04 13:00:00'), 200, 500000.00, (SELECT id FROM product WHERE name = 'Nồi cơm điện')),
--- ((SELECT id FROM sale_order WHERE order_date = '2024-06-05 14:00:00'), 150, 700000.00, (SELECT id FROM product WHERE name = 'Máy đo huyết áp'));
+--
+-- Dumping data for table `supplier_product`
+--
 
--- INSERT INTO warehouse (id, location, capacity, active)
--- VALUES
--- (UUID(), 'Quận 1, TP. Hồ Chí Minh', 10000, TRUE),
--- (UUID(), 'Quận 5, TP. Hồ Chí Minh', 8000, TRUE),
--- (UUID(), 'Quận 10, TP. Hồ Chí Minh', 6000, TRUE),
--- (UUID(), 'Quận 3, TP. Hồ Chí Minh', 4000, TRUE),
--- (UUID(), 'Quận 2, TP. Hồ Chí Minh', 2000, TRUE);
+LOCK TABLES `supplier_product` WRITE;
+/*!40000 ALTER TABLE `supplier_product` DISABLE KEYS */;
+/*!40000 ALTER TABLE `supplier_product` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- INSERT INTO inventory (id, quantity, warehouse_id, product_id)
--- VALUES
--- (UUID(), 1000, (SELECT id FROM warehouse WHERE location = 'Quận 1, TP. Hồ Chí Minh'), (SELECT id FROM product WHERE name = 'Gạo Jasmine')),
--- (UUID(), 5000, (SELECT id FROM warehouse WHERE location = 'Quận 5, TP. Hồ Chí Minh'), (SELECT id FROM product WHERE name = 'Thuốc Paracetamol')),
--- (UUID(), 300, (SELECT id FROM warehouse WHERE location = 'Quận 10, TP. Hồ Chí Minh'), (SELECT id FROM product WHERE name = 'Áo sơ mi nam')),
--- (UUID(), 200, (SELECT id FROM warehouse WHERE location = 'Quận 3, TP. Hồ Chí Minh'), (SELECT id FROM product WHERE name = 'Nồi cơm điện')),
--- (UUID(), 150, (SELECT id FROM warehouse WHERE location = 'Quận 2, TP. Hồ Chí Minh'), (SELECT id FROM product WHERE name = 'Máy đo huyết áp'));
+--
+-- Table structure for table `tax`
+--
 
--- INSERT INTO shipment_company (id, company_name, contact_info, active, rating)
--- VALUES
--- (UUID(), 'Giao Hàng Nhanh', '0123456789, contact@ghn.vn', TRUE, 4.7),
--- (UUID(), 'Viettel Post', '0987654321, support@viettelpost.vn', TRUE, 4.5),
--- (UUID(), 'J&T Express', '0234567890, care@jtexpress.vn', TRUE, 4.6),
--- (UUID(), 'VNPost', '0345678901, info@vnpost.vn', TRUE, 4.4),
--- (UUID(), 'DHL', '0456789012, service@dhl.vn', TRUE, 4.8);
+DROP TABLE IF EXISTS `tax`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tax` (
+  `rate` decimal(5,2) DEFAULT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `region` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- INSERT INTO shipment (id, shipment_date, status, tracking_number, expected_delivery, company_id, sale_id, purchase_id)
--- VALUES
--- (UUID(), '2024-07-01', 'Shipped', 'GHN1234567890', '2024-07-05', (SELECT id FROM shipment_company WHERE company_name = 'Giao Hàng Nhanh'), (SELECT id FROM sale_order WHERE order_date = '2024-06-01 10:00:00'), (SELECT id FROM purchase_order WHERE order_date = '2024-06-01 10:00:00')),
--- (UUID(), '2024-07-02', 'In Transit', 'VTP1234567890', '2024-07-06', (SELECT id FROM shipment_company WHERE company_name = 'Viettel Post'), (SELECT id FROM sale_order WHERE order_date = '2024-06-02 11:00:00'), (SELECT id FROM purchase_order WHERE order_date = '2024-06-02 11:00:00')),
--- (UUID(), '2024-07-03', 'Delivered', 'J&T1234567890', '2024-07-07', (SELECT id FROM shipment_company WHERE company_name = 'J&T Express'), (SELECT id FROM sale_order WHERE order_date = '2024-06-03 12:00:00'), (SELECT id FROM purchase_order WHERE order_date = '2024-06-03 12:00:00')),
--- (UUID(), '2024-07-04', 'Returned', 'VNPost1234567890', '2024-07-08', (SELECT id FROM shipment_company WHERE company_name = 'VNPost'), (SELECT id FROM sale_order WHERE order_date = '2024-06-04 13:00:00'), (SELECT id FROM purchase_order WHERE order_date = '2024-06-04 13:00:00')),
--- (UUID(), '2024-07-05', 'Shipped', 'DHL1234567890', '2024-07-09', (SELECT id FROM shipment_company WHERE company_name = 'DHL'), (SELECT id FROM sale_order WHERE order_date = '2024-06-05 14:00:00'), (SELECT id FROM purchase_order WHERE order_date = '2024-06-05 14:00:00'));
+--
+-- Dumping data for table `tax`
+--
 
--- INSERT INTO pricing (price, effective_date, product_id, supplier_id)
--- VALUES
--- (15000.00, '2024-06-01 10:00:00', (SELECT id FROM product WHERE name = 'Gạo Jasmine'), (SELECT id FROM supplier WHERE name = 'Công ty TNHH Thực Phẩm Việt')),
--- (2000.00, '2024-06-02 11:00:00', (SELECT id FROM product WHERE name = 'Thuốc Paracetamol'), (SELECT id FROM supplier WHERE name = 'Công ty Cổ Phần Dược Phẩm Hòa Bình')),
--- (300000.00, '2024-06-03 12:00:00', (SELECT id FROM product WHERE name = 'Áo sơ mi nam'), (SELECT id FROM supplier WHERE name = 'Công ty TNHH Sản Xuất Áo Sơ Mi Việt')),
--- (500000.00, '2024-06-04 13:00:00', (SELECT id FROM product WHERE name = 'Nồi cơm điện'), (SELECT id FROM supplier WHERE name = 'Công ty TNHH Điện Tử Minh Khang')),
--- (700000.00, '2024-06-05 14:00:00', (SELECT id FROM product WHERE name = 'Máy đo huyết áp'), (SELECT id FROM supplier WHERE name = 'Công ty TNHH Dược Phẩm Nam An'));
+LOCK TABLES `tax` WRITE;
+/*!40000 ALTER TABLE `tax` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tax` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user` (
+  `deleted` bit(1) DEFAULT NULL,
+  `created_date` datetime(6) DEFAULT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `updated_date` datetime(6) DEFAULT NULL,
+  `phone` varchar(12) DEFAULT NULL,
+  `full_name` varchar(50) NOT NULL,
+  `email` varchar(200) DEFAULT NULL,
+  `address` varchar(300) DEFAULT NULL,
+  `avatar` varchar(300) DEFAULT NULL,
+  `role` enum('ROLE_ADMIN','ROLE_CARRIER','ROLE_CUSTOMER','ROLE_SUPPLIER') DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `warehouse`
+--
+
+DROP TABLE IF EXISTS `warehouse`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `warehouse` (
+  `active` bit(1) DEFAULT NULL,
+  `capacity` int DEFAULT NULL,
+  `cost` decimal(10,2) DEFAULT NULL,
+  `created_date` datetime(6) DEFAULT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `updated_date` datetime(6) DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `warehouse`
+--
+
+LOCK TABLES `warehouse` WRITE;
+/*!40000 ALTER TABLE `warehouse` DISABLE KEYS */;
+/*!40000 ALTER TABLE `warehouse` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2024-08-06 14:25:50
