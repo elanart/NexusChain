@@ -1,8 +1,6 @@
-CREATE DATABASE  IF NOT EXISTS `nexuschain` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `nexuschain`;
 -- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
--- Host: localhost    Database: nexuschain
+-- Host: localhost    Database: nexuschainscm
 -- ------------------------------------------------------
 -- Server version	8.1.0
 
@@ -25,9 +23,9 @@ DROP TABLE IF EXISTS `account`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `account` (
-  `id` bigint NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(300) NOT NULL,
+  `id` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FKnmcdy69g09oucre7atob6874f` FOREIGN KEY (`id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -51,7 +49,7 @@ DROP TABLE IF EXISTS `carrier`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `carrier` (
   `rating` decimal(3,2) DEFAULT NULL,
-  `id` bigint NOT NULL,
+  `id` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FKcusloqdh774oh98in78xfoo1k` FOREIGN KEY (`id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -74,8 +72,8 @@ DROP TABLE IF EXISTS `category`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `category` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
   `description` varchar(255) DEFAULT NULL,
+  `id` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -98,14 +96,18 @@ DROP TABLE IF EXISTS `inventory`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `inventory` (
-  `quantity` int DEFAULT NULL,
+  `quantity` int NOT NULL,
   `created_date` datetime(6) DEFAULT NULL,
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `expiry_date` datetime(6) DEFAULT NULL,
   `updated_date` datetime(6) DEFAULT NULL,
-  `warehouse_id` bigint NOT NULL,
+  `id` varchar(255) NOT NULL,
+  `product_id` varchar(255) NOT NULL,
+  `warehouse_id` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
+  KEY `FKp7gj4l80fx8v0uap3b2crjwp5` (`product_id`),
   KEY `FKix9yxgetau1y25hhnv42gsiok` (`warehouse_id`),
-  CONSTRAINT `FKix9yxgetau1y25hhnv42gsiok` FOREIGN KEY (`warehouse_id`) REFERENCES `warehouse` (`id`)
+  CONSTRAINT `FKix9yxgetau1y25hhnv42gsiok` FOREIGN KEY (`warehouse_id`) REFERENCES `warehouse` (`id`),
+  CONSTRAINT `FKp7gj4l80fx8v0uap3b2crjwp5` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -128,11 +130,11 @@ DROP TABLE IF EXISTS `invoice`;
 CREATE TABLE `invoice` (
   `paid` bit(1) DEFAULT NULL,
   `total_amount` decimal(10,2) DEFAULT NULL,
-  `id` bigint NOT NULL AUTO_INCREMENT,
   `invoice_date` datetime(6) DEFAULT NULL,
-  `order_id` bigint NOT NULL,
-  `shipment_id` bigint DEFAULT NULL,
-  `tax_id` bigint DEFAULT NULL,
+  `id` varchar(255) NOT NULL,
+  `order_id` varchar(255) NOT NULL,
+  `shipment_id` varchar(255) DEFAULT NULL,
+  `tax_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UKifwc1o7l3llam0bmfe5nrbk0o` (`shipment_id`),
   KEY `FKr27vrfyll0shs80upv1rmctie` (`order_id`),
@@ -161,9 +163,9 @@ DROP TABLE IF EXISTS `order`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order` (
   `deleted` bit(1) DEFAULT NULL,
-  `id` bigint NOT NULL AUTO_INCREMENT,
   `order_date` datetime(6) DEFAULT NULL,
-  `user_id` bigint NOT NULL,
+  `id` varchar(255) NOT NULL,
+  `user_id` varchar(255) NOT NULL,
   `status` enum('DELIVERED','IN_TRANSIT','RETURNED','SHIPPED') DEFAULT NULL,
   `type` enum('INBOUND','OUTBOUND') DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -191,8 +193,8 @@ DROP TABLE IF EXISTS `order_detail`;
 CREATE TABLE `order_detail` (
   `price` decimal(10,2) DEFAULT NULL,
   `quantity` int DEFAULT NULL,
-  `id` bigint NOT NULL,
-  `product_id` bigint DEFAULT NULL,
+  `id` varchar(255) NOT NULL,
+  `product_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKb8bg2bkty0oksa3wiq5mp5qnc` (`product_id`),
   CONSTRAINT `FKb8bg2bkty0oksa3wiq5mp5qnc` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
@@ -218,12 +220,12 @@ DROP TABLE IF EXISTS `pricing`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pricing` (
   `created_date` datetime(6) DEFAULT NULL,
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `product_id` bigint NOT NULL,
-  `shipment_id` bigint DEFAULT NULL,
-  `supplier_id` bigint NOT NULL,
   `updated_date` datetime(6) DEFAULT NULL,
-  `warehouse_id` bigint DEFAULT NULL,
+  `id` varchar(255) NOT NULL,
+  `product_id` varchar(255) NOT NULL,
+  `shipment_id` varchar(255) DEFAULT NULL,
+  `supplier_id` varchar(255) NOT NULL,
+  `warehouse_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK32fer4vv8nbdvnmgsbkfvuyjb` (`product_id`),
   KEY `FK42vksr04k5qba38wf7x3a7pg9` (`shipment_id`),
@@ -255,11 +257,10 @@ DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
   `deleted` bit(1) DEFAULT NULL,
   `price` decimal(10,2) DEFAULT NULL,
-  `quantity` int NOT NULL,
-  `category_id` bigint DEFAULT NULL,
-  `id` bigint NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
+  `category_id` varchar(255) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
+  `id` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK1mtsbur82frn64de7balymq9s` (`category_id`),
   CONSTRAINT `FK1mtsbur82frn64de7balymq9s` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
@@ -276,34 +277,6 @@ LOCK TABLES `product` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `product_inventory`
---
-
-DROP TABLE IF EXISTS `product_inventory`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `product_inventory` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `inventory_id` bigint NOT NULL,
-  `product_id` bigint NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKrp29y97hpxviprydwuh5ndrc8` (`inventory_id`),
-  KEY `FK8echmjvoete36r6q97dr6pl7j` (`product_id`),
-  CONSTRAINT `FK8echmjvoete36r6q97dr6pl7j` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
-  CONSTRAINT `FKrp29y97hpxviprydwuh5ndrc8` FOREIGN KEY (`inventory_id`) REFERENCES `inventory` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `product_inventory`
---
-
-LOCK TABLES `product_inventory` WRITE;
-/*!40000 ALTER TABLE `product_inventory` DISABLE KEYS */;
-/*!40000 ALTER TABLE `product_inventory` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `shipment`
 --
 
@@ -312,12 +285,12 @@ DROP TABLE IF EXISTS `shipment`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `shipment` (
   `cost` decimal(10,2) DEFAULT NULL,
-  `carrier_id` bigint NOT NULL,
   `expected_delivery` datetime(6) DEFAULT NULL,
-  `id` bigint NOT NULL AUTO_INCREMENT,
   `shipment_date` datetime(6) NOT NULL,
-  `warehouse_id` bigint NOT NULL,
   `tracking_number` varchar(100) DEFAULT NULL,
+  `carrier_id` varchar(255) NOT NULL,
+  `id` varchar(255) NOT NULL,
+  `warehouse_id` varchar(255) NOT NULL,
   `status` enum('CANCELLED','COMPLETED','PENDING') DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKqx7fy955cdwxgc95y8tsf9dro` (`carrier_id`),
@@ -344,12 +317,8 @@ DROP TABLE IF EXISTS `supplier`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `supplier` (
-  `rating` decimal(3,2) DEFAULT NULL,
-  `id` bigint NOT NULL,
-  `review_date` datetime(6) DEFAULT NULL,
-  `comment` varchar(300) DEFAULT NULL,
   `payment_terms` varchar(300) DEFAULT NULL,
-  `criterion` enum('Cost','Quality','Timely_Delivery') DEFAULT NULL,
+  `id` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FKroxgvrf6wv4y971660cgxpt46` FOREIGN KEY (`id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -372,9 +341,9 @@ DROP TABLE IF EXISTS `supplier_product`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `supplier_product` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `product_id` bigint NOT NULL,
-  `supplier_id` bigint NOT NULL,
+  `id` varchar(255) NOT NULL,
+  `product_id` varchar(255) NOT NULL,
+  `supplier_id` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FKpa7c04lsyqaxrge5h8amxgj1m` (`product_id`),
   KEY `FKielp9e4tvmqu204v3s6odp1tc` (`supplier_id`),
@@ -393,6 +362,33 @@ LOCK TABLES `supplier_product` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `supplier_rating`
+--
+
+DROP TABLE IF EXISTS `supplier_rating`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `supplier_rating` (
+  `rating` decimal(3,2) DEFAULT NULL,
+  `created_date` datetime(6) DEFAULT NULL,
+  `updated_date` datetime(6) DEFAULT NULL,
+  `comment` varchar(300) DEFAULT NULL,
+  `id` varchar(255) NOT NULL,
+  `criterion` enum('Cost','Quality','Timely_Delivery') DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `supplier_rating`
+--
+
+LOCK TABLES `supplier_rating` WRITE;
+/*!40000 ALTER TABLE `supplier_rating` DISABLE KEYS */;
+/*!40000 ALTER TABLE `supplier_rating` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tax`
 --
 
@@ -401,8 +397,8 @@ DROP TABLE IF EXISTS `tax`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tax` (
   `rate` decimal(5,2) DEFAULT NULL,
-  `id` bigint NOT NULL AUTO_INCREMENT,
   `region` varchar(100) DEFAULT NULL,
+  `id` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -426,13 +422,13 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `deleted` bit(1) DEFAULT NULL,
   `created_date` datetime(6) DEFAULT NULL,
-  `id` bigint NOT NULL AUTO_INCREMENT,
   `updated_date` datetime(6) DEFAULT NULL,
   `phone` varchar(12) DEFAULT NULL,
   `full_name` varchar(50) NOT NULL,
   `email` varchar(200) DEFAULT NULL,
   `address` varchar(300) DEFAULT NULL,
   `avatar` varchar(300) DEFAULT NULL,
+  `id` varchar(255) NOT NULL,
   `role` enum('ROLE_ADMIN','ROLE_CARRIER','ROLE_CUSTOMER','ROLE_SUPPLIER') DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -459,8 +455,8 @@ CREATE TABLE `warehouse` (
   `capacity` int DEFAULT NULL,
   `cost` decimal(10,2) DEFAULT NULL,
   `created_date` datetime(6) DEFAULT NULL,
-  `id` bigint NOT NULL AUTO_INCREMENT,
   `updated_date` datetime(6) DEFAULT NULL,
+  `id` varchar(255) NOT NULL,
   `location` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -484,4 +480,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-06 14:25:50
+-- Dump completed on 2024-08-07 19:03:27
