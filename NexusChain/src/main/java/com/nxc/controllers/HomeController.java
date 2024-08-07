@@ -4,7 +4,7 @@
  */
 package com.nxc.controllers;
 
-import com.nxc.service.CategoryService;
+//import com.nxc.service.CategoryService;
 import com.nxc.service.SupplierService;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +22,14 @@ public class HomeController {
     @Autowired
     private SupplierService supplierService;
     
-    @Autowired
-    private CategoryService categoryService;
+//    @Autowired
+//    private CategoryService categoryService;
     
     @RequestMapping("/")
     public String index(Model model, @RequestParam Map<String, String> params) {
         
 //        model.addAttribute("suppliers", this.supplierService.getSuppliers(params));
-        model.addAttribute("categories", this.categoryService.getAllCategories());
+//        model.addAttribute("categories", this.categoryService.getAllCategories());
         
         return "home";
     }

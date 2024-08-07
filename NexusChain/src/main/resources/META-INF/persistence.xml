@@ -19,6 +19,13 @@
     <class>com.nxc.pojo.Warehouse</class>
     <class>com.nxc.pojo.Shipment</class>
     <class>com.nxc.pojo.Pricing</class>
+    <class>com.nxc.pojo.Account</class>
+    <class>com.nxc.pojo.ProductInventory</class>
+    <class>com.nxc.pojo.Inventory</class>
+    <class>com.nxc.pojo.Carrier</class>
+    <class>com.nxc.pojo.Order1</class>
+    <class>com.nxc.pojo.OrderDetail</class>
+    <class>com.nxc.pojo.Tax</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/nexuschainscm?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

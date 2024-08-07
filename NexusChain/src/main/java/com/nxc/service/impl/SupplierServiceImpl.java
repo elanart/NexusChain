@@ -5,6 +5,7 @@
 package com.nxc.service.impl;
 
 import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.nxc.pojo.Supplier;
 import com.nxc.repository.SupplierRepository;
 import com.nxc.service.SupplierService;
@@ -28,5 +29,15 @@ public class SupplierServiceImpl implements SupplierService{
     
     public void addOrUpdate(Supplier supplier) {
         this.supplierRepository.addOrUpdate(supplier);
+        
+         if(!supplier.getFile().isEmpty()) {
+            try {
+                Map res = this.cloudinary.uploader().upload(supplier.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                supplier.setImage(res.get("secure_url").toString());
+            } catch (IOException ex) {
+                Logger.getLogger(ProductServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        this.productRepo.addOrUpdate(p);
     }
 }

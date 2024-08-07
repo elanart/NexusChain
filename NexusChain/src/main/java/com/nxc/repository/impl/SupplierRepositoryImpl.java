@@ -5,6 +5,7 @@
 package com.nxc.repository.impl;
 
 import com.nxc.pojo.Supplier;
+import com.nxc.pojo.User;
 import com.nxc.repository.SupplierRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.Map;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.hibernate.Session;
@@ -35,19 +37,10 @@ public class SupplierRepositoryImpl implements SupplierRepository {
     public List<Supplier> getSuppliers(Map<String, String> params) {
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
-        CriteriaQuery<Supplier> q = b.createQuery(Supplier.class);
-        Root root = q.from(Supplier.class);
-        q.select(root);
+        CriteriaQuery<String> q = b.createQuery(String.class);
 
-        if (params != null) {
-            List<Predicate> predicates = new ArrayList<>();
-            String kw = params.get("q");
-            if (kw != null && !kw.isEmpty()) {
-                Predicate p1 = b.like(root.get("name"), String.format("%%%s%%", kw));
-                predicates.add(p1);
-            }
-            q.where(predicates.toArray(Predicate[]::new));
-        }
+        Root rootSupplier = q.from(User.class);
+        q.select(rootSupplier);
 
         Query query = s.createQuery(q);
 
@@ -57,10 +50,20 @@ public class SupplierRepositoryImpl implements SupplierRepository {
     @Override
     public void addOrUpdate(Supplier supplier) {
         Session s = this.factory.getObject().getCurrentSession();
-        if (supplier.getId() != null) {
-            s.update(supplier);
+        User user = supplier.getUser();
+
+        // Save or update User
+        if (user.getId() == null) {
+            s.save(user);
         } else {
+            s.update(user);
+        }
+
+        // Save or update Supplier
+        if (supplier.getId() == null) {
             s.save(supplier);
+        } else {
+            s.update(supplier);
         }
     }
 }

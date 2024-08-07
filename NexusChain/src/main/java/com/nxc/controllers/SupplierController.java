@@ -5,6 +5,7 @@
 package com.nxc.controllers;
 
 import com.nxc.pojo.Supplier;
+import com.nxc.pojo.User;
 import com.nxc.service.SupplierService;
 import java.util.Map;
 import java.util.UUID;
@@ -29,29 +30,53 @@ public class SupplierController {
     @Autowired
     private SupplierService supplierService;
 
-    @RequestMapping("/supplier")
-    public String index(Model model, @RequestParam Map<String, String> params) {
-        model.addAttribute("suppliers", this.supplierService.getSuppliers(params));
-        return "supplier";
-    }
-
-    @ModelAttribute("/supplier")
-    public String supplierView(Model model) {
+    @GetMapping("/supplier")
+    public String showSupplierForm(Model model) {
+        model.addAttribute("user", new User());
         model.addAttribute("supplier", new Supplier());
         return "supplier";
     }
 
+//    @PostMapping("/supplier")
+//    public String createSupplier(Model model, @ModelAttribute(value = "supplier") @Valid Supplier s, BindingResult rs) {
+//        if (rs.hasErrors()) {
+//            return "supplier";
+//        }
+//        return "redirect:/supplier";
+//    }
     @PostMapping("/supplier")
-    public String create(Model model, @ModelAttribute(value = "supplier") @Valid Supplier s,
+    public String createSupplier(Model model,
+            @ModelAttribute(value = "user") @Valid User u,
+            @ModelAttribute(value = "supplier") @Valid Supplier s,
             BindingResult rs) {
         if (rs.hasErrors()) {
             return "supplier";
         }
-        if (s.getId() == null) {
-            s.setId(UUID.randomUUID());
-        }
-        this.supplierService.addOrUpdate(s);
-        return "redirect:/";
-    }
 
+        // Set user to supplier
+        s.setUser(u);
+
+        // Save supplier using service
+        this.supplierService.addOrUpdate(s);
+
+        return "redirect:/supplier";
+    }
+//    @ModelAttribute("/supplier")
+//    public String supplierView(Model model) {
+//        model.addAttribute("supplier", new Supplier());
+//        return "supplier";
+//    }
+
+//    @PostMapping("/supplier")
+//    public String create(Model model, @ModelAttribute(value = "supplier") @Valid Supplier s,
+//            BindingResult rs) {
+//        if (rs.hasErrors()) {
+//            return "supplier";
+//        }
+//        if (s.getId() == null) {
+//            s.setId(UUID.randomUUID());
+//        }
+//        this.supplierService.addOrUpdate(s);
+//        return "redirect:/";
+//    }
 }
