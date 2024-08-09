@@ -2,7 +2,10 @@ package com.nxc.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,10 +25,12 @@ public class Account implements Serializable {
 
     @NotNull
     @Column(length = 50, nullable = false)
+    @Size(min = 1, max = 50, message = "{user.username.sizeMsg}")
     private String username;
 
     @NotNull
     @Column(length = 300, nullable = false)
+    @NotEmpty(message = "{user.password.sizeMsg}")
     private String password;
 
     @JsonIgnore

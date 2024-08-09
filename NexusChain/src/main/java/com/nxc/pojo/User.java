@@ -4,13 +4,14 @@ import com.nxc.enums.RoleEnum;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -39,11 +40,17 @@ public class User implements Serializable {
     private String avatar;
 
     @Column(length = 200)
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$",
+            message = "{user.email.error.invalidMsg}")
     private String email;
 
     @Builder.Default
     @Column(name = "deleted")
     private Boolean isDeleted = false;
+
+    @Builder.Default
+    @Column(name = "confirm")
+    private Boolean isConfirm = false;
 
     @Column(name = "created_date", updatable = false)
     private Date createdDate;
@@ -71,7 +78,6 @@ public class User implements Serializable {
 
     @PrePersist
     protected void onCreate() {
-        this.isDeleted = false;
         createdDate = new Date();
     }
 

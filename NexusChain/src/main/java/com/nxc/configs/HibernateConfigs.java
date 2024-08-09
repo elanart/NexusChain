@@ -10,13 +10,14 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 import javax.sql.DataSource;
+import java.util.Objects;
 import java.util.Properties;
 
 import static org.hibernate.cfg.AvailableSettings.*;
 
 @Configuration
 @PropertySource("classpath:database.properties")
-public class HibernateConfig {
+public class HibernateConfigs {
     @Autowired
     private Environment env;
 
@@ -38,7 +39,7 @@ public class HibernateConfig {
         DriverManagerDataSource dataSource
                 = new DriverManagerDataSource();
         dataSource.setDriverClassName(
-                env.getProperty("hibernate.connection.driverClass"));
+                Objects.requireNonNull(env.getProperty("hibernate.connection.driverClass")));
         dataSource.setUrl(env.getProperty("hibernate.connection.url"));
         dataSource.setUsername(
                 env.getProperty("hibernate.connection.username"));

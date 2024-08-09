@@ -13,6 +13,5 @@ import java.util.Map;
  * @author tuann
  */
 public interface SupplierRepository {
-    List<Supplier> getSuppliers(Map<String, String> params);
-    void addOrUpdate(Supplier supplier);
+    void saveOrUpdate(Supplier supplier);
 }

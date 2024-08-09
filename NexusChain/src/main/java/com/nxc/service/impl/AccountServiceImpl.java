@@ -13,7 +13,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void saveAccount(Account account) {
-        this.accountRepository.saveAccount(account);
+        this.accountRepository.saveOrUpdate(account);
     }
 
     @Override
