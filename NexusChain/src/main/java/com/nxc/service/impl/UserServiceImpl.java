@@ -8,7 +8,6 @@ import com.nxc.repository.AccountRepository;
 import com.nxc.repository.UserRepository;
 import com.nxc.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,10 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service("userDetailsService")
 @RequiredArgsConstructor
@@ -45,8 +41,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findByRole(RoleEnum role) {
-        return this.userRepository.findByRole(role);
+    public List<User> getUsers(Map<String, String> params) {
+        return this.userRepository.getUsers(params);
     }
 
     @Override
@@ -87,6 +83,31 @@ public class UserServiceImpl implements UserService {
         user.setAccount(account);
         this.accountRepository.saveOrUpdate(account);
         return this.userRepository.saveOrUpdate(user);
+    }
+
+    @Override
+    public List<User> findByRole(RoleEnum role) {
+        return this.userRepository.findByRole(role);
+    }
+
+    @Override
+    public void confirmUserAccount(Long userId) {
+        User user = this.userRepository.findById(userId);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found!");
+        } else {
+            if (!user.getIsConfirm()) {
+                user.setIsConfirm(true);
+                this.userRepository.saveOrUpdate(user);
+
+            }
+        }
+
+    }
+
+    @Override
+    public User findById(Long id) {
+        return this.userRepository.findById(id);
     }
 }
 

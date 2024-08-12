@@ -40,6 +40,18 @@ public class SupplierRepositoryImpl implements SupplierRepository {
     }
 
     @Override
+    public Supplier findById(Long id) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Supplier> cq = cb.createQuery(Supplier.class);
+        Root<Supplier> root = cq.from(Supplier.class);
+        cq.select(root);
+        cq.where(cb.equal(root.get("id"), id));
+        Query query = session.createQuery(cq);
+        return (Supplier) query.getSingleResult();
+    }
+
+    @Override
     public void saveOrUpdate(Supplier supplier) {
         Session session = this.getCurrentSession();
         session.saveOrUpdate(supplier);

@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SupplierRegistrationResponse {
+public class SupplierResponse {
     private UserResponse user;
 }

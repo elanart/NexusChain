@@ -13,5 +13,6 @@ import java.util.Map;
  * @author tuann
  */
 public interface SupplierRepository {
+    Supplier findById(Long id);
     void saveOrUpdate(Supplier supplier);
 }

@@ -13,6 +13,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Repository
@@ -26,20 +27,37 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> findByRole(RoleEnum role) {
+    public List<User> getUsers(Map<String, String> params) {
         Session session = this.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<User> criteria = builder.createQuery(User.class);
         Root<User> root = criteria.from(User.class);
         criteria.select(root);
 
-        List<Predicate> predicates = new ArrayList<>();
-        Predicate userRole = builder.equal(root.get("role"), role);
-        Predicate isDeleted = builder.isFalse(root.get("isDeleted"));
-        predicates.add(userRole);
-        predicates.add(isDeleted);
+        if (params != null) {
+            List<Predicate> predicates = new ArrayList<>();
 
-        criteria.where(predicates.toArray(Predicate[]::new));
+//            Predicate isValid = builder.and(
+//                    builder.equal(root.get("isDeleted"), false),
+//                    builder.equal(root.get("isConfirm"), true)
+//            );
+//            predicates.add(isValid);
+
+            String fullName = params.get("fullName");
+            if (fullName != null && !fullName.isEmpty()) {
+                Predicate p1 = builder.like(root.get("fullName"), String.format("%%%s%%", fullName));
+                predicates.add(p1);
+            }
+
+            String role = params.get("role");
+            if (role != null && !role.isEmpty()) {
+                RoleEnum userRole = RoleEnum.valueOf(role);
+                Predicate p2 = builder.equal(root.get("role"), userRole);
+                predicates.add(p2);
+            }
+
+            criteria.where(predicates.toArray(Predicate[]::new));
+        }
 
         Query query = session.createQuery(criteria);
 
@@ -69,6 +87,45 @@ public class UserRepositoryImpl implements UserRepository {
         criteria.select(root);
         criteria.where(builder.equal(root.get("username"), username));
 
+        Query query = session.createQuery(criteria);
+        return (User) query.getSingleResult();
+    }
+
+    @Override
+    public List<User> findByRole(RoleEnum role) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = builder.createQuery(User.class);
+        Root<User> root = criteria.from(User.class);
+        criteria.select(root);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        Predicate isValid = builder.and(
+                builder.equal(root.get("isDeleted"), false),
+                builder.equal(root.get("isConfirm"), true)
+        );
+        predicates.add(isValid);
+
+        Predicate userRole = builder.equal(root.get("role"), role);
+        predicates.add(userRole);
+
+        criteria.where(predicates.toArray(Predicate[]::new));
+
+        Query query = session.createQuery(criteria);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public User findById(Long id) {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = builder.createQuery(User.class);
+        Root<User> root = criteria.from(User.class);
+        criteria.select(root);
+
+        criteria.where(builder.equal(root.get("id"), id));
         Query query = session.createQuery(criteria);
         return (User) query.getSingleResult();
     }

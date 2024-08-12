@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public enum RoleEnum {
     ROLE_ADMIN("Quản trị viên"),
-    ROLE_CUSTOMER("Khách hàng"),
+    ROLE_DISTRIBUTOR("Đại lý"),
     ROLE_SUPPLIER("Nhà cung cấp"),
     ROLE_CARRIER("Đối tác vận chuyển");
 

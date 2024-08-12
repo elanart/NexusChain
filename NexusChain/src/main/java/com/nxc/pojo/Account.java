@@ -1,6 +1,5 @@
 package com.nxc.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -33,7 +32,6 @@ public class Account implements Serializable {
     @NotEmpty(message = "{user.password.sizeMsg}")
     private String password;
 
-    @JsonIgnore
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
     @MapsId
     @OneToOne(optional = false)

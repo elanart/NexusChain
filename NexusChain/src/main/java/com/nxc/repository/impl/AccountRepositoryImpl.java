@@ -12,6 +12,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.List;
 import java.util.Objects;
 
 @Repository
@@ -42,5 +43,31 @@ public class AccountRepositoryImpl implements AccountRepository {
     public void saveOrUpdate(Account account) {
         Session session = this.getCurrentSession();
         session.saveOrUpdate(account);
+    }
+
+    @Override
+    public List<Account> getAccounts() {
+        Session session = this.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Account> criteria = builder.createQuery(Account.class);
+        Root<Account> root = criteria.from(Account.class);
+        criteria.select(root);
+
+        Query query = session.createQuery(criteria);
+        return query.getResultList();
+    }
+
+    @Override
+    public Account findById(Long id) {
+        Session session = this.getCurrentSession();
+
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Account> criteria = builder.createQuery(Account.class);
+        Root<Account> root = criteria.from(Account.class);
+        criteria.select(root);
+        criteria.where(builder.equal(root.get("id"), id));
+
+        Query query = session.createQuery(criteria);
+        return (Account) query.getSingleResult();
     }
 }

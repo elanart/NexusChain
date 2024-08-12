@@ -1,25 +1,50 @@
 package com.nxc.controllers;
 
-import com.nxc.dto.supplier.request.SupplierRegistrationRequest;
-import com.nxc.dto.supplier.response.SupplierRegistrationResponse;
+import com.nxc.dto.account.request.AccountRequest;
+import com.nxc.dto.supplier.request.SupplierRequest;
+import com.nxc.dto.supplier.request.SupplierUpdateRequest;
+import com.nxc.dto.supplier.response.SupplierResponse;
 import com.nxc.service.SupplierService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.nxc.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/suppliers")
+@RequiredArgsConstructor
 public class SupplierController {
-    @Autowired
-    private SupplierService supplierService;
+    private final SupplierService supplierService;
+    private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<SupplierRegistrationResponse> registerSupplier(@RequestBody SupplierRegistrationRequest request) {
-        SupplierRegistrationResponse response = supplierService.registerSupplier(request);
+    public ResponseEntity<SupplierResponse> registerSupplier(@RequestBody SupplierRequest request) {
+        SupplierResponse response = this.supplierService.registerSupplier(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @RequestMapping("/current_user")
+    public String currentUserName(Principal principal) {
+        return principal.getName();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<SupplierResponse> updateSupplier(
+            @PathVariable Long id,
+            @RequestBody SupplierUpdateRequest request) {
+        SupplierResponse response = this.supplierService.updateSupplier(id, request);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}/account")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateSupplierAccount(
+            @PathVariable Long id,
+            @RequestBody AccountRequest request) {
+        this.supplierService.updateSupplierAccount(id, request);
     }
 }

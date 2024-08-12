@@ -9,12 +9,12 @@
         <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp" />
         <put-attribute name="content" value="..." />
     </definition>
-    <definition name="home" extends="baseLayout">
+    <definition name="index" extends="baseLayout">
         <put-attribute name="title" value="Trang chủ" />
         <put-attribute name="content" value="/WEB-INF/pages/index.jsp" />
     </definition>
-    <definition name="supplier" extends="baseLayout">
-        <put-attribute name="title" value="Quản lý nhà cung cấp" />
-        <put-attribute name="content" value="/WEB-INF/pages/supplier.jsp" />
+    <definition name="account" extends="baseLayout">
+        <put-attribute name="title" value="Danh sách người dùng" />
+        <put-attribute name="content" value="/WEB-INF/pages/account.jsp" />
     </definition>
 </tiles-definitions>

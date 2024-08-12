@@ -10,43 +10,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c083cbf9-aa8d-4c1d-83bd-dbaacb9a31a8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/configs/SecurityConfigs.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/configs/SecurityWebAppContextConfigs.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/configs/WebInitializerConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/dto/account/request/AccountRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/dto/supplier/request/SupplierRegistrationRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/dto/supplier/response/SupplierDetailsResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/dto/supplier/response/SupplierRegistrationResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/dto/user/request/UserRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/dto/user/response/UserDetailResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/dto/user/response/UserResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/service/InitializerService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/service/impl/InitializerServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/controllers/AdminController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/dto/supplier/request/SupplierUpdateRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/account.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/configs/DispatcherServletInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/configs/DispatcherServletInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/configs/HibernateConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/configs/HibernateConfigs.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/configs/TilesConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/configs/TilesConfigs.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/configs/WebApplicationContextConfigs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/configs/WebApplicationContextConfigs.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/controllers/AccountController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/controllers/HomeController.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/controllers/SupplierController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/controllers/SupplierController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/controllers/UserController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/dto/supplier/request/SupplierRegistrationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/dto/supplier/request/SupplierRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/dto/supplier/response/SupplierRegistrationResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/dto/supplier/response/SupplierResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/enums/RoleEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/enums/RoleEnum.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/repository/AccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/repository/AccountRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/repository/SupplierRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/repository/SupplierRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/repository/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/repository/impl/AccountRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/repository/impl/AccountRepositoryImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/repository/impl/SupplierRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/repository/impl/SupplierRepositoryImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/repository/impl/UserRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/repository/impl/UserRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/service/AccountService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/service/SupplierService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/service/SupplierService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/service/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/service/impl/AccountServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/service/impl/AccountServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/service/impl/InitializerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/service/impl/InitializerServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/service/impl/SupplierServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/service/impl/SupplierServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/service/impl/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/database.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/database.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/messages.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/messages.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/layout/base.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/layout/base.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/layout/footer.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/layout/footer.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/layout/header.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/layout/header.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/supplier.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/tiles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/tiles.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,9 +48,10 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="spring-beans.schema" />
-        <option value="Jsp File" />
         <option value="com.intellij.jpb.JpaEntity" />
         <option value="Interface" />
+        <option value="HTML File" />
+        <option value="Jsp File" />
         <option value="Class" />
       </list>
     </option>
@@ -104,10 +96,12 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Tomcat Server.Tomcat 9.0.91.executor": "Run",
-    "git-widget-placeholder": "nhat",
+    "extract.method.default.visibility": "private",
+    "git-widget-placeholder": "lan",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/Project/NexusChain/NexusChain",
@@ -119,6 +113,7 @@
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.3137931",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -127,6 +122,11 @@
     ]
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Project\NexusChain\NexusChain\src\main\webapp\WEB-INF\views" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Tomcat 9.0.91" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 9.0.91" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
       <option name="UPDATING_POLICY" value="restart-server" />
@@ -237,6 +237,10 @@
       <workItem from="1723035753144" duration="713000" />
       <workItem from="1723082613776" duration="6336000" />
       <workItem from="1723196129188" duration="10119000" />
+      <workItem from="1723290443099" duration="5438000" />
+      <workItem from="1723342234724" duration="6014000" />
+      <workItem from="1723385152104" duration="6602000" />
+      <workItem from="1723434827438" duration="24068000" />
     </task>
     <servers />
   </component>

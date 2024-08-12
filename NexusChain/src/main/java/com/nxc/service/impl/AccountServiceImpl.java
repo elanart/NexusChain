@@ -20,4 +20,9 @@ public class AccountServiceImpl implements AccountService {
     public Account findByUsername(String username) {
         return this.accountRepository.findByUsername(username);
     }
+
+    @Override
+    public Account findById(Long id) {
+        return this.accountRepository.findById(id);
+    }
 }
