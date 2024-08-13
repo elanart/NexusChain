@@ -4,6 +4,7 @@ import com.nxc.dto.account.request.AccountRequest;
 import com.nxc.dto.supplier.request.SupplierRequest;
 import com.nxc.dto.supplier.request.SupplierUpdateRequest;
 import com.nxc.dto.supplier.response.SupplierResponse;
+import com.nxc.service.CloudinaryService;
 import com.nxc.service.SupplierService;
 import com.nxc.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +17,14 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/api/suppliers")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class SupplierController {
     private final SupplierService supplierService;
     private final UserService userService;
+    private final CloudinaryService cloudinaryService;
 
     @PostMapping("/register")
-    public ResponseEntity<SupplierResponse> registerSupplier(@RequestBody SupplierRequest request) {
+    public ResponseEntity<SupplierResponse> registerSupplier(@ModelAttribute SupplierRequest request) {
         SupplierResponse response = this.supplierService.registerSupplier(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

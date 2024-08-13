@@ -12,7 +12,7 @@ public class AccountServiceImpl implements AccountService {
     private AccountRepository accountRepository;
 
     @Override
-    public void saveAccount(Account account) {
+    public void saveOrUpdate(Account account) {
         this.accountRepository.saveOrUpdate(account);
     }
 

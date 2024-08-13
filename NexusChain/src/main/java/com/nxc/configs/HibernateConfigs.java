@@ -53,7 +53,6 @@ public class HibernateConfigs {
         props.put(DIALECT, env.getProperty("hibernate.dialect"));
         props.put(SHOW_SQL, env.getProperty("hibernate.showSql"));
 
-        // Code First
         props.put(HBM2DDL_AUTO, env.getProperty("hibernate.hbm2ddl.auto"));
         return props;
     }

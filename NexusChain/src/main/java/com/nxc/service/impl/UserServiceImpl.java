@@ -4,8 +4,8 @@ import com.nxc.dto.user.request.UserRequest;
 import com.nxc.enums.RoleEnum;
 import com.nxc.pojo.Account;
 import com.nxc.pojo.User;
-import com.nxc.repository.AccountRepository;
 import com.nxc.repository.UserRepository;
+import com.nxc.service.AccountService;
 import com.nxc.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,21 +23,23 @@ import java.util.*;
 @Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final AccountRepository accountRepository;
+    private final AccountService accountService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User u = this.getUserByUsername(username);
-        if (u == null) {
+        Account account = this.accountService.findByUsername(username);
+        if (account == null) {
             throw new UsernameNotFoundException("Invalid Username!");
         }
 
+        User user = account.getUser();
+
         Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority(u.getRole().name()));
+        authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
 
         return new org.springframework.security.core.userdetails.User(
-                u.getAccount().getUsername(), u.getAccount().getPassword(), authorities);
+                account.getUsername(), account.getPassword(), authorities);
     }
 
     @Override
@@ -81,7 +83,7 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         user.setAccount(account);
-        this.accountRepository.saveOrUpdate(account);
+        this.accountService.saveOrUpdate(account);
         return this.userRepository.saveOrUpdate(user);
     }
 

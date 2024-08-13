@@ -2,6 +2,10 @@ package com.nxc.configs;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.nxc.filters.CustomAccessDeniedHandler;
+import com.nxc.filters.JwtAuthenticationTokenFilter;
+import com.nxc.filters.RestAuthenticationEntryPoint;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
@@ -32,32 +37,26 @@ public class SecurityConfigs extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth)
-            throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.formLogin()
-//                .usernameParameter("username")
-//                .passwordParameter("password");
-//
-//        http.formLogin().defaultSuccessUrl("/")
-//                .failureUrl("/login?error");
-//
-//        http.logout().logoutSuccessUrl("/login");
-//
-//        http.exceptionHandling()
-//                .accessDeniedPage("/login?accessDenied");
+        http.authorizeRequests()
+                .antMatchers("/api/**").permitAll()
+                .anyRequest().permitAll()
+                .and()
+                .formLogin()
+                .defaultSuccessUrl("/admin")
+                .failureUrl("/login?error=true")
+                .permitAll()
+                .and()
+                .logout()
+                .logoutSuccessUrl("/login")
+                .permitAll();
 
-        http.authorizeRequests().antMatchers("/api").permitAll();
-//                .antMatchers("/api/products").permitAll()
-//                .antMatchers("/**").access("hasRole('ROLE_ADMIN')");
-//                .access("hasRole('ROLE_ADMIN')");
-//        .antMatchers("/**/pay")
-//                .access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
         http.csrf().disable();
     }
 
@@ -66,7 +65,7 @@ public class SecurityConfigs extends WebSecurityConfigurerAdapter {
         return new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", "djga3njzi",
                 "api_key", "595946198281489",
-                "api_secret", "hd1cRj177f0HVAQ-vSeqG_yT9Y0-A",
+                "api_secret", "hd1cRj177f0HVAQ-vSeqG_yT9Y0",
                 "secure", true));
     }
 }
