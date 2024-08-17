@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 @Table(name = "order_detail")
 public class OrderDetail implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Integer quantity;
@@ -26,12 +27,10 @@ public class OrderDetail implements Serializable {
     private BigDecimal price;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @JoinColumn(name = "product_id", referencedColumnName = "id",  insertable = false, updatable = false)
     private Product product;
 
-    @JsonIgnore
-    @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
-    @MapsId
-    @OneToOne(optional = false)
+    @JoinColumn(name = "order_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
     private Order order;
 }

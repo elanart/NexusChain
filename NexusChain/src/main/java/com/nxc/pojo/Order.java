@@ -10,7 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+
+import java.util.Date;
 import java.util.Set;
 
 @Data
@@ -25,7 +26,7 @@ public class Order implements Serializable {
     private Long id;
 
     @Column(name = "order_date")
-    private LocalDateTime orderDate;
+    private Date orderDate;
 
     @Enumerated(EnumType.STRING)
     private ShippingStatusEnum status;
@@ -45,6 +46,6 @@ public class Order implements Serializable {
     private Set<Invoice> invoices;
 
     @Valid
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "order")
-    private OrderDetail orderDetail;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "order")
+    private Set<OrderDetail> orderDetails;
 }
