@@ -1,15 +1,17 @@
-package com.nxc.dto.supplier.response;
+package com.nxc.dto.account.response;
 
-import com.nxc.dto.user.response.UserResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SupplierResponse {
-    private UserResponse user;
+public class JwtResponse {
+    @NotNull
+    private String token;
 }

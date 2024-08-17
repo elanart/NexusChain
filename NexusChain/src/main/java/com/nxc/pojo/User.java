@@ -40,8 +40,7 @@ public class User implements Serializable {
     private String avatar;
 
     @Column(length = 200)
-    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$",
-            message = "{user.email.error.invalidMsg}")
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "{user.email.patternMsg}")
     private String email;
 
     @Builder.Default

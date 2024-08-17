@@ -1,4 +1,3 @@
-import { Input } from "postcss";
 import React, { useRef, useState } from "react";
 import APIs, { endpoints } from "../../configs/APIs";
 
@@ -16,11 +15,10 @@ const Register = () => {
 
   const roles = [
     { "Nhà cung cấp": "ROLE_SUPPLIER" },
-    { "Khách hàng": "ROLE_CUSTOMER" },
+    { "Đại lý": "ROLE_DISTRIBUTOR" },
     { "Đối tác vận chuyển": "ROLE_CARRIER" },
   ];
 
-  // Chuyển đổi mảng roles thành một mảng các tùy chọn
   const roleOptions = roles.map((role) => {
     const [label, value] = Object.entries(role)[0];
     return { label, value };
@@ -32,51 +30,27 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    // try {
-    //   let form = new FormData();
-    //   form.append('fullName', fullName)
-    //   form.append('address', address)
-    //   form.append('phone', phone)
-    //   form.append('email', email)
-    //   form.append('role', role)
-    //   form.append('username', username)
-    //   form.append('password', password)
-    //   form.append('paymentTerms', paymentTerms)
-    //   if(avatar.current.files.length > 0) {
-    //     form.append('avatar', avatar.current.files[0])
-    //   }
-
-    //   let res = await APIs.post(endpoints['registerUser'], form, {
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data'
-    //     }
-    //   })
-
-    //   if (res.status === 201 ) {
-    //     console.log("Tạo tài khoản thành công")
-    //   }
-    //   // console.log(fullName, address, phone, email, role, username, password, paymentTerms, avatar)
-    // } catch (error) {
-    //   console.error(error)
-    // }
     try {
-      const data = {
-        fullName,
-        address,
-        phone,
-        email,
-        role,
-        username,
-        password,
-        paymentTerms,
-      };
-  
-      let res = await APIs.post(endpoints['registerUser'], JSON.stringify(data), {
+      let form = new FormData();
+      form.append('user.fullName', fullName);
+      form.append('user.address', address);
+      form.append('user.phone', phone);
+      form.append('user.email', email);
+      form.append('user.role', role);
+      form.append('user.account.username', username);
+      form.append('user.account.password', password);
+      form.append('paymentTerms', paymentTerms);
+
+      if (avatar.current && avatar.current.files.length > 0) {
+        form.append('user.avatarFile', avatar.current.files[0]);
+      }
+
+      let res = await APIs.post(endpoints['registerUser'], form, {
         headers: {
-          'Content-Type': 'application/json',
-        },
+          'Content-Type': 'multipart/form-data'
+        }
       });
-  
+
       if (res.status === 201) {
         console.log("Tạo tài khoản thành công");
       }
@@ -225,7 +199,7 @@ const Register = () => {
               />
             </div>
           )}
-          {/* <div className="mt-3">
+          <div className="mt-3">
             <label for="avatar" class="block text-sm font-medium text-gray-700">
               Chọn ảnh đại diện
             </label>
@@ -238,7 +212,7 @@ const Register = () => {
               accept=".png, .jpg, .webp"
               required
             />
-          </div> */}
+          </div>
           <div className="mt-4">
             <button
               type="submit"
