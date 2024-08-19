@@ -17,6 +17,11 @@ import java.util.Map;
 public class AdminController {
     private final UserService userService;
 
+    @GetMapping
+    public String homePage() {
+        return "index";
+    }
+
     @GetMapping("/accounts")
     public String listAccounts(Model model, @RequestParam Map<String, String> params){
         model.addAttribute("users", this.userService.findUser(params));
