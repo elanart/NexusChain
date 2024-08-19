@@ -6,9 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<footer>
-    <div class="mt-4 p-5 bg-primary text-white rounded">
-        <h1>NexusChain Website</h1>
-        <p>Tran Le Lan & Vo Tuan Nhat, HCMCOU &copy; 2024</p>
-    </div>
+<footer class="footer">
+  <div class="footer-content">
+    <h1>NexusChain Website</h1>
+    <p>Tran Le Lan & Vo Tuan Nhat, HCMCOU &copy; 2024</p>
+  </div>
 </footer>
+
