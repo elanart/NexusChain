@@ -32,14 +32,13 @@ const Register = () => {
     e.preventDefault();
     try {
       let form = new FormData();
-      form.append('user.fullName', fullName);
-      form.append('user.address', address);
-      form.append('user.phone', phone);
-      form.append('user.email', email);
-      form.append('user.role', role);
-      form.append('user.account.username', username);
-      form.append('user.account.password', password);
-      form.append('paymentTerms', paymentTerms);
+      form.append('fullName', fullName);
+      form.append('address', address);
+      form.append('phone', phone);
+      form.append('email', email);
+      form.append('role', role);
+      form.append('username', username);
+      form.append('password', password);
 
       if (avatar.current && avatar.current.files.length > 0) {
         form.append('user.avatarFile', avatar.current.files[0]);
@@ -52,7 +51,7 @@ const Register = () => {
       });
 
       if (res.status === 201) {
-        console.log("Tạo tài khoản thành công");
+        alert('Đăng ký tài khoản thành công!');
       }
     } catch (error) {
       console.error(error);
