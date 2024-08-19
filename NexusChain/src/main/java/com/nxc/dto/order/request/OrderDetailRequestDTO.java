@@ -16,5 +16,4 @@ public class OrderDetailRequestDTO {
     private Integer quantity;
     private BigDecimal price;
     private Long productId;
-    private Long orderId;
 }

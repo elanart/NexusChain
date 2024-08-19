@@ -9,6 +9,8 @@ import com.nxc.enums.RoleEnum;
 import com.nxc.pojo.Order;
 import com.nxc.pojo.OrderDetail;
 import com.nxc.pojo.Product;
+import com.nxc.pojo.User;
+import com.nxc.repository.OrderDetailRepository;
 import com.nxc.repository.OrderRepository;
 import com.nxc.repository.ProductRepository;
 import com.nxc.repository.UserRepository;
@@ -19,64 +21,106 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.nio.file.AccessDeniedException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
+    private final OrderDetailRepository orderDetailRepository;
 
     @Override
-    @Transactional
-    public OrderResponseDTO addOrUpdateOrder(OrderRequestDTO orderRequest) {
+    public OrderResponseDTO addOrder(OrderRequestDTO orderRequest) {
+        User user = this.userRepository.findById(orderRequest.getUserId());
+        if (user == null) {
+            throw new EntityNotFoundException("Người dùng không tồn tại.");
+        }
+
         Order order = Order.builder()
                 .orderDate(orderRequest.getOrderDate())
                 .status(orderRequest.getStatus())
                 .type(orderRequest.getType())
+                .user(user)
                 .build();
 
-        Set<OrderDetail> orderDetails = orderRequest.getOrderDetails().stream()
-                .map(orderDetailRequestDTO -> createOrderDetail(orderDetailRequestDTO, order))
-                .collect(Collectors.toSet());
-
-        order.setOrderDetails(orderDetails);
-
         this.orderRepository.saveOrUpdate(order);
-
         return getOrderResponseDTO(order);
     }
 
-    private OrderDetail createOrderDetail(OrderDetailRequestDTO dto, Order order) {
-        Product product = this.productRepository.findById(dto.getProductId());
+    @Override
+    public OrderDetailResponseDTO addOrderDetail(Long orderId, OrderDetailRequestDTO orderDetailRequest) {
+        Order order = this.orderRepository.findById(orderId);
+        if (order == null) {
+            throw new EntityNotFoundException("Đơn hàng không tồn tại.");
+        }
 
-        return OrderDetail.builder()
-                .product(product)
-                .quantity(dto.getQuantity())
-                .price(dto.getPrice())
+        Product product = this.productRepository.findById(orderDetailRequest.getProductId());
+        if (product == null) {
+            throw new EntityNotFoundException("Sản phẩm không tồn tại.");
+        }
+
+        OrderDetail orderDetail = OrderDetail.builder()
                 .order(order)
+                .product(product)
+                .quantity(orderDetailRequest.getQuantity())
+                .price(orderDetailRequest.getPrice())
                 .build();
+
+        this.orderDetailRepository.saveOrUpdate(orderDetail);
+
+        return mapToOrderDetailResponseDTO(orderDetail);
+    }
+
+    @Override
+    public OrderResponseDTO updateOrder(OrderRequestDTO orderRequest) {
+        Order existingOrder = this.orderRepository.findById(orderRequest.getId());
+        if (existingOrder == null) {
+            throw new EntityNotFoundException("Đơn hàng không tồn tại.");
+        }
+
+        existingOrder.setOrderDate(orderRequest.getOrderDate());
+        existingOrder.setStatus(orderRequest.getStatus());
+        existingOrder.setType(orderRequest.getType());
+        existingOrder.setUser(this.userRepository.findById(orderRequest.getUserId()));
+
+        this.orderRepository.saveOrUpdate(existingOrder);
+
+        return getOrderResponseDTO(existingOrder);
     }
 
     @Override
     public void deleteOrder(Long orderId) {
         Order order = this.orderRepository.findById(orderId);
+        if (order == null) {
+            throw new EntityNotFoundException("Đơn hàng không tồn tại.");
+        }
+
         this.orderRepository.delete(order);
     }
 
     @Override
     public OrderResponseDTO getOrder(Long orderId) {
         Order order = this.orderRepository.findById(orderId);
+        if (order == null) {
+            throw new EntityNotFoundException("Đơn hàng không tồn tại.");
+        }
+
         return getOrderResponseDTO(order);
     }
 
     private OrderResponseDTO getOrderResponseDTO(Order order) {
-        Set<OrderDetailResponseDTO> orderDetailResponseDTOs = order.getOrderDetails().stream()
+        Set<OrderDetailResponseDTO> orderDetailResponseDTOs = (order.getOrderDetails() != null)
+                ? order.getOrderDetails().stream()
                 .map(this::mapToOrderDetailResponseDTO)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toSet())
+                : Collections.emptySet();
 
         return OrderResponseDTO.builder()
                 .id(order.getId())
