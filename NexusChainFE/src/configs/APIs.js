@@ -13,7 +13,7 @@ export const authAPIs = () => {
     return axios.create({
         baseURL: BASE_URL,
         headers: {
-            'Authorization': cookie.load('token')
+            'Authorization': `Bearer ${cookie.load('token')}`
         }
     })
 }

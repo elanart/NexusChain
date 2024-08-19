@@ -10,7 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c083cbf9-aa8d-4c1d-83bd-dbaacb9a31a8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/resources/database.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/database.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../NexusChainFE/src/configs/APIs.js" beforeDir="false" afterPath="$PROJECT_DIR$/../NexusChainFE/src/configs/APIs.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
