@@ -1,6 +1,8 @@
 package com.nxc.controllers;
 
+import com.nxc.dto.order.request.OrderDetailRequestDTO;
 import com.nxc.dto.order.request.OrderRequestDTO;
+import com.nxc.dto.order.response.OrderDetailResponseDTO;
 import com.nxc.dto.order.response.OrderResponseDTO;
 import com.nxc.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -20,66 +22,43 @@ public class ApiOrderController {
 
     private final OrderService orderService;
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addOrder(@RequestBody @Valid OrderRequestDTO orderRequest, BindingResult result) {
-        if (result.hasErrors()) {
-            return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
-        }
-
-        try {
-            OrderResponseDTO responseDTO = orderService.addOrUpdateOrder(orderRequest);
-            return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("Có lỗi xảy ra khi tạo đơn hàng." + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @PostMapping
+    public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+        OrderResponseDTO orderResponseDTO = orderService.addOrder(orderRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderResponseDTO);
     }
 
-    @PutMapping("/update/{orderId}")
-    public ResponseEntity<?> updateOrder(@PathVariable Long orderId,
-                                         @RequestBody @Valid OrderRequestDTO orderRequest, BindingResult result) {
-        if (result.hasErrors()) {
-            return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
-        }
-
-        try {
-            orderRequest.setId(orderId);
-            OrderResponseDTO responseDTO = orderService.addOrUpdateOrder(orderRequest);
-            return new ResponseEntity<>(responseDTO, HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>("Đơn hàng không tồn tại.", HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Có lỗi xảy ra khi cập nhật đơn hàng.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @PostMapping("/{orderId}/details")
+    public ResponseEntity<OrderDetailResponseDTO> addOrderDetail(@PathVariable Long orderId, @RequestBody OrderDetailRequestDTO orderDetailRequestDTO) {
+        OrderDetailResponseDTO orderDetailResponseDTO = orderService.addOrderDetail(orderId, orderDetailRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderDetailResponseDTO);
     }
 
-    @DeleteMapping("/delete/{orderId}")
-    public ResponseEntity<?> deleteOrder(@PathVariable Long orderId) {
-        try {
-            orderService.deleteOrder(orderId);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>("Đơn hàng không tồn tại.", HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Có lỗi xảy ra khi xóa đơn hàng.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @PatchMapping("/{orderId}")
+    public ResponseEntity<OrderResponseDTO> updateOrder(@PathVariable Long orderId, @RequestBody OrderRequestDTO orderRequestDTO) {
+        orderRequestDTO.setId(orderId);
+        OrderResponseDTO updatedOrder = orderService.updateOrder(orderRequestDTO);
+        return ResponseEntity.ok(updatedOrder);
+    }
+
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long orderId) {
+        orderService.deleteOrder(orderId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<?> getOrder(@PathVariable Long orderId) {
-        try {
-            OrderResponseDTO orderResponse = orderService.getOrder(orderId);
-            return new ResponseEntity<>(orderResponse, HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>("Đơn hàng không tồn tại.", HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<OrderResponseDTO> getOrder(@PathVariable Long orderId) {
+        OrderResponseDTO orderResponseDTO = orderService.getOrder(orderId);
+        return ResponseEntity.ok(orderResponseDTO);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<OrderResponseDTO>> getAllOrders() {
         List<OrderResponseDTO> orders = orderService.getAllOrders();
-        return new ResponseEntity<>(orders, HttpStatus.OK);
+        return ResponseEntity.ok(orders);
     }
 }
+
 
 

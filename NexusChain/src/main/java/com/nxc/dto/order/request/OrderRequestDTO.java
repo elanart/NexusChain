@@ -20,5 +20,5 @@ public class OrderRequestDTO {
     private Date orderDate;
     private ShippingStatusEnum status;
     private OrderTypeEnum type;
-    private Set<OrderDetailRequestDTO> orderDetails;
+    private Long userId;
 }

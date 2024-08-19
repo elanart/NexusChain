@@ -28,14 +28,13 @@ public class InitializerServiceImpl implements InitializerService {
         params.put("role", "ROLE_ADMIN");
         List<User> users = this.userService.findUser(params);
         if (users.isEmpty()) {
-            String hashedPassword = this.passwordEncoder.encode("123456");
 
             UserRequestDTO admin = UserRequestDTO.builder()
                     .fullName("Quản trị viên")
                     .email("admin@nxc.com")
                     .role(RoleEnum.ROLE_ADMIN)
                     .username("admin")
-                    .password(hashedPassword)
+                    .password("123456")
                     .build();
 
             this.userService.registerUser(admin);

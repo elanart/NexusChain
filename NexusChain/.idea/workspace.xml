@@ -10,17 +10,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c083cbf9-aa8d-4c1d-83bd-dbaacb9a31a8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/service/DataLoaderService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/service/impl/DataLoaderServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/repository/OrderDetailRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nxc/repository/impl/OrderDetailRepositoryImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/configs/WebInitializerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/configs/WebInitializerConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/controllers/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/controllers/ApiOrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/enums/OrderTypeEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/enums/OrderTypeEnum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/configs/JwtSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/configs/JwtSecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/controllers/ApiOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/controllers/ApiOrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/dto/order/request/OrderDetailRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/dto/order/request/OrderDetailRequestDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/dto/order/request/OrderRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/dto/order/request/OrderRequestDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/dto/order/response/OrderDetailResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/dto/order/response/OrderDetailResponseDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Category.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Order.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/OrderDetail.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/OrderDetail.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/SupplierProduct.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/pojo/SupplierProduct.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/repository/impl/OrderRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/repository/impl/OrderRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/service/OrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/service/impl/InitializerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/service/impl/InitializerServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nxc/service/impl/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nxc/service/impl/OrderServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -242,7 +245,7 @@
       <workItem from="1723866539133" duration="10138000" />
       <workItem from="1723948884249" duration="2379000" />
       <workItem from="1723970076662" duration="5903000" />
-      <workItem from="1724046040204" duration="289000" />
+      <workItem from="1724046040204" duration="9902000" />
     </task>
     <servers />
   </component>
