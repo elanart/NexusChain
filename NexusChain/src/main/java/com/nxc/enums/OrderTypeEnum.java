@@ -6,8 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum OrderTypeEnum {
-    INBOUND("Xuất kho"),
-    OUTBOUND("Nhập kho");
+    INBOUND("Nhập kho"),
+    OUTBOUND("Xuất kho");
 
     private final String displayName;
 }

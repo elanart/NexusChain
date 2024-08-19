@@ -15,6 +15,7 @@ import com.nxc.repository.UserRepository;
 import com.nxc.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.nio.file.AccessDeniedException;
@@ -30,6 +31,7 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
 
     @Override
+    @Transactional
     public OrderResponseDTO addOrUpdateOrder(OrderRequestDTO orderRequest) {
         Order order = Order.builder()
                 .orderDate(orderRequest.getOrderDate())

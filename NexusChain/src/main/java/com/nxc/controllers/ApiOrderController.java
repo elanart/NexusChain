@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
-public class OrderController {
+public class ApiOrderController {
 
     private final OrderService orderService;
 
@@ -30,7 +30,8 @@ public class OrderController {
             OrderResponseDTO responseDTO = orderService.addOrUpdateOrder(orderRequest);
             return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>("Có lỗi xảy ra khi tạo đơn hàng.", HttpStatus.INTERNAL_SERVER_ERROR);
+            e.printStackTrace();
+            return new ResponseEntity<>("Có lỗi xảy ra khi tạo đơn hàng." + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

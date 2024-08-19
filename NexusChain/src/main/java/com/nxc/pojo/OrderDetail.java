@@ -27,10 +27,10 @@ public class OrderDetail implements Serializable {
     private BigDecimal price;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id",  insertable = false, updatable = false)
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
-    @JoinColumn(name = "order_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Order order;
 }

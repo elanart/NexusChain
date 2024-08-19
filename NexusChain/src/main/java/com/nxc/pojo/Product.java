@@ -30,6 +30,9 @@ public class Product implements Serializable {
     @Column(precision = 10, scale = 2)
     private BigDecimal price;
 
+    @Column(length = 300)
+    private String image;
+
     @Builder.Default
     @Column(name = "deleted")
     private Boolean isDeleted = false;

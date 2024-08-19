@@ -27,8 +27,11 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public void saveOrUpdate(Order order) {
-        Session session = this.getCurrentSession();
-        session.saveOrUpdate(order);
+        if (order.getId() == null) {
+            this.getCurrentSession().save(order);
+        } else {
+            this.getCurrentSession().update(order);
+        }
     }
 
     @Override
