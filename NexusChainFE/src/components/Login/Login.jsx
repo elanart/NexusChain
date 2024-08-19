@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import APIs, { authAPIs, endpoints } from "../../configs/APIs";
 import cookie from "react-cookies";
+import { MyUserContext } from "../../App";
 
 const Login = () => {
+  const user = useContext(MyUserContext)
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -19,7 +21,7 @@ const Login = () => {
 
         let user = await authAPIs().get(endpoints['current-user'])
         console.log(user.data)
-        // cookie.save("user", user.data)
+        cookie.save("user", user.data)
     } catch (error) {
         console.error(error)
     }
