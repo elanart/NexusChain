@@ -1,5 +1,6 @@
 package com.nxc.pojo;
 
+import com.nxc.enums.OrderStatusEnum;
 import com.nxc.enums.OrderTypeEnum;
 import com.nxc.enums.ShippingStatusEnum;
 import javax.persistence.*;
@@ -30,7 +31,7 @@ public class Order implements Serializable {
     private Date orderDate;
 
     @Enumerated(EnumType.STRING)
-    private ShippingStatusEnum status;
+    private OrderStatusEnum status;
 
     @Enumerated(EnumType.STRING)
     private OrderTypeEnum type;
@@ -38,6 +39,10 @@ public class Order implements Serializable {
     @Builder.Default
     @Column(name = "deleted")
     private Boolean isDeleted = false;
+
+    @Builder.Default
+    @Column(name = "confirm")
+    private Boolean isConfirm = false;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
@@ -49,6 +54,11 @@ public class Order implements Serializable {
     @Valid
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "order")
     private Set<OrderDetail> orderDetails;
+
+    @PrePersist
+    protected void onCreate() {
+        status = OrderStatusEnum.PENDING;
+    }
 
     @Override
     public boolean equals(Object o) {

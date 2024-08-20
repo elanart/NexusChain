@@ -15,8 +15,8 @@ const Login = () => {
             "username": username,
             "password": password
         })
-        console.log(res.data)
-        cookie.save("token", res.data);
+        console.log(res.data.token)
+        cookie.save("token", res.data.token);
         console.log(cookie.load("token"))
 
         let user = await authAPIs().get(endpoints['current-user'])

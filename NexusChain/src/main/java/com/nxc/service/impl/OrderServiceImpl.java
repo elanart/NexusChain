@@ -5,6 +5,7 @@ import com.nxc.dto.order.request.OrderRequestDTO;
 import com.nxc.dto.order.response.OrderDetailResponseDTO;
 import com.nxc.dto.order.response.OrderResponseDTO;
 import com.nxc.dto.user.request.UserRequestDTO;
+import com.nxc.enums.OrderStatusEnum;
 import com.nxc.enums.RoleEnum;
 import com.nxc.pojo.Order;
 import com.nxc.pojo.OrderDetail;
@@ -45,13 +46,62 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = Order.builder()
                 .orderDate(orderRequest.getOrderDate())
-                .status(orderRequest.getStatus())
                 .type(orderRequest.getType())
                 .user(user)
                 .build();
 
         this.orderRepository.saveOrUpdate(order);
         return getOrderResponseDTO(order);
+    }
+
+    @Override
+    public OrderResponseDTO confirmOrder(Long orderId, Long userId) {
+        Order order = this.orderRepository.findById(orderId);
+
+        if (order == null) {
+            throw new EntityNotFoundException("Don hang khong ton tai.");
+        }
+
+        User supplier = this.userRepository.findById(userId);
+        if (supplier == null || supplier.getRole() != RoleEnum.ROLE_SUPPLIER) {
+            throw new IllegalArgumentException("Nguoi dung khong phai la nha cung cap.");
+        }
+
+        if (order.getStatus() != OrderStatusEnum.PENDING) {
+            throw new IllegalStateException("Don hang da xu ly!");
+        }
+
+        order.setIsConfirm(true);
+        order.setStatus(OrderStatusEnum.COMPLETED);
+        orderRepository.saveOrUpdate(order);
+
+        return getOrderResponseDTO(order);
+    }
+
+    @Override
+    public boolean cancelOrder(Long orderId, Long userId) {
+        Order order = this.orderRepository.findById(orderId);
+
+        if (order == null) {
+            throw new EntityNotFoundException("Don hang khong ton tai.");
+        }
+
+        User user = this.userRepository.findById(userId);
+        if (user == null) {
+            throw new EntityNotFoundException("nguoi dung khong ton tai.");
+        }
+
+        if (order.getStatus() == OrderStatusEnum.PENDING &&
+                (user.getRole() == RoleEnum.ROLE_DISTRIBUTOR || user.getRole() == RoleEnum.ROLE_SUPPLIER)) {
+            order.setStatus(OrderStatusEnum.CANCELLED);
+            this.orderRepository.saveOrUpdate(order);
+
+            return true;
+
+        } else if (order.getStatus() != OrderStatusEnum.PENDING) {
+            throw new IllegalStateException("Đơn hàng không thể hủy vì không ở trạng thái PENDING.");
+        }
+        return false;
     }
 
     @Override

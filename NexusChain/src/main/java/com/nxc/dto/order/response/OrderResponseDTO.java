@@ -1,5 +1,6 @@
 package com.nxc.dto.order.response;
 
+import com.nxc.enums.OrderStatusEnum;
 import com.nxc.enums.OrderTypeEnum;
 import com.nxc.enums.ShippingStatusEnum;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,8 @@ import java.util.Set;
 public class OrderResponseDTO {
     private Long id;
     private Date orderDate;
-    private ShippingStatusEnum status;
+    private OrderStatusEnum status;
     private OrderTypeEnum type;
+    private Boolean isConfirm;
     private Set<OrderDetailResponseDTO> orderDetails;
 }

@@ -4,8 +4,10 @@ import com.nxc.components.JwtService;
 import com.nxc.dto.account.request.AccountRequestDTO;
 import com.nxc.dto.account.response.JwtResponse;
 import com.nxc.dto.user.request.UserRequestDTO;
+import com.nxc.dto.user.request.UserUpdateRequestDTO;
 import com.nxc.dto.user.response.UserResponseDTO;
 import com.nxc.pojo.Account;
+import com.nxc.pojo.User;
 import com.nxc.service.AccountService;
 import com.nxc.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -51,20 +53,22 @@ public class ApiUserController {
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
-    @PatchMapping("/update")
-    public ResponseEntity<String> updateUser(@ModelAttribute @Valid UserRequestDTO userRequestDTO,
-                                             BindingResult bindingResult) {
+    @PatchMapping("/current-user/update")
+    public ResponseEntity<String> updateUser(@ModelAttribute @Valid UserUpdateRequestDTO userUpdateRequestDTO,
+                                             BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>("Co loi xay ra!!!", HttpStatus.BAD_REQUEST);
         }
-        this.userService.updateUser(userRequestDTO);
-        return new ResponseEntity<>("Cap nhat thanh cong!", HttpStatus.OK);
-    }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getUserDetails(@PathVariable Long id) {
-        UserResponseDTO responseDTO = this.userService.getUserDetails(id);
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        String currentUsername = principal.getName();
+        Account currentUserAccount = this.accountService.findByUsername(currentUsername);
+        User user = currentUserAccount.getUser();
+
+        if(user != null && user.getId().equals(userUpdateRequestDTO.getId())) {
+            this.userService.updateUser(userUpdateRequestDTO);
+            return new ResponseEntity<>("Cap nhat thanh cong!", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Co loi xay ra!!!", HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/current-user")
@@ -90,6 +94,14 @@ public class ApiUserController {
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            Account userAccount = this.accountService.findByUsername(accountRequestDTO.getUsername());
+            User user = userAccount.getUser();
+
+            if (!user.getIsConfirm()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tai khoan chua duoc xac nhan!");
+            }
+
             String jwt = jwtService.generateTokenLogin(accountRequestDTO.getUsername());
             return ResponseEntity.ok(new JwtResponse(jwt));
         } catch (BadCredentialsException e) {

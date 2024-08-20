@@ -1,5 +1,6 @@
 package com.nxc.dto.order.request;
 
+import com.nxc.enums.OrderStatusEnum;
 import com.nxc.enums.OrderTypeEnum;
 import com.nxc.enums.ShippingStatusEnum;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.Set;
 public class OrderRequestDTO {
     private Long id;
     private Date orderDate;
-    private ShippingStatusEnum status;
+    private OrderStatusEnum status;
     private OrderTypeEnum type;
     private Long userId;
 }

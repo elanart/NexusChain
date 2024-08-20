@@ -2,6 +2,8 @@ package com.nxc.pojo;
 
 import com.nxc.enums.OrderStatusEnum;
 import javax.persistence.*;
+
+import com.nxc.enums.ShippingStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +29,7 @@ public class Shipment implements Serializable {
     private LocalDateTime shipmentDate;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatusEnum status;
+    private ShippingStatusEnum status;
 
     @Column(name = "tracking_number", length = 100)
     private String trackingNumber;
