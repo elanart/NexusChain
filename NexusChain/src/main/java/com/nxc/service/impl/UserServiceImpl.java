@@ -1,10 +1,15 @@
 package com.nxc.service.impl;
 
 import com.nxc.dto.user.request.UserRequestDTO;
+import com.nxc.dto.user.request.UserUpdateRequestDTO;
 import com.nxc.dto.user.response.UserResponseDTO;
 import com.nxc.enums.RoleEnum;
 import com.nxc.pojo.Account;
+import com.nxc.pojo.Carrier;
+import com.nxc.pojo.Supplier;
 import com.nxc.pojo.User;
+import com.nxc.repository.CarrierRepository;
+import com.nxc.repository.SupplierRepository;
 import com.nxc.repository.UserRepository;
 import com.nxc.service.AccountService;
 import com.nxc.service.CloudinaryService;
@@ -26,6 +31,8 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final AccountService accountService;
+    private final SupplierRepository supplierRepository;
+    private final CarrierRepository carrierRepository;
     private final CloudinaryService cloudinaryService;
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -89,20 +96,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(UserRequestDTO userRequestDTO) {
-        User user = this.userRepository.findById(userRequestDTO.getId());
+    public void updateUser(UserUpdateRequestDTO userUpdateRequestDTO) {
+        User user = this.userRepository.findById(userUpdateRequestDTO.getId());
         if (user != null && user.getIsConfirm()) {
-            MultipartFile avatar = userRequestDTO.getAvatar();
+            MultipartFile avatar = userUpdateRequestDTO.getAvatar();
             String avatarUrl = null;
             if (avatar != null && !avatar.isEmpty()) {
                 avatarUrl = this.cloudinaryService.uploadImage(avatar);
             }
 
-            user.setFullName(userRequestDTO.getFullName());
-            user.setAddress(userRequestDTO.getAddress());
-            user.setPhone(userRequestDTO.getPhone());
+            user.setFullName(userUpdateRequestDTO.getFullName());
+            user.setAddress(userUpdateRequestDTO.getAddress());
+            user.setPhone(userUpdateRequestDTO.getPhone());
             user.setAvatar(avatarUrl);
             user.setUpdatedDate(new Date());
+
+            if (user.getRole() == RoleEnum.ROLE_SUPPLIER){
+                Supplier supplier = Supplier.builder()
+                        .paymentTerms(userUpdateRequestDTO.getPaymentTerms())
+                        .build();
+
+                this.supplierRepository.saveSupplier(supplier);
+
+            } else if (user.getRole() == RoleEnum.ROLE_CARRIER){
+                Carrier carrier = Carrier.builder()
+                        .cooperationTerms(userUpdateRequestDTO.getCooperationTerms())
+                        .build();
+
+                this.carrierRepository.saveCarrier(carrier);
+            }
 
             this.userRepository.saveOrUpdate(user);
         }

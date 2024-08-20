@@ -12,6 +12,8 @@ import java.util.List;
 
 public interface OrderService {
     OrderResponseDTO addOrder(OrderRequestDTO orderRequest);
+    OrderResponseDTO confirmOrder(Long orderId, Long userId);
+    boolean cancelOrder(Long orderId, Long userId);
     OrderResponseDTO updateOrder(OrderRequestDTO orderRequest);
     OrderDetailResponseDTO addOrderDetail(Long orderId, OrderDetailRequestDTO orderDetailRequest);
     void deleteOrder(Long orderId);

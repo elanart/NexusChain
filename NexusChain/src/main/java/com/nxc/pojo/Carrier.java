@@ -24,6 +24,9 @@ public class Carrier implements Serializable {
     @Column(precision = 3, scale = 2)
     private BigDecimal rating;
 
+    @Column(name = "cooperation_terms", length = 300)
+    private String cooperationTerms;
+
     @JsonIgnore
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
     @MapsId
