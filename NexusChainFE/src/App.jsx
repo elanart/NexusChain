@@ -6,6 +6,7 @@ import Register from "./components/Register/Register";
 import Login from "./components/Login/Login";
 import { createContext, useReducer } from "react";
 import MyUserReducer from "./reducers/MyUserReducer";
+import UserDetails from "./components/User/UserDetails";
 
 export const MyUserContext = createContext();
 export const MyDispatchContext = createContext();
@@ -19,8 +20,9 @@ const App = () => {
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/Register" element={<Register />} />
+            <Route path="/Login" element={<Login />} />
+            <Route path="/UserDetails" element={<UserDetails />} />
           </Routes>
           <Footer />
         </MyDispatchContext.Provider>

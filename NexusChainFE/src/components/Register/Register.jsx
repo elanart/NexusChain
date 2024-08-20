@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import APIs, { endpoints } from "../../configs/APIs";
+import { Navigate, useNavigate } from "react-router";
 
 const Register = () => {
   const [fullName, setFullname] = useState("");
@@ -9,9 +10,11 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [paymentTerms, setPaymentTerms] = useState("");
-  const [role, setRole] = useState("ROLE_CUSTOMER");
+  const [role, setRole] = useState("ROLE_DISTRIBUTOR");
 
   const avatar = useRef();
+
+  const navigate = useNavigate(); // Sử dụng useNavigate
 
   const roles = [
     { "Nhà cung cấp": "ROLE_SUPPLIER" },
@@ -41,7 +44,7 @@ const Register = () => {
       form.append('password', password);
 
       if (avatar.current && avatar.current.files.length > 0) {
-        form.append('user.avatarFile', avatar.current.files[0]);
+        form.append('avatar', avatar.current.files[0]);
       }
 
       let res = await APIs.post(endpoints['registerUser'], form, {
@@ -51,7 +54,8 @@ const Register = () => {
       });
 
       if (res.status === 201) {
-        alert('Đăng ký tài khoản thành công!');
+        alert("Đăng ký tài khoản thành công")
+        navigate("/Login")
       }
     } catch (error) {
       console.error(error);
@@ -179,25 +183,6 @@ const Register = () => {
               ))}
             </select>
           </div>
-          {role === "ROLE_SUPPLIER" && (
-            <div className="mt-3">
-              <label
-                for="paymentTerms"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Điều kiện thanh toán
-              </label>
-              <input
-                type="text"
-                id="paymentTerms"
-                name="paymentTerms"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                value={paymentTerms}
-                onChange={(e) => setPaymentTerms(e.target.value)}
-                required
-              />
-            </div>
-          )}
           <div className="mt-3">
             <label for="avatar" class="block text-sm font-medium text-gray-700">
               Chọn ảnh đại diện

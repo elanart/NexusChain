@@ -5,6 +5,7 @@ const BASE_URL = "http://localhost:8080/nexuschain/api"
 
 export const endpoints = {
     "registerUser": "/user/register",
+    "updateUser": "/user/update",
     "login": "/user/login",
     "current-user": "/user/current-user"
 }

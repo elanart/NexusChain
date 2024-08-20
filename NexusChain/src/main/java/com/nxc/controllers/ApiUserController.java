@@ -6,6 +6,7 @@ import com.nxc.dto.account.response.JwtResponse;
 import com.nxc.dto.user.request.UserRequestDTO;
 import com.nxc.dto.user.response.UserResponseDTO;
 import com.nxc.pojo.Account;
+import com.nxc.pojo.User;
 import com.nxc.service.AccountService;
 import com.nxc.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -90,6 +91,14 @@ public class ApiUserController {
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            
+            Account account = this.accountService.findByUsername(accountRequestDTO.getUsername());
+            User user = account.getUser();
+            
+            if(!user.getIsConfirm()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tai khoan chua duoc xac nhan!");
+            }
+            
             String jwt = jwtService.generateTokenLogin(accountRequestDTO.getUsername());
             return ResponseEntity.ok(new JwtResponse(jwt));
         } catch (BadCredentialsException e) {

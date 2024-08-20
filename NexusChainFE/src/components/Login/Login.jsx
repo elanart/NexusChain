@@ -1,12 +1,17 @@
 import React, { useContext, useState } from "react";
 import APIs, { authAPIs, endpoints } from "../../configs/APIs";
 import cookie from "react-cookies";
-import { MyUserContext } from "../../App";
+import { MyDispatchContext, MyUserContext } from "../../App";
+import { Navigate } from "react-router";
+import { Link } from "react-router-dom";
 
 const Login = () => {
-  const user = useContext(MyUserContext)
+  const user = useContext(MyUserContext);
+  const dispatch = useContext(MyDispatchContext);
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [statusLogin, setStatusLogin] = useState()
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -15,17 +20,28 @@ const Login = () => {
             "username": username,
             "password": password
         })
-        console.log(res.data)
-        cookie.save("token", res.data);
-        console.log(cookie.load("token"))
+
+        if(res.status === 401) {
+          setStatusLogin("Tài khoản không tồn tại!")
+        }
+
+        cookie.save("token", res.data.token);
 
         let user = await authAPIs().get(endpoints['current-user'])
         console.log(user.data)
         cookie.save("user", user.data)
+        dispatch({
+          "type": "login",
+          "payload": user.data
+        })
+       
     } catch (error) {
         console.error(error)
     }
+  }
 
+  if(user !== null) {
+    return <Navigate to="/"/>
   }
 
   return (
@@ -67,6 +83,7 @@ const Login = () => {
               required
             />
           </div>
+          {statusLogin !== null?<><p className="text-red-600">{statusLogin}</p></>:<></>}
           <div className="mt-4">
             <button
               type="submit"
@@ -74,6 +91,9 @@ const Login = () => {
             >
               Đăng nhập
             </button>
+          </div>
+          <div className="mt-4 text-center">
+            <p>Bạn chưa có tài khoản? Đăng ký <Link className="text-blue-500" to="/Register">tại đây</Link></p>
           </div>
         </form>
       </div>
