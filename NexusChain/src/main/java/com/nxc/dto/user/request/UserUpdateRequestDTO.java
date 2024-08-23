@@ -25,8 +25,6 @@ public class UserUpdateRequestDTO {
 
     private String phone;
 
-    private MultipartFile avatar;
-
     @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "{user.email.patternMsg}")
     private String email;
 

@@ -96,19 +96,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(UserUpdateRequestDTO userUpdateRequestDTO) {
-        User user = this.userRepository.findById(userUpdateRequestDTO.getId());
+    @Transactional
+    public void updateUser(String username, UserUpdateRequestDTO userUpdateRequestDTO) {
+        Account account = this.accountService.findByUsername(username);
+        User user = account.getUser();
         if (user != null && user.getIsConfirm()) {
-            MultipartFile avatar = userUpdateRequestDTO.getAvatar();
-            String avatarUrl = null;
-            if (avatar != null && !avatar.isEmpty()) {
-                avatarUrl = this.cloudinaryService.uploadImage(avatar);
+
+            if (userUpdateRequestDTO.getFullName() != null) {
+                user.setFullName(userUpdateRequestDTO.getFullName());
             }
 
-            user.setFullName(userUpdateRequestDTO.getFullName());
-            user.setAddress(userUpdateRequestDTO.getAddress());
-            user.setPhone(userUpdateRequestDTO.getPhone());
-            user.setAvatar(avatarUrl);
+            if (userUpdateRequestDTO.getAddress() != null) {
+                user.setAddress(userUpdateRequestDTO.getAddress());
+            }
+
+            if (userUpdateRequestDTO.getPhone() != null) {
+                user.setPhone(userUpdateRequestDTO.getPhone());
+            }
+
             user.setUpdatedDate(new Date());
 
             if (user.getRole() == RoleEnum.ROLE_SUPPLIER){
@@ -150,11 +155,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void requestDeleteUser(Long userId) {
+    public void deleteUser(Long userId) {
         User user = this.userRepository.findById(userId);
         if (user != null) {
             user.setIsDeleted(true);
-            userRepository.saveOrUpdate(user);
+            this.userRepository.saveOrUpdate(user);
         }
     }
 

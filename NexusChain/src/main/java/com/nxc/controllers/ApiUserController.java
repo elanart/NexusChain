@@ -54,18 +54,16 @@ public class ApiUserController {
     }
 
     @PatchMapping("/current-user/update")
-    public ResponseEntity<String> updateUser(@ModelAttribute @Valid UserUpdateRequestDTO userUpdateRequestDTO,
+    public ResponseEntity<String> updateUser(@RequestBody @Valid UserUpdateRequestDTO userUpdateRequestDTO,
                                              BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>("Co loi xay ra!!!", HttpStatus.BAD_REQUEST);
         }
 
-        String currentUsername = principal.getName();
-        Account currentUserAccount = this.accountService.findByUsername(currentUsername);
-        User user = currentUserAccount.getUser();
+        String username = principal.getName();
 
-        if(user != null && user.getId().equals(userUpdateRequestDTO.getId())) {
-            this.userService.updateUser(userUpdateRequestDTO);
+        if(username != null) {
+            this.userService.updateUser(username, userUpdateRequestDTO);
             return new ResponseEntity<>("Cap nhat thanh cong!", HttpStatus.OK);
         }
         return new ResponseEntity<>("Co loi xay ra!!!", HttpStatus.BAD_REQUEST);
@@ -78,12 +76,6 @@ public class ApiUserController {
 
         UserResponseDTO responseDTO = this.userService.getUserDetails(account.getId());
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/request-delete/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void requestDeleteUser(@PathVariable Long id) {
-        this.userService.requestDeleteUser(id);
     }
 
     @PostMapping("/login")

@@ -17,4 +17,8 @@
         <put-attribute name="title" value="Danh sách người dùng" />
         <put-attribute name="content" value="/WEB-INF/pages/account.jsp" />
     </definition>
+    <definition name="order" extends="baseLayout">
+        <put-attribute name="title" value="Danh sách đơn hàng" />
+        <put-attribute name="content" value="/WEB-INF/pages/order.jsp" />
+    </definition>
 </tiles-definitions>

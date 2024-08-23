@@ -1,5 +1,6 @@
 package com.nxc.controllers;
 
+import com.nxc.service.OrderService;
 import com.nxc.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AdminController {
     private final UserService userService;
+    private final OrderService orderService;
 
     @GetMapping
     public String homePage() {
@@ -30,8 +32,20 @@ public class AdminController {
     }
 
     @PostMapping("/accounts")
-    public String confirmUser(@RequestParam("userId") Long userId) {
-        this.userService.confirmUser(userId);
+    public String confirmUser(@RequestParam("id") Long id) {
+        this.userService.confirmUser(id);
         return "redirect:/admin/accounts";
+    }
+
+    @PostMapping("/accounts/delete")
+    public String deleteUser(@RequestParam("userId") Long userId) {
+        this.userService.deleteUser(userId);
+        return "redirect:/admin/accounts";
+    }
+
+    @GetMapping("/orders")
+    public String listOrders(Model model) {
+        model.addAttribute("orders", this.orderService.getAllOrders());
+        return "order";
     }
 }

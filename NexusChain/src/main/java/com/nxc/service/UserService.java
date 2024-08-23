@@ -12,8 +12,8 @@ import java.util.Map;
 public interface UserService extends UserDetailsService {
     UserResponseDTO registerUser(UserRequestDTO userRequestDTO);
     void confirmUser(Long userId);
-    void updateUser(UserUpdateRequestDTO userUpdateRequestDTO);
+    void updateUser(String username, UserUpdateRequestDTO userUpdateRequestDTO);
     UserResponseDTO getUserDetails(Long userId);
-    void requestDeleteUser(Long userId);
+    void deleteUser(Long userId);
     List<User> findUser(Map<String, String> params);
 }
