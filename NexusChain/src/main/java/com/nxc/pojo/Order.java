@@ -23,6 +23,7 @@ import java.util.Set;
 @Entity
 @Table(name = "\"order\"")
 public class Order implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -57,13 +58,18 @@ public class Order implements Serializable {
 
     @PrePersist
     protected void onCreate() {
+        orderDate = new Date(); // Gán thời gian hiện tại
         status = OrderStatusEnum.PENDING;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Order order = (Order) o;
         return Objects.equals(id, order.id);
     }

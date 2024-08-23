@@ -21,12 +21,7 @@ const Login = () => {
             "password": password
         })
 
-        if(res.status === 401) {
-          setStatusLogin("Tài khoản không tồn tại!")
-        }
-
         cookie.save("token", res.data.token);
-
 
         let user = await authAPIs().get(endpoints['current-user'])
         console.log(user.data)
@@ -37,7 +32,11 @@ const Login = () => {
         })
        
     } catch (error) {
-        console.error(error)
+      if (error.response && error.response.status === 401) {
+        setStatusLogin("Tài khoản chưa đăng ký hoặc chưa được xác nhận!");
+      } else {
+        console.error(error);
+      }
     }
   }
 
@@ -84,7 +83,7 @@ const Login = () => {
               required
             />
           </div>
-          {statusLogin !== null?<><p className="text-red-600">{statusLogin}</p></>:<></>}
+          {statusLogin !== null?<><p className="text-red-600 mt-2">{statusLogin}</p></>:<></>}
           <div className="mt-4">
             <button
               type="submit"

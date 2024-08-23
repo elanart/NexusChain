@@ -4,10 +4,11 @@ import cookie from "react-cookies";
 const BASE_URL = "http://localhost:8080/nexuschain/api"
 
 export const endpoints = {
-    "registerUser": "/user/register",
-    "updateUser": "/user/update",
+    "current-user": "/user/current-user",
     "login": "/user/login",
-    "current-user": "/user/current-user"
+    "registerUser": "/user/register",
+    "updateUser": "/user/current-user/update",
+    "createOrder": "/orders"
 }
 
 export const authAPIs = () => {

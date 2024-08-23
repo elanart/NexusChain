@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 @CrossOrigin
 @RequiredArgsConstructor
 public class ApiUserController {
+
     private final UserService userService;
     private final AccountService accountService;
     private final JwtService jwtService;
@@ -39,7 +40,7 @@ public class ApiUserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@ModelAttribute @Valid UserRequestDTO userRequestDTO,
-                                          BindingResult bindingResult) {
+            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -55,14 +56,14 @@ public class ApiUserController {
 
     @PatchMapping("/current-user/update")
     public ResponseEntity<String> updateUser(@RequestBody @Valid UserUpdateRequestDTO userUpdateRequestDTO,
-                                             BindingResult bindingResult, Principal principal) {
+            BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>("Co loi xay ra!!!", HttpStatus.BAD_REQUEST);
         }
 
         String username = principal.getName();
 
-        if(username != null) {
+        if (username != null) {
             this.userService.updateUser(username, userUpdateRequestDTO);
             return new ResponseEntity<>("Cap nhat thanh cong!", HttpStatus.OK);
         }
