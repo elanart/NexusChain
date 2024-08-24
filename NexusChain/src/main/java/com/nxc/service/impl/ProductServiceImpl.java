@@ -76,4 +76,20 @@ public class ProductServiceImpl implements ProductService {
         Product product = this.productRepository.findById(id);
         this.productRepository.delete(product);
     }
+
+    @Override
+    public List<ProductResponseDTO> findProductsByUserId(Long userId) {
+        List<Product> products = this.productRepository.findProductsByUserId(userId);
+
+        return products.stream()
+                .map(product -> ProductResponseDTO.builder()
+                        .id(product.getId())
+                        .name(product.getName())
+                        .price(product.getPrice())
+                        .description(product.getDescription())
+                        .isDeleted(product.getIsDeleted())
+                        .categoryName(product.getCategory().getName())
+                        .build())
+                .collect(Collectors.toList());
+    }
 }

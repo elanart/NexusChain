@@ -58,7 +58,7 @@ public class Order implements Serializable {
 
     @PrePersist
     protected void onCreate() {
-        orderDate = new Date(); // Gán thời gian hiện tại
+        orderDate = new Date();
         status = OrderStatusEnum.PENDING;
     }
 

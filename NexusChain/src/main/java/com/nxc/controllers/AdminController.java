@@ -44,8 +44,8 @@ public class AdminController {
     }
 
     @GetMapping("/orders")
-    public String listOrders(Model model) {
-        model.addAttribute("orders", this.orderService.getAllOrders());
+    public String listOrders(Model model, Map<String, String> params) {
+        model.addAttribute("orders", this.orderService.getAllOrders(params));
         return "order";
     }
 }

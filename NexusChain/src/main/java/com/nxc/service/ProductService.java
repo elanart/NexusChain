@@ -10,4 +10,6 @@ public interface ProductService {
     List<ProductResponseDTO> findAllProducts();
     ProductResponseDTO addOrUpdateProduct(ProductRequestDTO productRequest);
     void deleteProduct(Long id);
+    List<ProductResponseDTO> findProductsByUserId(Long userId);
+
 }

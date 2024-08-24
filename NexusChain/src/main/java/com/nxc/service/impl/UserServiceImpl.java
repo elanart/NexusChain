@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service("userDetailsService")
 @RequiredArgsConstructor
@@ -168,6 +169,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findUser(Map<String, String> params) {
         return this.userRepository.findUser(params);
+    }
+
+    @Override
+    public List<UserResponseDTO> getAllSuppliers() {
+        Map<String, String> params = new HashMap<>();
+        params.put("role", RoleEnum.ROLE_SUPPLIER.name());
+        List<User> supplierUsers = this.userRepository.findUser(params);
+
+        return supplierUsers.stream()
+                .map(user -> UserResponseDTO.builder()
+                        .id(user.getId())
+                        .fullName(user.getFullName())
+                        .email(user.getEmail())
+                        .phone(user.getPhone())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override

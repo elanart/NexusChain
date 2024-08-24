@@ -9,6 +9,7 @@ import com.nxc.pojo.Order;
 import com.nxc.pojo.OrderDetail;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderService {
     OrderResponseDTO addOrder(OrderRequestDTO orderRequest);
@@ -18,5 +19,5 @@ public interface OrderService {
     OrderDetailResponseDTO addOrderDetail(Long orderId, OrderDetailRequestDTO orderDetailRequest);
     void deleteOrder(Long orderId);
     OrderResponseDTO getOrder(Long orderId);
-    List<OrderResponseDTO> getAllOrders();
+    List<OrderResponseDTO> getAllOrders(Map<String, String> params);
 }

@@ -16,4 +16,5 @@ public interface UserService extends UserDetailsService {
     UserResponseDTO getUserDetails(Long userId);
     void deleteUser(Long userId);
     List<User> findUser(Map<String, String> params);
+    List<UserResponseDTO> getAllSuppliers();
 }

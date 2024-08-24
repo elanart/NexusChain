@@ -7,14 +7,8 @@ import com.nxc.dto.order.response.OrderResponseDTO;
 import com.nxc.dto.user.request.UserRequestDTO;
 import com.nxc.enums.OrderStatusEnum;
 import com.nxc.enums.RoleEnum;
-import com.nxc.pojo.Order;
-import com.nxc.pojo.OrderDetail;
-import com.nxc.pojo.Product;
-import com.nxc.pojo.User;
-import com.nxc.repository.OrderDetailRepository;
-import com.nxc.repository.OrderRepository;
-import com.nxc.repository.ProductRepository;
-import com.nxc.repository.UserRepository;
+import com.nxc.pojo.*;
+import com.nxc.repository.*;
 import com.nxc.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,16 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.nio.file.AccessDeniedException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class OrderServiceImpl implements OrderService {
-
+    private final AccountRepository accountRepository;
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
@@ -45,7 +37,6 @@ public class OrderServiceImpl implements OrderService {
         }
 
         Order order = Order.builder()
-                .orderDate(orderRequest.getOrderDate())
                 .type(orderRequest.getType())
                 .user(user)
                 .build();
@@ -135,7 +126,6 @@ public class OrderServiceImpl implements OrderService {
             throw new EntityNotFoundException("Đơn hàng không tồn tại.");
         }
 
-        existingOrder.setOrderDate(orderRequest.getOrderDate());
         existingOrder.setStatus(orderRequest.getStatus());
         existingOrder.setType(orderRequest.getType());
         existingOrder.setUser(this.userRepository.findById(orderRequest.getUserId()));
@@ -192,8 +182,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderResponseDTO> getAllOrders() {
-        return orderRepository.findAll().stream()
+    public List<OrderResponseDTO> getAllOrders(Map<String, String> params) {
+        return orderRepository.findAll(params).stream()
                 .map(this::getOrderResponseDTO)
                 .collect(Collectors.toList());
     }
