@@ -119,6 +119,7 @@ public class UserServiceImpl implements UserService {
             if (user.getRole() == RoleEnum.ROLE_SUPPLIER){
                 Supplier supplier = Supplier.builder()
                         .paymentTerms(userUpdateRequestDTO.getPaymentTerms())
+                        .user(user)
                         .build();
 
                 this.supplierRepository.saveSupplier(supplier);
@@ -126,6 +127,7 @@ public class UserServiceImpl implements UserService {
             } else if (user.getRole() == RoleEnum.ROLE_CARRIER){
                 Carrier carrier = Carrier.builder()
                         .cooperationTerms(userUpdateRequestDTO.getCooperationTerms())
+                        .user(user)
                         .build();
 
                 this.carrierRepository.saveCarrier(carrier);
