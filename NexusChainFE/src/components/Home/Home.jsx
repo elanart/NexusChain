@@ -35,6 +35,10 @@ const Home = () => {
     }
   }
 
+  const handleViewListContract = () => {
+
+  }
+
   return (
     <div className="w-4/5 h-screen mx-auto mt-12 bg-gray-100">
      <div className='mt-12'>
@@ -43,6 +47,12 @@ const Home = () => {
             <button className='w-48 h-16 text-white mt-12 bg-blue-500 rounded-full' onClick={() => handleCreateOrder()}>Tạo đơn hàng</button>
           </>
         )}
+
+     {user && user.role === "ROLE_CARRIER" && (
+      <>
+        <button className='w-60 h-20 text-white mt-12 bg-blue-500 rounded-full' onClick={() => handleViewListContract()}>Xem danh sách hợp đồng vận chuyển của bạn</button>
+      </>
+    )}
      </div>
     </div>
   )
