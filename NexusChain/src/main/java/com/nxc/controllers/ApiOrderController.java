@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -24,7 +25,11 @@ public class ApiOrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+    public ResponseEntity<?> createOrder(@RequestBody @Valid OrderRequestDTO orderRequestDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
+
         OrderResponseDTO orderResponseDTO = this.orderService.addOrder(orderRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(orderResponseDTO);
     }
@@ -55,8 +60,8 @@ public class ApiOrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderResponseDTO>> getAllOrders() {
-        List<OrderResponseDTO> orders = this.orderService.getAllOrders();
+    public ResponseEntity<List<OrderResponseDTO>> getAllOrders(Map<String, String> params) {
+        List<OrderResponseDTO> orders = this.orderService.getAllOrders(params);
         return ResponseEntity.ok(orders);
     }
 

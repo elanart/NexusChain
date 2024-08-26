@@ -18,7 +18,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class OrderRequestDTO {
     private Long id;
-    private Date orderDate;
     private OrderStatusEnum status;
     private OrderTypeEnum type;
     private Long userId;
