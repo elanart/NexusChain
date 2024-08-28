@@ -6,6 +6,7 @@ import com.nxc.dto.order.response.OrderDetailResponseDTO;
 import com.nxc.dto.order.response.OrderResponseDTO;
 import com.nxc.dto.user.request.UserRequestDTO;
 import com.nxc.enums.OrderStatusEnum;
+import com.nxc.enums.OrderTypeEnum;
 import com.nxc.enums.RoleEnum;
 import com.nxc.pojo.*;
 import com.nxc.repository.*;
@@ -23,72 +24,82 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class OrderServiceImpl implements OrderService {
-    private final AccountRepository accountRepository;
     private final OrderRepository orderRepository;
+    private final OrderDetailRepository orderDetailRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
-    private final OrderDetailRepository orderDetailRepository;
+    private final InventoryRepository inventoryRepository;
+    private final WarehouseRepository warehouseRepository;
 
     @Override
-    public OrderResponseDTO addOrder(OrderRequestDTO orderRequest) {
+    public OrderResponseDTO addOrder(OrderRequestDTO orderRequest) throws AccessDeniedException {
         User user = this.userRepository.findById(orderRequest.getUserId());
         if (user == null) {
             throw new EntityNotFoundException("Người dùng không tồn tại.");
         }
 
-        Order order = Order.builder()
-                .type(orderRequest.getType())
-                .user(user)
-                .build();
+        Warehouse warehouse = this.warehouseRepository.findById(orderRequest.getWarehouseId());
+        if (warehouse == null) {
+            throw new EntityNotFoundException("Kho hàng không tồn tại.");
+        }
 
-        this.orderRepository.saveOrUpdate(order);
-        return getOrderResponseDTO(order);
+        if ((user.getRole() == RoleEnum.ROLE_SUPPLIER && orderRequest.getType() == OrderTypeEnum.INBOUND) ||
+                (user.getRole() == RoleEnum.ROLE_DISTRIBUTOR && orderRequest.getType() == OrderTypeEnum.OUTBOUND)) {
+
+            Order order = Order.builder()
+                    .type(orderRequest.getType())
+                    .user(user)
+                    .warehouse(warehouse)
+                    .build();
+
+            this.orderRepository.saveOrUpdate(order);
+            return this.getOrderResponseDTO(order);
+        } else {
+            throw new AccessDeniedException("Người dùng không có quyền tạo đơn hàng với loại này.");
+        }
     }
 
     @Override
     public OrderResponseDTO confirmOrder(Long orderId, Long userId) {
         Order order = this.orderRepository.findById(orderId);
-
         if (order == null) {
-            throw new EntityNotFoundException("Don hang khong ton tai.");
+            throw new EntityNotFoundException("Đơn hàng không tồn tại.");
         }
 
         User supplier = this.userRepository.findById(userId);
         if (supplier == null || supplier.getRole() != RoleEnum.ROLE_SUPPLIER) {
-            throw new IllegalArgumentException("Nguoi dung khong phai la nha cung cap.");
+            throw new IllegalArgumentException("Người dùng không phải là nhà cung cấp.");
         }
 
         if (order.getStatus() != OrderStatusEnum.PENDING) {
-            throw new IllegalStateException("Don hang da xu ly!");
+            throw new IllegalStateException("Đơn hàng đã được xử lý!");
         }
 
         order.setIsConfirm(true);
         order.setStatus(OrderStatusEnum.COMPLETED);
-        orderRepository.saveOrUpdate(order);
+        this.orderRepository.saveOrUpdate(order);
 
-        return getOrderResponseDTO(order);
+        return this.getOrderResponseDTO(order);
     }
 
     @Override
     public boolean cancelOrder(Long orderId, Long userId) {
         Order order = this.orderRepository.findById(orderId);
-
         if (order == null) {
-            throw new EntityNotFoundException("Don hang khong ton tai.");
+            throw new EntityNotFoundException("Đơn hàng không tồn tại.");
         }
 
         User user = this.userRepository.findById(userId);
         if (user == null) {
-            throw new EntityNotFoundException("nguoi dung khong ton tai.");
+            throw new EntityNotFoundException("Người dùng không tồn tại.");
         }
 
         if (order.getStatus() == OrderStatusEnum.PENDING &&
                 (user.getRole() == RoleEnum.ROLE_DISTRIBUTOR || user.getRole() == RoleEnum.ROLE_SUPPLIER)) {
+
             order.setStatus(OrderStatusEnum.CANCELLED);
             this.orderRepository.saveOrUpdate(order);
-
             return true;
-
         } else if (order.getStatus() != OrderStatusEnum.PENDING) {
             throw new IllegalStateException("Đơn hàng không thể hủy vì không ở trạng thái PENDING.");
         }
@@ -107,6 +118,28 @@ public class OrderServiceImpl implements OrderService {
             throw new EntityNotFoundException("Sản phẩm không tồn tại.");
         }
 
+        Warehouse warehouse = order.getWarehouse();
+        if (warehouse == null) {
+            throw new IllegalStateException("Đơn hàng không có thông tin về kho.");
+        }
+
+        if (order.getType() == OrderTypeEnum.INBOUND) {
+            Inventory inventory = this.inventoryRepository.getByWarehouseId(warehouse.getId());
+            int availableCapacity = warehouse.getCapacity() - inventory.getQuantity();
+
+            if (orderDetailRequest.getQuantity() > availableCapacity) {
+                throw new IllegalStateException("Không đủ sức chứa trong kho.");
+            }
+        } else if (order.getType() == OrderTypeEnum.OUTBOUND) {
+            Inventory inventory = inventoryRepository.findByProductIdAndWarehouseId(product.getId(), warehouse.getId());
+            if (inventory == null || inventory.getQuantity() < orderDetailRequest.getQuantity()) {
+                throw new IllegalStateException("Không đủ hàng tồn kho.");
+            }
+
+            inventory.setQuantity(inventory.getQuantity() - orderDetailRequest.getQuantity());
+            this.inventoryRepository.saveOrUpdate(inventory);
+        }
+
         OrderDetail orderDetail = OrderDetail.builder()
                 .order(order)
                 .product(product)
@@ -116,7 +149,7 @@ public class OrderServiceImpl implements OrderService {
 
         this.orderDetailRepository.saveOrUpdate(orderDetail);
 
-        return mapToOrderDetailResponseDTO(orderDetail);
+        return this.mapToOrderDetailResponseDTO(orderDetail);
     }
 
     @Override
@@ -126,13 +159,19 @@ public class OrderServiceImpl implements OrderService {
             throw new EntityNotFoundException("Đơn hàng không tồn tại.");
         }
 
+        Warehouse warehouse = this.warehouseRepository.findById(orderRequest.getWarehouseId());
+        if (warehouse == null) {
+            throw new EntityNotFoundException("Kho hàng không tồn tại.");
+        }
+
         existingOrder.setStatus(orderRequest.getStatus());
         existingOrder.setType(orderRequest.getType());
         existingOrder.setUser(this.userRepository.findById(orderRequest.getUserId()));
+        existingOrder.setWarehouse(this.warehouseRepository.findById(orderRequest.getWarehouseId()));
 
         this.orderRepository.saveOrUpdate(existingOrder);
 
-        return getOrderResponseDTO(existingOrder);
+        return this.getOrderResponseDTO(existingOrder);
     }
 
     @Override
@@ -152,7 +191,14 @@ public class OrderServiceImpl implements OrderService {
             throw new EntityNotFoundException("Đơn hàng không tồn tại.");
         }
 
-        return getOrderResponseDTO(order);
+        return this.getOrderResponseDTO(order);
+    }
+
+    @Override
+    public List<OrderResponseDTO> getAllOrders(Map<String, String> params) {
+        return this.orderRepository.findAll(params).stream()
+                .map(this::getOrderResponseDTO)
+                .collect(Collectors.toList());
     }
 
     private OrderResponseDTO getOrderResponseDTO(Order order) {
@@ -167,6 +213,8 @@ public class OrderServiceImpl implements OrderService {
                 .orderDate(order.getOrderDate())
                 .status(order.getStatus())
                 .type(order.getType())
+                .isConfirm(order.getIsConfirm())
+                .warehouseId(order.getWarehouse().getId())
                 .orderDetails(orderDetailResponseDTOs)
                 .build();
     }
@@ -179,12 +227,5 @@ public class OrderServiceImpl implements OrderService {
                 .quantity(detail.getQuantity())
                 .price(detail.getPrice())
                 .build();
-    }
-
-    @Override
-    public List<OrderResponseDTO> getAllOrders(Map<String, String> params) {
-        return orderRepository.findAll(params).stream()
-                .map(this::getOrderResponseDTO)
-                .collect(Collectors.toList());
     }
 }

@@ -49,6 +49,9 @@ public class Warehouse implements Serializable {
     @OneToMany(mappedBy = "warehouse")
     private Set<Shipment> shipments;
 
+    @OneToMany(mappedBy = "warehouse")
+    private Set<Order> orders;
+
     @PrePersist
     protected void onCreate() {
         this.createdDate = new Date();

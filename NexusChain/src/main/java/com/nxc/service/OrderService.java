@@ -8,11 +8,12 @@ import com.nxc.dto.user.request.UserRequestDTO;
 import com.nxc.pojo.Order;
 import com.nxc.pojo.OrderDetail;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Map;
 
 public interface OrderService {
-    OrderResponseDTO addOrder(OrderRequestDTO orderRequest);
+    OrderResponseDTO addOrder(OrderRequestDTO orderRequest) throws AccessDeniedException;
     OrderResponseDTO confirmOrder(Long orderId, Long userId);
     boolean cancelOrder(Long orderId, Long userId);
     OrderResponseDTO updateOrder(OrderRequestDTO orderRequest);

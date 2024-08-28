@@ -21,5 +21,6 @@ public class OrderResponseDTO {
     private OrderStatusEnum status;
     private OrderTypeEnum type;
     private Boolean isConfirm;
+    private Long warehouseId;
     private Set<OrderDetailResponseDTO> orderDetails;
 }

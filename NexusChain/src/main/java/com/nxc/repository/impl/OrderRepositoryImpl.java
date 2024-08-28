@@ -9,6 +9,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -31,11 +32,8 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public void saveOrUpdate(Order order) {
-        if (order.getId() == null) {
-            this.getCurrentSession().save(order);
-        } else {
-            this.getCurrentSession().update(order);
-        }
+        Session session = this.getCurrentSession();
+        session.saveOrUpdate(order);
     }
 
     @Override
@@ -48,7 +46,11 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public Order findById(Long id) {
         Session session = this.getCurrentSession();
-        return session.get(Order.class, id);
+        Order order = session.get(Order.class, id);
+        if (order == null) {
+            throw new EntityNotFoundException("Đơn hàng không tồn tại.");
+        }
+        return order;
     }
 
     @Override
@@ -73,7 +75,7 @@ public class OrderRepositoryImpl implements OrderRepository {
             predicates.add(p2);
         }
 
-        criteria.where(predicates.toArray(Predicate[]::new));
+        criteria.where(predicates.toArray(new Predicate[0]));
 
         Query query = session.createQuery(criteria);
         return query.getResultList();

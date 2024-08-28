@@ -6,6 +6,7 @@ import com.nxc.service.DataLoaderService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class DataLoaderServiceImpl implements DataLoaderService {
     private final LocalSessionFactoryBean factory;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     private Session getCurrentSession() {
         return Objects.requireNonNull(this.factory.getObject()).getCurrentSession();
@@ -27,13 +29,15 @@ public class DataLoaderServiceImpl implements DataLoaderService {
     public void loadData() {
         Session session = this.getCurrentSession();
 
-        Category category1 = Category.builder().name("Electronics").description("Electronics and gadgets").build();
-        Category category2 = Category.builder().name("Books").description("Books and literature").build();
-        Category category3 = Category.builder().name("Clothing").description("Clothing and apparel").build();
-        session.save(category1);
-        session.save(category2);
-        session.save(category3);
+        // Create categories
+        Category electronics = Category.builder().name("Electronics").description("Electronics and gadgets").build();
+        Category books = Category.builder().name("Books").description("Books and literature").build();
+        Category clothing = Category.builder().name("Clothing").description("Clothing and apparel").build();
+        session.save(electronics);
+        session.save(books);
+        session.save(clothing);
 
+        // Create users
         User user1 = User.builder().fullName("John Doe").email("john.doe@example.com").role(RoleEnum.ROLE_CARRIER).isConfirm(true).build();
         User user2 = User.builder().fullName("Jane Smith").email("jane.smith@example.com").role(RoleEnum.ROLE_DISTRIBUTOR).isConfirm(true).build();
         User user3 = User.builder().fullName("Alice Johnson").email("alice.johnson@example.com").role(RoleEnum.ROLE_SUPPLIER).isConfirm(true).build();
@@ -41,13 +45,15 @@ public class DataLoaderServiceImpl implements DataLoaderService {
         session.save(user2);
         session.save(user3);
 
-        Account account1 = Account.builder().username("john123").password("password123").user(user1).build();
-        Account account2 = Account.builder().username("jane456").password("password456").user(user2).build();
-        Account account3 = Account.builder().username("alice789").password("password789").user(user3).build();
+        // Create accounts
+        Account account1 = Account.builder().username("john123").password(this.passwordEncoder.encode("123456")).user(user1).build();
+        Account account2 = Account.builder().username("jane456").password(this.passwordEncoder.encode("123456")).user(user2).build();
+        Account account3 = Account.builder().username("alice789").password(this.passwordEncoder.encode("123456")).user(user3).build();
         session.save(account1);
         session.save(account2);
         session.save(account3);
 
+        // Create suppliers
         Supplier supplier1 = Supplier.builder().user(user3).paymentTerms("Net 30 days").build();
         Supplier supplier2 = Supplier.builder().user(user2).paymentTerms("Net 15 days").build();
         Supplier supplier3 = Supplier.builder().user(user1).paymentTerms("Net 45 days").build();
@@ -55,25 +61,51 @@ public class DataLoaderServiceImpl implements DataLoaderService {
         session.save(supplier2);
         session.save(supplier3);
 
-        Product product1 = Product.builder().name("Laptop").price(new BigDecimal("1200.00")).category(category1).build();
-        Product product2 = Product.builder().name("Smartphone").price(new BigDecimal("800.00")).category(category1).build();
-        Product product3 = Product.builder().name("Novel").price(new BigDecimal("15.00")).category(category2).build();
-        session.save(product1);
-        session.save(product2);
-        session.save(product3);
+        // Create warehouses
+        Warehouse warehouse1 = Warehouse.builder().location("Location A").capacity(1500).build();
+        Warehouse warehouse2 = Warehouse.builder().location("Location B").capacity(8000).build();
+        Warehouse warehouse3 = Warehouse.builder().location("Location C").capacity(9700).build();
+        session.save(warehouse1);
+        session.save(warehouse2);
+        session.save(warehouse3);
 
-        Order order1 = Order.builder().orderDate(new Date()).user(user1).build();
-        Order order2 = Order.builder().orderDate(new Date()).user(user2).build();
-        Order order3 = Order.builder().orderDate(new Date()).user(user3).build();
+        // Create products
+        Product laptop = Product.builder().name("Laptop").price(new BigDecimal("1200.00")).category(electronics).build();
+        Product smartphone = Product.builder().name("Smartphone").price(new BigDecimal("800.00")).category(electronics).build();
+        Product novel = Product.builder().name("Novel").price(new BigDecimal("15.00")).category(books).build();
+        session.save(laptop);
+        session.save(smartphone);
+        session.save(novel);
+
+        // Create inventory for each product in each warehouse
+        Inventory laptopInventory1 = Inventory.builder().product(laptop).warehouse(warehouse1).quantity(50).build();
+        Inventory laptopInventory2 = Inventory.builder().product(laptop).warehouse(warehouse2).quantity(30).build();
+        Inventory smartphoneInventory1 = Inventory.builder().product(smartphone).warehouse(warehouse1).quantity(100).build();
+        Inventory smartphoneInventory2 = Inventory.builder().product(smartphone).warehouse(warehouse3).quantity(50).build();
+        Inventory novelInventory1 = Inventory.builder().product(novel).warehouse(warehouse2).quantity(200).build();
+        Inventory novelInventory2 = Inventory.builder().product(novel).warehouse(warehouse3).quantity(150).build();
+        session.save(laptopInventory1);
+        session.save(laptopInventory2);
+        session.save(smartphoneInventory1);
+        session.save(smartphoneInventory2);
+        session.save(novelInventory1);
+        session.save(novelInventory2);
+
+        // Create orders
+        Order order1 = Order.builder().orderDate(new Date()).user(user1).warehouse(warehouse1).build();
+        Order order2 = Order.builder().orderDate(new Date()).user(user2).warehouse(warehouse2).build();
+        Order order3 = Order.builder().orderDate(new Date()).user(user3).warehouse(warehouse3).build();
         session.save(order1);
         session.save(order2);
         session.save(order3);
 
-        OrderDetail orderDetail1 = OrderDetail.builder().order(order1).product(product1).quantity(2).price(new BigDecimal("2400.00")).build();
-        OrderDetail orderDetail2 = OrderDetail.builder().order(order2).product(product2).quantity(1).price(new BigDecimal("800.00")).build();
-        OrderDetail orderDetail3 = OrderDetail.builder().order(order3).product(product3).quantity(5).price(new BigDecimal("75.00")).build();
+        // Create order details
+        OrderDetail orderDetail1 = OrderDetail.builder().order(order1).product(laptop).quantity(2).price(new BigDecimal("2400.00")).build();
+        OrderDetail orderDetail2 = OrderDetail.builder().order(order2).product(smartphone).quantity(1).price(new BigDecimal("800.00")).build();
+        OrderDetail orderDetail3 = OrderDetail.builder().order(order3).product(novel).quantity(5).price(new BigDecimal("75.00")).build();
         session.save(orderDetail1);
         session.save(orderDetail2);
         session.save(orderDetail3);
     }
 }
+

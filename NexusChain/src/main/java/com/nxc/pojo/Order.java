@@ -56,6 +56,10 @@ public class Order implements Serializable {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "order")
     private Set<OrderDetail> orderDetails;
 
+    @ManyToOne
+    @JoinColumn(name = "warehouse_id", referencedColumnName = "id")
+    private Warehouse warehouse;
+
     @PrePersist
     protected void onCreate() {
         orderDate = new Date();
