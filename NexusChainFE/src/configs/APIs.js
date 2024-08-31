@@ -8,7 +8,12 @@ export const endpoints = {
     "login": "/user/login",
     "registerUser": "/user/register",
     "updateUser": "/user/current-user/update",
-    "createOrder": "/orders"
+    "getAllSupplier": "/user/suppliers/",
+    "getAllProduct": (userId) => `/user/${userId}/products/`,
+
+    "getAllOrder": '/user/current-user/orders',
+    "createOrder": "/orders",
+    "orderDetail": (orderId) => `/${orderId}/details`,
 }
 
 export const authAPIs = () => {

@@ -4,8 +4,10 @@ import com.nxc.dto.product.request.ProductRequestDTO;
 import com.nxc.dto.product.response.ProductResponseDTO;
 import com.nxc.pojo.Category;
 import com.nxc.pojo.Product;
+import com.nxc.pojo.User;
 import com.nxc.repository.CategoryRepository;
 import com.nxc.repository.ProductRepository;
+import com.nxc.repository.UserRepository;
 import com.nxc.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     @Override
     public ProductResponseDTO findProductById(Long id) {
@@ -53,6 +56,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDTO addOrUpdateProduct(ProductRequestDTO productRequest) {
         Category category = this.categoryRepository.findById(productRequest.getCategoryId());
+        User user = this.userRepository.findById(productRequest.getUserId());
 
         Product product = Product.builder()
                 .name(productRequest.getName())
@@ -61,6 +65,9 @@ public class ProductServiceImpl implements ProductService {
                 .category(category)
                 .build();
 
+        this.productRepository.saveOrUpdate(product);
+        
+        
         return ProductResponseDTO.builder()
                 .id(product.getId())
                 .name(productRequest.getName())
