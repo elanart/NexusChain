@@ -1,5 +1,7 @@
 package com.nxc.service.impl;
 
+import com.nxc.dto.warehouse.response.WarehouseResponseDTO;
+import com.nxc.dto.warehouse.resquest.WarehouseResquestDTO;
 import com.nxc.pojo.Warehouse;
 import com.nxc.repository.WarehouseRepository;
 import com.nxc.service.WarehouseService;
@@ -40,5 +42,14 @@ public class WarehouseServiceImpl implements WarehouseService {
     public void deleteWarehouse(Long warehouseId) {
         Warehouse warehouse = this.warehouseRepository.findById(warehouseId);
         this.warehouseRepository.delete(warehouse);
+    }
+
+    @Override
+    public void saveOrUpdate(WarehouseResquestDTO warehouseResquestDTO) {
+        Warehouse warehouse = new Warehouse();
+        warehouse.setLocation(warehouseResquestDTO.getLocation());
+        warehouse.setCapacity(warehouseResquestDTO.getCapacity());
+        warehouse.setCost(warehouseResquestDTO.getCost());
+        this.warehouseRepository.saveOrUpdate(warehouse);
     }
 }

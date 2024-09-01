@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -35,9 +34,11 @@ public class Warehouse implements Serializable {
     private Boolean isActive = true;
 
     @Column(name = "created_date", updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
-    @Column(name = "updated_date", insertable = false)
+    @Column(name = "updated_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "warehouse")

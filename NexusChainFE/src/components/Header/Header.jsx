@@ -14,7 +14,7 @@ const Header = () => {
   }
 
   return (
-    <div className='w-full h-12 bg-blue-700 fixed top-0 left-0 flex items-center justify-between px-4'>
+    <div className='w-full h-12 bg-blue-700 fixed top-0 left-0 flex items-center justify-between px-4 z-50'>
       <Link className='font-bold text-white' to="/">NEXUS CHAIN</Link>
       <div className='space-x-4'>
         {user === null? 

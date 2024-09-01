@@ -2,6 +2,11 @@ package com.nxc.repository.impl;
 
 import com.nxc.pojo.Warehouse;
 import com.nxc.repository.WarehouseRepository;
+import java.util.Objects;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -14,7 +19,7 @@ import java.util.Objects;
 @Repository
 @Transactional
 @RequiredArgsConstructor
-public class WarehouseRepositoryImpl implements WarehouseRepository {
+public class WarehouseRepositoryImpl implements WarehouseRepository{
     private final LocalSessionFactoryBean factory;
 
     private Session getCurrentSession() {
@@ -43,4 +48,5 @@ public class WarehouseRepositoryImpl implements WarehouseRepository {
         Session session = this.getCurrentSession();
         return session.createQuery("from Warehouse", Warehouse.class).getResultList();
     }
+
 }
