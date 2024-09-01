@@ -1,5 +1,6 @@
 package com.nxc.service.impl;
 
+import com.nxc.enums.OrderTypeEnum;
 import com.nxc.enums.RoleEnum;
 import com.nxc.pojo.*;
 import com.nxc.service.DataLoaderService;
@@ -92,7 +93,7 @@ public class DataLoaderServiceImpl implements DataLoaderService {
         session.save(novelInventory2);
 
         // Create orders
-        Order order1 = Order.builder().orderDate(new Date()).user(user1).warehouse(warehouse1).build();
+        Order order1 = Order.builder().orderDate(new Date()).user(user1).warehouse(warehouse1).type(OrderTypeEnum.INBOUND).build();
         Order order2 = Order.builder().orderDate(new Date()).user(user2).warehouse(warehouse2).build();
         Order order3 = Order.builder().orderDate(new Date()).user(user3).warehouse(warehouse3).build();
         session.save(order1);

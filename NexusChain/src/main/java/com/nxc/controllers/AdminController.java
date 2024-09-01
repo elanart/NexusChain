@@ -1,5 +1,6 @@
 package com.nxc.controllers;
 
+import com.nxc.dto.order.response.OrderResponseDTO;
 import com.nxc.service.OrderService;
 import com.nxc.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -44,8 +46,36 @@ public class AdminController {
     }
 
     @GetMapping("/orders")
-    public String listOrders(Model model, Map<String, String> params) {
-        model.addAttribute("orders", this.orderService.getAllOrders(params));
+    public String viewOrders(@RequestParam Map<String, String> params, Model model) {
+        List<OrderResponseDTO> orders = orderService.getAllOrders(params);
+        model.addAttribute("orders", orders);
+
+        for (OrderResponseDTO order : orders) {
+            String userFullName = orderService.getUserFullName(order.getUserId());
+            model.addAttribute("userFullName" + order.getId(), userFullName);
+        }
+
         return "order";
+    }
+
+    @GetMapping("/orders/{orderId}")
+    public String viewOrderDetail(@PathVariable Long orderId, Model model) {
+        OrderResponseDTO order = orderService.getOrder(orderId);
+        model.addAttribute("order", order);
+        return "orderDetails";
+    }
+
+    @PostMapping("/orders/{orderId}/confirm")
+    public String confirmOrder(@PathVariable Long orderId) {
+        Long adminUserId = 1L;
+        orderService.confirmOrder(orderId, adminUserId);
+        return "redirect:/admin/orders";
+    }
+
+    @PostMapping("/orders/{orderId}/cancel")
+    public String cancelOrder(@PathVariable Long orderId) {
+        Long adminUserId = 1L;
+        orderService.cancelOrder(orderId, adminUserId);
+        return "redirect:/admin/orders";
     }
 }

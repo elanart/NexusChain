@@ -21,4 +21,6 @@ public interface OrderService {
     void deleteOrder(Long orderId);
     OrderResponseDTO getOrder(Long orderId);
     List<OrderResponseDTO> getAllOrders(Map<String, String> params);
+    void placeOrder(Order order);
+    String getUserFullName(Long userId);
 }

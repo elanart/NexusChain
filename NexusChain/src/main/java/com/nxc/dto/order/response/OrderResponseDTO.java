@@ -22,5 +22,7 @@ public class OrderResponseDTO {
     private OrderTypeEnum type;
     private Boolean isConfirm;
     private Long warehouseId;
+    private Long userId;
+    private String userFullName;
     private Set<OrderDetailResponseDTO> orderDetails;
 }

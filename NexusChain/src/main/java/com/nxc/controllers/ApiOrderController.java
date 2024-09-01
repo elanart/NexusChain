@@ -8,15 +8,12 @@ import com.nxc.pojo.Account;
 import com.nxc.pojo.User;
 import com.nxc.service.AccountService;
 import com.nxc.service.OrderService;
-import com.nxc.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
@@ -28,7 +25,6 @@ import java.util.Map;
 @CrossOrigin
 public class ApiOrderController {
     private final OrderService orderService;
-    private final UserService userService;
     private final AccountService accountService;
 
     @PostMapping
@@ -39,6 +35,7 @@ public class ApiOrderController {
         String username = principal.getName();
         Account account = this.accountService.findByUsername(username);
         User user = account.getUser();
+
         orderRequestDTO.setUserId(user.getId());
 
         OrderResponseDTO orderResponseDTO = this.orderService.addOrder(orderRequestDTO);
@@ -46,7 +43,18 @@ public class ApiOrderController {
     }
 
     @PostMapping("/{orderId}/details")
-    public ResponseEntity<OrderDetailResponseDTO> addOrderDetail(@PathVariable Long orderId, @RequestBody @Valid OrderDetailRequestDTO orderDetailRequestDTO) {
+    public ResponseEntity<OrderDetailResponseDTO> addOrderDetail(@PathVariable Long orderId,
+                                                                 @RequestBody @Valid OrderDetailRequestDTO orderDetailRequestDTO,
+                                                                 Principal principal) {
+        String username = principal.getName();
+        Account account = this.accountService.findByUsername(username);
+        User user = account.getUser();
+        OrderResponseDTO order = orderService.getOrder(orderId);
+
+        if (!order.getUserId().equals(user.getId())) {
+            return ResponseEntity.status(403).build();
+        }
+
         OrderDetailResponseDTO orderDetailResponseDTO = this.orderService.addOrderDetail(orderId, orderDetailRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(orderDetailResponseDTO);
     }
@@ -65,13 +73,26 @@ public class ApiOrderController {
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderResponseDTO> getOrder(@PathVariable Long orderId) {
-        OrderResponseDTO orderResponseDTO = this.orderService.getOrder(orderId);
-        return ResponseEntity.ok(orderResponseDTO);
+    public ResponseEntity<OrderResponseDTO> getOrder(@PathVariable Long orderId, Principal principal) {
+        String username = principal.getName();
+        Account account = this.accountService.findByUsername(username);
+        User user = account.getUser();
+        OrderResponseDTO orderResponse = orderService.getOrder(orderId);
+
+        if (!orderResponse.getUserId().equals(user.getId())) {
+            return ResponseEntity.status(403).build();
+        }
+
+        return ResponseEntity.ok(orderResponse);
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderResponseDTO>> getAllOrders(@RequestParam Map<String, String> params) {
+    public ResponseEntity<List<OrderResponseDTO>> getUserOrders(@RequestParam Map<String, String> params, Principal principal) {
+        String username = principal.getName();
+        Account account = this.accountService.findByUsername(username);
+        User user = account.getUser();
+        params.put("userId", user.getId().toString());
+
         List<OrderResponseDTO> orders = this.orderService.getAllOrders(params);
         return ResponseEntity.ok(orders);
     }
@@ -94,29 +115,9 @@ public class ApiOrderController {
 
         boolean isCancelled = this.orderService.cancelOrder(orderId, user.getId());
         if (isCancelled) {
-            return ResponseEntity.ok("Order cancelled successfully.");
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(400).build();
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order cancellation failed.");
-    }
-
-    // Exception handling for common errors
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<String> handleEntityNotFound(EntityNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-    }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-    }
-
-    @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<String> handleIllegalState(IllegalStateException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<String> handleAccessDenied(AccessDeniedException ex) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
     }
 }

@@ -36,7 +36,7 @@ public class ApiWarehouseController {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
 
-        WarehouseResponseDTO warehouseResponseDTO = this.warehouseService.saveOrUpdate(warehouseResquestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(warehouseResponseDTO);
+        this.warehouseService.saveOrUpdate(warehouseResquestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

@@ -10,6 +10,7 @@ import com.nxc.enums.OrderTypeEnum;
 import com.nxc.enums.RoleEnum;
 import com.nxc.pojo.*;
 import com.nxc.repository.*;
+import com.nxc.service.InventoryService;
 import com.nxc.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
     private final InventoryRepository inventoryRepository;
     private final WarehouseRepository warehouseRepository;
+    private final InventoryService inventoryService;
 
     @Override
     public OrderResponseDTO addOrder(OrderRequestDTO orderRequest) throws AccessDeniedException {
@@ -66,9 +68,14 @@ public class OrderServiceImpl implements OrderService {
             throw new EntityNotFoundException("Đơn hàng không tồn tại.");
         }
 
-        User supplier = this.userRepository.findById(userId);
-        if (supplier == null || supplier.getRole() != RoleEnum.ROLE_SUPPLIER) {
-            throw new IllegalArgumentException("Người dùng không phải là nhà cung cấp.");
+        User user = this.userRepository.findById(userId);
+        if (user == null) {
+            throw new EntityNotFoundException("Người dùng không tồn tại.");
+        }
+
+        if ((order.getType() == OrderTypeEnum.INBOUND && (user.getRole() != RoleEnum.ROLE_SUPPLIER && user.getRole() != RoleEnum.ROLE_ADMIN)) ||
+                (order.getType() == OrderTypeEnum.OUTBOUND && (user.getRole() != RoleEnum.ROLE_DISTRIBUTOR && user.getRole() != RoleEnum.ROLE_ADMIN))) {
+            throw new IllegalArgumentException("Người dùng không có quyền xác nhận đơn hàng này.");
         }
 
         if (order.getStatus() != OrderStatusEnum.PENDING) {
@@ -94,16 +101,16 @@ public class OrderServiceImpl implements OrderService {
             throw new EntityNotFoundException("Người dùng không tồn tại.");
         }
 
-        if (order.getStatus() == OrderStatusEnum.PENDING &&
-                (user.getRole() == RoleEnum.ROLE_DISTRIBUTOR || user.getRole() == RoleEnum.ROLE_SUPPLIER)) {
-
-            order.setStatus(OrderStatusEnum.CANCELLED);
-            this.orderRepository.saveOrUpdate(order);
-            return true;
-        } else if (order.getStatus() != OrderStatusEnum.PENDING) {
-            throw new IllegalStateException("Đơn hàng không thể hủy vì không ở trạng thái PENDING.");
+        if ((order.getType() == OrderTypeEnum.INBOUND && (user.getRole() != RoleEnum.ROLE_SUPPLIER && user.getRole() != RoleEnum.ROLE_ADMIN)) ||
+                (order.getType() == OrderTypeEnum.OUTBOUND && (user.getRole() != RoleEnum.ROLE_DISTRIBUTOR && user.getRole() != RoleEnum.ROLE_ADMIN))) {
+            throw new IllegalArgumentException("Người dùng không có quyền hủy đơn hàng này.");
         }
-        return false;
+
+        inventoryService.updateInventoryById(order.getId());
+
+        order.setStatus(OrderStatusEnum.CANCELLED);
+        this.orderRepository.saveOrUpdate(order);
+        return true;
     }
 
     @Override
@@ -201,6 +208,18 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void placeOrder(Order order) {
+        orderRepository.saveOrUpdate(order);
+        inventoryService.updateInventoryById(order.getId());
+    }
+
+    @Override
+    public String getUserFullName(Long userId) {
+        User user = userRepository.findById(userId);
+        return user != null ? user.getFullName() : "Unknown";
+    }
+
     private OrderResponseDTO getOrderResponseDTO(Order order) {
         Set<OrderDetailResponseDTO> orderDetailResponseDTOs = (order.getOrderDetails() != null)
                 ? order.getOrderDetails().stream()
@@ -216,6 +235,8 @@ public class OrderServiceImpl implements OrderService {
                 .isConfirm(order.getIsConfirm())
                 .warehouseId(order.getWarehouse().getId())
                 .orderDetails(orderDetailResponseDTOs)
+                .userId(order.getUser().getId())
+                .userFullName(order.getUser().getFullName())
                 .build();
     }
 
