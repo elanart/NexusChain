@@ -8,6 +8,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 @Repository
@@ -24,5 +25,23 @@ public class CarrierRepositoryImpl implements CarrierRepository {
     public void saveCarrier(Carrier carrier) {
         Session session = this.getCurrentSession();
         session.save(carrier);
+    }
+
+    @Override
+    public Carrier findById(Long id) {
+        Session session = this.getCurrentSession();
+        return session.get(Carrier.class, id);
+    }
+
+    @Override
+    public List<Carrier> findAll() {
+        Session session = this.getCurrentSession();
+        return session.createCriteria(Carrier.class).list();
+    }
+
+    @Override
+    public void delete(Carrier carrier) {
+        Session session = this.getCurrentSession();
+        session.delete(carrier);
     }
 }

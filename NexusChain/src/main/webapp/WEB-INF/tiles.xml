@@ -25,4 +25,12 @@
         <put-attribute name="title" value="Chi tiết đơn hàng" />
         <put-attribute name="content" value="/WEB-INF/pages/orderDetails.jsp" />
     </definition>
+    <definition name="shipment" extends="baseLayout">
+        <put-attribute name="title" value="Danh sách lô hàng" />
+        <put-attribute name="content" value="/WEB-INF/pages/shipment.jsp"/>
+    </definition>
+    <definition name="shipmentDetails" extends="baseLayout">
+        <put-attribute name="title" value="Chi tiết lô hàng" />
+        <put-attribute name="content" value="/WEB-INF/pages/shipmentDetails.jsp"/>
+    </definition>
 </tiles-definitions>

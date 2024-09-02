@@ -23,6 +23,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<c:url value='/admin/orders' />">Danh sách đơn hàng</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<c:url value='/admin/shipments' />">Danh sách lô hàng</a>
+                </li>
                 <s:authorize access="!isAuthenticated()">
                     <li class="nav-item">
                         <a class="nav-link" href="<c:url value='/login' />">Đăng nhập</a>

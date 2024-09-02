@@ -1,7 +1,11 @@
 package com.nxc.controllers;
 
+import com.nxc.dto.carrier.respone.CarrierResponseDTO;
 import com.nxc.dto.order.response.OrderResponseDTO;
+import com.nxc.dto.shipment.response.ShipmentResponseDTO;
+import com.nxc.service.CarrierService;
 import com.nxc.service.OrderService;
+import com.nxc.service.ShipmentService;
 import com.nxc.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +24,8 @@ import java.util.Map;
 public class AdminController {
     private final UserService userService;
     private final OrderService orderService;
+    private final ShipmentService shipmentService;
+    private final CarrierService carrierService;
 
     @GetMapping
     public String homePage() {
@@ -77,5 +83,51 @@ public class AdminController {
         Long adminUserId = 1L;
         orderService.cancelOrder(orderId, adminUserId);
         return "redirect:/admin/orders";
+    }
+
+    @GetMapping("/shipments")
+    public String viewShipments(Model model) {
+        List<ShipmentResponseDTO> shipments = shipmentService.getAllShipments();
+        model.addAttribute("shipments", shipments);
+        return "shipment";
+    }
+
+    @GetMapping("/shipments/{shipmentId}")
+    public String viewShipmentDetail(@PathVariable Long shipmentId, Model model) {
+        ShipmentResponseDTO shipment = shipmentService.getShipmentDetails(shipmentId);
+        model.addAttribute("shipment", shipment);
+        return "shipmentDetails";
+    }
+
+    @PostMapping("/shipments/{id}/intransit")
+    public String intransitShipment(@PathVariable Long id) {
+        shipmentService.inTransitShipment(id);
+        return "redirect:/admin/shipments";
+    }
+
+    @PostMapping("/shipments/{id}/done")
+    public String doneShipment(@PathVariable Long id) {
+        shipmentService.doneShipment(id);
+        return "redirect:/admin/shipments";
+    }
+
+    @PostMapping("/shipments/{id}/cancel")
+    public String cancelShipment(@PathVariable Long id) {
+        shipmentService.cancelShipment(id);
+        return "redirect:/admin/shipments";
+    }
+
+    @GetMapping("/carriers")
+    public String listCarriers(Model model) {
+        List<CarrierResponseDTO> carriers = carrierService.getAllCarriers();
+        model.addAttribute("carriers", carriers);
+        return "carrier";
+    }
+
+    @GetMapping("/carriers/{carrierId}")
+    public String viewCarrierDetail(@PathVariable Long carrierId, Model model) {
+        CarrierResponseDTO carrier = carrierService.getCarrierDetails(carrierId);
+        model.addAttribute("carrier", carrier);
+        return "carrierDetails";
     }
 }
