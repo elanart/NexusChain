@@ -3,6 +3,7 @@ package com.nxc.controllers;
 import com.nxc.dto.order.response.OrderResponseDTO;
 import com.nxc.service.OrderService;
 import com.nxc.service.UserService;
+import com.nxc.service.WarehouseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class AdminController {
     private final UserService userService;
     private final OrderService orderService;
+    private final WarehouseService warehouseService;
 
     @GetMapping
     public String homePage() {
@@ -77,5 +79,11 @@ public class AdminController {
         Long adminUserId = 1L;
         orderService.cancelOrder(orderId, adminUserId);
         return "redirect:/admin/orders";
+    }
+    
+    @GetMapping("/warehouse")
+    public String viewWarehouse(Model model) {
+        model.addAttribute("warehouse", this.warehouseService.getAllWarehouses());
+        return "warehouse";
     }
 }
