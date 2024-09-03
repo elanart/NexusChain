@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
@@ -82,13 +83,66 @@ public class DataLoaderServiceImpl implements DataLoaderService {
         session.save(supplierProduct2);
         session.save(supplierProduct3);
 
-        // Create inventory for each product in each warehouse
-        Inventory laptopInventory1 = Inventory.builder().product(laptop).warehouse(warehouse1).quantity(50).build();
-        Inventory laptopInventory2 = Inventory.builder().product(laptop).warehouse(warehouse2).quantity(30).build();
-        Inventory smartphoneInventory1 = Inventory.builder().product(smartphone).warehouse(warehouse1).quantity(100).build();
-        Inventory smartphoneInventory2 = Inventory.builder().product(smartphone).warehouse(warehouse3).quantity(50).build();
-        Inventory novelInventory1 = Inventory.builder().product(novel).warehouse(warehouse2).quantity(200).build();
-        Inventory novelInventory2 = Inventory.builder().product(novel).warehouse(warehouse3).quantity(150).build();
+        Date currentDate = new Date();
+        Calendar cal = Calendar.getInstance();
+
+        // Hàng hóa hiện tại: 6 tháng sau
+        cal.setTime(currentDate);
+        cal.add(Calendar.MONTH, 6);
+        Date sixMonthsLater = cal.getTime();
+
+        // Hàng hóa đã hết hạn: Hôm qua
+        cal.setTime(currentDate);
+        cal.add(Calendar.DATE, -1);
+        Date yesterday = cal.getTime();
+
+        // Hàng hóa sắp hết hạn: 10 ngày sau
+        cal.setTime(currentDate);
+        cal.add(Calendar.DATE, 10);
+        Date tenDaysLater = cal.getTime();
+
+        Inventory laptopInventory1 = Inventory.builder()
+                .product(laptop)
+                .warehouse(warehouse1)
+                .quantity(50)
+                .expiryDate(sixMonthsLater)  // Hàng hóa hiện tại
+                .build();
+
+        Inventory laptopInventory2 = Inventory.builder()
+                .product(laptop)
+                .warehouse(warehouse2)
+                .quantity(30)
+                .expiryDate(tenDaysLater)  // Hàng hóa sắp hết hạn
+                .build();
+
+        Inventory smartphoneInventory1 = Inventory.builder()
+                .product(smartphone)
+                .warehouse(warehouse1)
+                .quantity(100)
+                .expiryDate(yesterday)  // Hàng hóa đã hết hạn
+                .build();
+
+        Inventory smartphoneInventory2 = Inventory.builder()
+                .product(smartphone)
+                .warehouse(warehouse3)
+                .quantity(50)
+                .expiryDate(tenDaysLater)  // Hàng hóa sắp hết hạn
+                .build();
+
+        Inventory novelInventory1 = Inventory.builder()
+                .product(novel)
+                .warehouse(warehouse2)
+                .quantity(200)
+                .expiryDate(sixMonthsLater)  // Hàng hóa hiện tại
+                .build();
+
+        Inventory novelInventory2 = Inventory.builder()
+                .product(novel)
+                .warehouse(warehouse3)
+                .quantity(150)
+                .expiryDate(yesterday)  // Hàng hóa đã hết hạn
+                .build();
+
         session.save(laptopInventory1);
         session.save(laptopInventory2);
         session.save(smartphoneInventory1);

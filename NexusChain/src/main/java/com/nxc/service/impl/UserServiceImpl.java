@@ -188,6 +188,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<Supplier> getSuppliers() {
+        Map<String, String> params = new HashMap<>();
+        params.put("role", RoleEnum.ROLE_SUPPLIER.name());
+
+        List<User> supplierUsers = this.userRepository.findUser(params);
+
+        return supplierUsers.stream()
+                .map(User::getSupplier)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public User findById(Long id) {
+        return this.userRepository.findById(id);
+    }
+
+    @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Account account = this.accountService.findByUsername(username);

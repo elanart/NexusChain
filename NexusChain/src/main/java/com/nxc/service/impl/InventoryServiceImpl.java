@@ -1,5 +1,6 @@
 package com.nxc.service.impl;
 
+import com.nxc.dto.inventory.InventoryReportDTO;
 import com.nxc.enums.OrderTypeEnum;
 import com.nxc.pojo.*;
 import com.nxc.repository.InventoryRepository;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -82,6 +85,40 @@ public class InventoryServiceImpl implements InventoryService {
                 inventoryRepository.saveOrUpdate(inventory);
             }
         }
+    }
+
+    @Override
+    public InventoryReportDTO getInventoryReport() {
+        List<Inventory> allInventories = this.inventoryRepository.findAll();
+
+        int totalItems = 0;
+        int nearExpiryItems = 0;
+        int expiredItems = 0;
+
+        Date currentDate = new Date();
+
+        for (Inventory inventory : allInventories) {
+            totalItems += inventory.getQuantity();
+            if (inventory.getExpiryDate() != null) {
+                if (inventory.getExpiryDate().before(currentDate)) {
+                    expiredItems += inventory.getQuantity();
+                } else if (isNearExpiry(inventory.getExpiryDate())) {
+                    nearExpiryItems += inventory.getQuantity();
+                }
+            }
+        }
+
+        return InventoryReportDTO.builder()
+                .totalItems(totalItems)
+                .nearExpiryItems(nearExpiryItems)
+                .expiredItems(expiredItems)
+                .build();
+    }
+
+    private boolean isNearExpiry(Date expiryDate) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, 30);
+        return expiryDate.before(cal.getTime());
     }
 
 }
