@@ -2,6 +2,7 @@ package com.nxc.service.impl;
 
 import com.nxc.enums.OrderTypeEnum;
 import com.nxc.enums.RoleEnum;
+import com.nxc.enums.ShippingStatusEnum;
 import com.nxc.pojo.*;
 import com.nxc.service.DataLoaderService;
 import lombok.RequiredArgsConstructor;
@@ -56,11 +57,7 @@ public class DataLoaderServiceImpl implements DataLoaderService {
 
         // Create suppliers
         Supplier supplier1 = Supplier.builder().user(user3).paymentTerms("Net 30 days").build();
-        Supplier supplier2 = Supplier.builder().user(user2).paymentTerms("Net 15 days").build();
-        Supplier supplier3 = Supplier.builder().user(user1).paymentTerms("Net 45 days").build();
         session.save(supplier1);
-        session.save(supplier2);
-        session.save(supplier3);
 
         // Create warehouses
         Warehouse warehouse1 = Warehouse.builder().location("Location A").capacity(1500).build();
@@ -78,6 +75,13 @@ public class DataLoaderServiceImpl implements DataLoaderService {
         session.save(smartphone);
         session.save(novel);
 
+        SupplierProduct supplierProduct1 = SupplierProduct.builder().supplier(supplier1).product(laptop).build();
+        SupplierProduct supplierProduct2 = SupplierProduct.builder().supplier(supplier1).product(smartphone).build();
+        SupplierProduct supplierProduct3 = SupplierProduct.builder().supplier(supplier1).product(novel).build();
+        session.save(supplierProduct1);
+        session.save(supplierProduct2);
+        session.save(supplierProduct3);
+
         // Create inventory for each product in each warehouse
         Inventory laptopInventory1 = Inventory.builder().product(laptop).warehouse(warehouse1).quantity(50).build();
         Inventory laptopInventory2 = Inventory.builder().product(laptop).warehouse(warehouse2).quantity(30).build();
@@ -93,9 +97,9 @@ public class DataLoaderServiceImpl implements DataLoaderService {
         session.save(novelInventory2);
 
         // Create orders
-        Order order1 = Order.builder().orderDate(new Date()).user(user1).warehouse(warehouse1).type(OrderTypeEnum.INBOUND).build();
-        Order order2 = Order.builder().orderDate(new Date()).user(user2).warehouse(warehouse2).build();
-        Order order3 = Order.builder().orderDate(new Date()).user(user3).warehouse(warehouse3).build();
+        Order order1 = Order.builder().orderDate(new Date()).user(user3).warehouse(warehouse1).type(OrderTypeEnum.INBOUND).build();
+        Order order2 = Order.builder().orderDate(new Date()).user(user2).warehouse(warehouse2).type(OrderTypeEnum.OUTBOUND).build();
+        Order order3 = Order.builder().orderDate(new Date()).user(user3).warehouse(warehouse3).type(OrderTypeEnum.INBOUND).build();
         session.save(order1);
         session.save(order2);
         session.save(order3);
@@ -107,6 +111,25 @@ public class DataLoaderServiceImpl implements DataLoaderService {
         session.save(orderDetail1);
         session.save(orderDetail2);
         session.save(orderDetail3);
+
+        Carrier carrier1 = Carrier.builder()
+                .cooperationTerms("Standard Cooperation Terms")
+                .rating(new BigDecimal("4.5"))
+                .user(user1)
+                .build();
+        session.save(carrier1);
+
+        Shipment shipment1 = Shipment.builder()
+                .trackingNumber("TRACK123456")
+                .shipmentDate(new Date())
+                .status(ShippingStatusEnum.SHIPPED)
+                .expectedDelivery(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)) // 1 week later
+                .cost(new BigDecimal("150.00"))
+                .destination("Ho Chi Minh City")
+                .carrier(carrier1)
+                .warehouse(warehouse1)
+                .build();
+        session.save(shipment1);
     }
 }
 

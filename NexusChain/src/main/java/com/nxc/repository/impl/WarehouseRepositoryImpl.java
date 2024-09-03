@@ -1,5 +1,6 @@
 package com.nxc.repository.impl;
 
+import com.nxc.pojo.Shipment;
 import com.nxc.pojo.Warehouse;
 import com.nxc.repository.WarehouseRepository;
 import java.util.Objects;
@@ -37,10 +38,16 @@ public class WarehouseRepositoryImpl implements WarehouseRepository{
         return this.getCurrentSession().get(Warehouse.class, id);
     }
 
+//    @Override
+//    public void delete(Warehouse warehouse) {
+//        Session session = this.getCurrentSession();
+//        session.delete(warehouse);
+//    }
     @Override
-    public void delete(Warehouse warehouse) {
-        Session session = this.getCurrentSession();
-        session.delete(warehouse);
+    public void delete(Long id) {
+        Session s = getCurrentSession();
+        Warehouse w = this.findById(id);
+        s.delete(w);
     }
 
     @Override

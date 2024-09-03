@@ -40,8 +40,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public void deleteWarehouse(Long warehouseId) {
-        Warehouse warehouse = this.warehouseRepository.findById(warehouseId);
-        this.warehouseRepository.delete(warehouse);
+        this.warehouseRepository.delete(warehouseId);
     }
 
     @Override

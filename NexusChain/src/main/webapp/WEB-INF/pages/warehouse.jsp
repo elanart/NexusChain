@@ -17,16 +17,22 @@
         <th>Ngày tạo</th>
         <th>Ngày chỉnh sửa</th>
         <th>Trạng thái</th>
+        <th>Hành động</th>
     </tr>
     <c:forEach items="${warehouse}" var="w">
-        <tr>
+        <tr id="warehouse${w.id}">
             <td>${w.id}</td>
             <td>${w.location}</td>
             <td>${w.capacity}</td>
             <td>${w.cost}</td>
             <td><fmt:formatDate value="${w.createdDate}" pattern="HH:mm dd-MM-yyyy" /></td>
             <td><fmt:formatDate value="${w.updatedDate}" pattern="HH:mm dd-MM-yyyy" /></td>
-    <td>${w.isActive}</td>
-</tr>
-</c:forEach>
+            <td>${w.isActive}</td>
+            <td>
+                <form action="/admin/warehouse/${w.id}/delete" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">Xóa</button>
+                </form>
+            </td>
+        </tr>
+    </c:forEach>
 </table>

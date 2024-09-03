@@ -61,6 +61,7 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
         return resolver;
     }
     
+    
 //    @Override
 //    public void addCorsMappings(CorsRegistry registry) {
 //        registry.addMapping("/**")
@@ -89,4 +90,9 @@ public class WebApplicationContextConfigs implements WebMvcConfigurer {
 //
 //        return resolver;
 //    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+       registry.addResourceHandler("/js/**").addResourceLocations("/resources/js/");
+    }
 }

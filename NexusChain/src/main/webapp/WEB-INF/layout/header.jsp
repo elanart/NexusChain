@@ -26,6 +26,9 @@ To change this template use File | Settings | File Templates.
                 <li class="nav-item">
                     <a class="nav-link" href="<c:url value='/admin/warehouse' />">Danh sách kho</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<c:url value='/admin/shipments' />">Danh sách lô hàng</a>
+                </li>
                 <s:authorize access="!isAuthenticated()">
                     <li class="nav-item">
                         <a class="nav-link" href="<c:url value='/login' />">Đăng nhập</a>
