@@ -37,4 +37,20 @@
         <put-attribute name="title" value="Chi tiết lô hàng" />
         <put-attribute name="content" value="/WEB-INF/pages/shipmentDetails.jsp"/>
     </definition>
+    <definition name="inventoryReport" extends="baseLayout">
+        <put-attribute name="title" value="Thống kê hàng tồn kho" />
+        <put-attribute name="content" value="/WEB-INF/pages/inventoryReport.jsp"/>
+    </definition>
+    <definition name="supplierList" extends="baseLayout">
+        <put-attribute name="title" value="Danh sách nhà cung cấp" />
+        <put-attribute name="content" value="/WEB-INF/pages/supplierList.jsp" />
+    </definition>
+    <definition name="supplierRatings" extends="baseLayout">
+        <put-attribute name="title" value="Đánh giá nhà cung cấp" />
+        <put-attribute name="content" value="/WEB-INF/pages/supplierRatings.jsp"/>
+    </definition>
+    <definition name="supplierPerformance" extends="baseLayout">
+        <put-attribute name="title" value="Hiệu suất nhà cung cấp" />
+        <put-attribute name="content" value="/WEB-INF/pages/supplierPerformance.jsp"/>
+    </definition>
 </tiles-definitions>

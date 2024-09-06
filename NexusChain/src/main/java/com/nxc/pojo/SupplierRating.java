@@ -26,7 +26,7 @@ public class SupplierRating implements Serializable {
     private CriteriaEnum criterion;
 
     @Column(precision = 3, scale = 2)
-    private BigDecimal rating;
+    private Double rating;
 
     @Column(length = 300)
     private String comment;

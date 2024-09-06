@@ -3,14 +3,22 @@ package com.nxc.controllers;
 import com.nxc.dto.carrier.respone.CarrierResponseDTO;
 import com.nxc.dto.order.response.OrderResponseDTO;
 import com.nxc.dto.shipment.response.ShipmentResponseDTO;
+<<<<<<< HEAD
 import com.nxc.service.CarrierService;
 import com.nxc.service.OrderService;
 import com.nxc.service.ShipmentService;
 import com.nxc.service.UserService;
 import com.nxc.service.WarehouseService;
+=======
+import com.nxc.dto.supplier.request.SupplierPerformanceDTO;
+import com.nxc.dto.supplier.request.SupplierPerformanceRequestDTO;
+import com.nxc.dto.supplier.request.SupplierRatingRequestDTO;
+import com.nxc.dto.supplier.response.SupplierRatingResponseDTO;
+import com.nxc.dto.user.response.UserResponseDTO;
+import com.nxc.enums.CriteriaEnum;
+import com.nxc.service.*;
+>>>>>>> origin/lan
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +37,10 @@ public class AdminController {
     private final WarehouseService warehouseService;
     private final ShipmentService shipmentService;
     private final CarrierService carrierService;
+    private final InventoryService inventoryService;
+    private final SupplierRatingService supplierRatingService;
+    private final SupplierPerformanceService supplierPerformanceService;
+
 
     @GetMapping
     public String homePage() {
@@ -144,5 +156,44 @@ public class AdminController {
         CarrierResponseDTO carrier = carrierService.getCarrierDetails(carrierId);
         model.addAttribute("carrier", carrier);
         return "carrierDetails";
+    }
+
+    @GetMapping("/suppliers")
+    public String listSuppliers(Model model) {
+        List<UserResponseDTO> suppliers = userService.getAllSuppliers();
+        model.addAttribute("suppliers", suppliers);
+        return "supplierList";
+    }
+
+    @GetMapping("/suppliers/{supplierId}/ratings")
+    public String viewSupplierRatings(@PathVariable Long supplierId, Model model) {
+        List<SupplierRatingResponseDTO> ratings = supplierRatingService.getRatingsBySupplier(supplierId);
+
+        model.addAttribute("ratings", ratings);
+        model.addAttribute("supplierId", supplierId);
+        model.addAttribute("criteria", CriteriaEnum.values());
+
+        return "supplierRatings";
+    }
+
+    @PostMapping("/suppliers/{supplierId}/ratings")
+    public String rateSupplier(@PathVariable Long supplierId, SupplierRatingRequestDTO dto) {
+        dto.setSupplierId(supplierId);
+        supplierRatingService.rateSupplier(dto);
+        return "redirect:/admin/suppliers/";
+    }
+
+    @GetMapping("/inventory-report")
+    public String viewInventoryReport(Model model) {
+        model.addAttribute("inventory", inventoryService.getInventoryReport());
+        return "inventoryReport";
+    }
+
+    @GetMapping("/suppliers/performance")
+    public String viewSupplierPerformance(Model model) {
+        List<SupplierPerformanceDTO> performanceList = supplierPerformanceService.getSupplierPerformanceReport();
+        System.out.println(performanceList);
+        model.addAttribute("performanceList", performanceList);
+        return "supplierPerformance";
     }
 }

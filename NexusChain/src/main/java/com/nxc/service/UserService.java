@@ -3,6 +3,7 @@ package com.nxc.service;
 import com.nxc.dto.user.request.UserRequestDTO;
 import com.nxc.dto.user.request.UserUpdateRequestDTO;
 import com.nxc.dto.user.response.UserResponseDTO;
+import com.nxc.pojo.Supplier;
 import com.nxc.pojo.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -17,4 +18,6 @@ public interface UserService extends UserDetailsService {
     void deleteUser(Long userId);
     List<User> findUser(Map<String, String> params);
     List<UserResponseDTO> getAllSuppliers();
+    List<Supplier> getSuppliers();
+    User findById(Long id);
 }
