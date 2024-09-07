@@ -21,7 +21,6 @@ import java.util.Set;
 public class OrderRequestDTO {
     private Long id;
 
-    @NotNull(message = "Trạng thái đơn hàng không được để trống")
     private OrderStatusEnum status;
 
     private OrderTypeEnum type;
@@ -29,6 +28,5 @@ public class OrderRequestDTO {
     @NotNull(message = "ID kho không được để trống")
     private Long warehouseId;
 
-    @NotNull(message = "ID người dùng không được để trống")
     private Long userId;
 }

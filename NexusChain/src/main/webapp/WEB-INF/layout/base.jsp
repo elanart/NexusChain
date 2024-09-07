@@ -20,6 +20,19 @@
         <%--    <script src="<c:url value="/js/script.js" />"></script>--%>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <style>
+            /* Ensure the body takes the full height of the viewport */
+            body {
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+                margin: 0;
+            }
+
+            .container {
+                flex: 1;
+                padding-bottom: 60px; /* Add padding equal to the footer height */
+            }
+
             .footer {
                 position: fixed;
                 bottom: 0;
@@ -30,6 +43,7 @@
                 text-align: center;
                 padding: 10px 0;
                 z-index: 1000; /* Ensures the footer stays on top of other elements */
+                height: 60px; /* Set a fixed height for the footer */
             }
 
             /* Footer content */

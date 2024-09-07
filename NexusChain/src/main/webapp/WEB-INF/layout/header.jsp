@@ -29,6 +29,7 @@
                           <a class="dropdown-item" href="<c:url value='/admin/orders' />">Đơn hàng</a>
                           <a class="dropdown-item" href="<c:url value='/admin/shipments' />">Lô hàng</a>
                           <a class="dropdown-item" href="<c:url value='/admin/suppliers' />">Nhà cung cấp</a>
+                          <a class="dropdown-item" href="<c:url value='/admin/warehouse' />">Kho</a>
                       </div>
                   </li>
                   <li class="nav-item">

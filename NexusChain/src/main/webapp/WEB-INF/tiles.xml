@@ -49,4 +49,8 @@
         <put-attribute name="title" value="Hiệu suất nhà cung cấp" />
         <put-attribute name="content" value="/WEB-INF/pages/supplierPerformance.jsp"/>
     </definition>
+    <definition name="warehouse" extends="baseLayout">
+        <put-attribute name="title" value="Danh sách kho hàng" />
+        <put-attribute name="content" value="/WEB-INF/pages/warehouse.jsp" />
+    </definition>
 </tiles-definitions>

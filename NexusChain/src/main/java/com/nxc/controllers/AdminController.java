@@ -30,6 +30,7 @@ public class AdminController {
     private final InventoryService inventoryService;
     private final SupplierRatingService supplierRatingService;
     private final SupplierPerformanceService supplierPerformanceService;
+    private final WarehouseService warehouseService;
 
 
     @GetMapping
@@ -173,5 +174,11 @@ public class AdminController {
         System.out.println(performanceList);
         model.addAttribute("performanceList", performanceList);
         return "supplierPerformance";
+    }
+
+    @GetMapping("/warehouse")
+    public String viewWarehouse(Model model) {
+        model.addAttribute("warehouse", this.warehouseService.getAllWarehouses());
+        return "warehouse";
     }
 }

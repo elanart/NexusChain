@@ -17,7 +17,6 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShipmentRequestDTO {
-    @NotNull(message = "Carrier ID là bắt buộc")
     private Long carrierId;
     @NotNull(message = "Warehouse ID là bắt buộc")
     private Long warehouseId;

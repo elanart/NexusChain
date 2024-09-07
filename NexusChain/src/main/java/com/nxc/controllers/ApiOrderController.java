@@ -60,14 +60,31 @@ public class ApiOrderController {
     }
 
     @PatchMapping("/{orderId}")
-    public ResponseEntity<OrderResponseDTO> updateOrder(@PathVariable Long orderId, @RequestBody @Valid OrderRequestDTO orderRequestDTO) {
+    public ResponseEntity<OrderResponseDTO> updateOrder(@PathVariable Long orderId, @RequestBody @Valid OrderRequestDTO orderRequestDTO,
+                                                        Principal principal) {
+        String username = principal.getName();
+        Account account = this.accountService.findByUsername(username);
+        User user = account.getUser();
+        OrderResponseDTO order = orderService.getOrder(orderId);
+        if (!order.getUserId().equals(user.getId())) {
+            return ResponseEntity.status(403).build();
+        }
+
         orderRequestDTO.setId(orderId);
         OrderResponseDTO updatedOrder = this.orderService.updateOrder(orderRequestDTO);
-        return ResponseEntity.ok(updatedOrder);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedOrder);
     }
 
     @DeleteMapping("/{orderId}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Long orderId) {
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long orderId, Principal principal) {
+        String username = principal.getName();
+        Account account = this.accountService.findByUsername(username);
+        User user = account.getUser();
+        OrderResponseDTO order = orderService.getOrder(orderId);
+        if (!order.getUserId().equals(user.getId())) {
+            return ResponseEntity.status(403).build();
+        }
+
         this.orderService.deleteOrder(orderId);
         return ResponseEntity.noContent().build();
     }
@@ -83,18 +100,18 @@ public class ApiOrderController {
             return ResponseEntity.status(403).build();
         }
 
-        return ResponseEntity.ok(orderResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(orderResponse);
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderResponseDTO>> getUserOrders(@RequestParam Map<String, String> params, Principal principal) {
+    public ResponseEntity<List<OrderResponseDTO>> getUserOrders(@RequestBody Map<String, String> params, Principal principal) {
         String username = principal.getName();
         Account account = this.accountService.findByUsername(username);
         User user = account.getUser();
         params.put("userId", user.getId().toString());
 
         List<OrderResponseDTO> orders = this.orderService.getAllOrders(params);
-        return ResponseEntity.ok(orders);
+        return ResponseEntity.status(HttpStatus.OK).body(orders);
     }
 
     @PatchMapping("/{orderId}/confirm")

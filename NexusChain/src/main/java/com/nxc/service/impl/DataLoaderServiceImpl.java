@@ -61,9 +61,9 @@ public class DataLoaderServiceImpl implements DataLoaderService {
         session.save(supplier1);
 
         // Create warehouses
-        Warehouse warehouse1 = Warehouse.builder().location("Location A").capacity(1500).build();
-        Warehouse warehouse2 = Warehouse.builder().location("Location B").capacity(8000).build();
-        Warehouse warehouse3 = Warehouse.builder().location("Location C").capacity(9700).build();
+        Warehouse warehouse1 = Warehouse.builder().location("Location A").capacity(1500).cost(new BigDecimal("1200.00")).build();
+        Warehouse warehouse2 = Warehouse.builder().location("Location B").capacity(8000).cost(new BigDecimal("1200.00")).build();
+        Warehouse warehouse3 = Warehouse.builder().location("Location C").capacity(9700).cost(new BigDecimal("1200.00")).build();
         session.save(warehouse1);
         session.save(warehouse2);
         session.save(warehouse3);
