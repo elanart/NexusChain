@@ -26,7 +26,14 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Override
     public void scheduleShipment(ShipmentRequestDTO shipmentRequestDTO) {
         Carrier carrier = carrierRepository.findById(shipmentRequestDTO.getCarrierId());
+        if(carrier == null) {
+            throw new IllegalArgumentException("Đơn vị vận chuyển không tồn tại");
+        }
+
         Warehouse warehouse = warehouseRepository.findById(shipmentRequestDTO.getWarehouseId());
+        if(warehouse == null) {
+            throw new IllegalArgumentException("Kho không tồn tại");
+        }
 
         Shipment shipment = Shipment.builder()
                 .shipmentDate(shipmentRequestDTO.getShipmentDate())
@@ -45,6 +52,9 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Override
     public ShipmentResponseDTO getShipmentDetails(Long id) {
         Shipment shipment = shipmentRepository.findById(id);
+        if(shipment == null) {
+            throw new IllegalArgumentException("Đơn vận chuyển không tồn tại");
+        }
         return mapToShipmentResponseDTO(shipment);
     }
 
@@ -59,6 +69,9 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Override
     public void inTransitShipment(Long id) {
         Shipment shipment = shipmentRepository.findById(id);
+        if(shipment == null) {
+            throw new IllegalArgumentException("Đơn vận chuyển không tồn tại");
+        }
         shipment.setStatus(ShippingStatusEnum.IN_TRANSIT);
         shipmentRepository.saveOrUpdate(shipment);
     }
@@ -66,6 +79,9 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Override
     public void doneShipment(Long id) {
         Shipment shipment = shipmentRepository.findById(id);
+        if(shipment == null) {
+            throw new IllegalArgumentException("Đơn vận chuyển không tồn tại");
+        }
         shipment.setStatus(ShippingStatusEnum.DELIVERED);
         shipmentRepository.saveOrUpdate(shipment);
     }
@@ -73,6 +89,9 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Override
     public void cancelShipment(Long id) {
         Shipment shipment = shipmentRepository.findById(id);
+        if(shipment == null) {
+            throw new IllegalArgumentException("Đơn vận chuyển không tồn tại");
+        }
         shipment.setStatus(ShippingStatusEnum.RETURNED);
         shipmentRepository.saveOrUpdate(shipment);
     }

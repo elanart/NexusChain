@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Builder
@@ -22,12 +23,13 @@ public class Invoice implements Serializable {
     private Long id;
 
     @Column(name = "invoice_date")
-    private LocalDateTime invoiceDate;
+    private Date invoiceDate;
 
     @Column(name = "total_amount", precision = 10, scale = 2)
     private BigDecimal totalAmount;
 
-    private Boolean paid;
+    @Column(name = "paid")
+    private Boolean isPaid;
 
     @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "tax_id", referencedColumnName = "id")

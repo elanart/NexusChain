@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
@@ -19,8 +20,15 @@ import java.util.Set;
 @NoArgsConstructor
 public class OrderRequestDTO {
     private Long id;
+
+    @NotNull(message = "Trạng thái đơn hàng không được để trống")
     private OrderStatusEnum status;
+
     private OrderTypeEnum type;
+
+    @NotNull(message = "ID kho không được để trống")
     private Long warehouseId;
+
+    @NotNull(message = "ID người dùng không được để trống")
     private Long userId;
 }

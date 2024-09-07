@@ -25,6 +25,9 @@ public class ApiShipmentController {
     @GetMapping("/{id}")
     public ResponseEntity<ShipmentResponseDTO> getShipmentDetails(@PathVariable Long id) {
         ShipmentResponseDTO shipment = shipmentService.getShipmentDetails(id);
+        if (shipment == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         return ResponseEntity.ok(shipment);
     }
 
@@ -36,19 +39,31 @@ public class ApiShipmentController {
 
     @PostMapping("/{id}/intransit")
     public ResponseEntity<Void> inTransitShipment(@PathVariable Long id) {
-        shipmentService.inTransitShipment(id);
-        return ResponseEntity.ok().build();
+        try {
+            shipmentService.inTransitShipment(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @PostMapping("/{id}/done")
     public ResponseEntity<Void> doneShipment(@PathVariable Long id) {
-        shipmentService.doneShipment(id);
-        return ResponseEntity.ok().build();
+        try {
+            shipmentService.doneShipment(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @PostMapping("/{id}/cancel")
     public ResponseEntity<Void> cancelShipment(@PathVariable Long id) {
-        shipmentService.cancelShipment(id);
-        return ResponseEntity.ok().build();
+        try {
+            shipmentService.cancelShipment(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }

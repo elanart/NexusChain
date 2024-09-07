@@ -100,6 +100,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void updateUser(String username, UserUpdateRequestDTO userUpdateRequestDTO) {
         Account account = this.accountService.findByUsername(username);
+
+        if(account == null) {
+            throw new IllegalArgumentException("Người dùng không tồn tại");
+        }
+
         User user = account.getUser();
         if (user != null && user.getIsConfirm()) {
 
@@ -141,20 +146,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDTO getUserDetails(Long userId) {
         User user = this.userRepository.findById(userId);
-        if (user != null) {
-            return UserResponseDTO.builder()
-                    .id(user.getId())
-                    .fullName(user.getFullName())
-                    .address(user.getAddress())
-                    .phone(user.getPhone())
-                    .email(user.getEmail())
-                    .role(user.getRole())
-                    .isConfirm(user.getIsConfirm())
-                    .isDeleted(user.getIsDeleted())
-                    .avatar(user.getAvatar())
-                    .build();
+
+        if(user == null) {
+            throw new IllegalArgumentException("Người dùng không tồn tại");
         }
-        return null;
+
+        return UserResponseDTO.builder()
+                .id(user.getId())
+                .fullName(user.getFullName())
+                .address(user.getAddress())
+                .phone(user.getPhone())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .isConfirm(user.getIsConfirm())
+                .isDeleted(user.getIsDeleted())
+                .avatar(user.getAvatar())
+                .build();
     }
 
     @Override
@@ -163,6 +170,9 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             user.setIsDeleted(true);
             this.userRepository.saveOrUpdate(user);
+        }
+        else {
+            throw new IllegalArgumentException("Người dùng không tồn tại");
         }
     }
 

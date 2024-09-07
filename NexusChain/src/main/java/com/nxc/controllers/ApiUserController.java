@@ -49,11 +49,7 @@ public class ApiUserController {
     public ResponseEntity<?> registerUser(@ModelAttribute @Valid UserRequestDTO userRequestDTO,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<String> errors = bindingResult.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.toList());
-
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
 
         UserResponseDTO responseDTO = this.userService.registerUser(userRequestDTO);
@@ -62,10 +58,10 @@ public class ApiUserController {
     }
 
     @PatchMapping("/current-user/update")
-    public ResponseEntity<String> updateUser(@RequestBody @Valid UserUpdateRequestDTO userUpdateRequestDTO,
+    public ResponseEntity<?> updateUser(@RequestBody @Valid UserUpdateRequestDTO userUpdateRequestDTO,
             BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>("Co loi xay ra!!!", HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
 
         String username = principal.getName();
@@ -87,7 +83,7 @@ public class ApiUserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody AccountRequestDTO accountRequestDTO) {
+    public ResponseEntity<?> authenticateUser(@RequestBody @Valid AccountRequestDTO accountRequestDTO) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(accountRequestDTO.getUsername(), accountRequestDTO.getPassword())
@@ -129,10 +125,10 @@ public class ApiUserController {
     }
 
     @GetMapping("/{userId}/products")
-    public ResponseEntity<?> findProductsByUserId(@PathVariable Long userId){
+    public ResponseEntity<?> findProductsByUserId(@PathVariable @Valid Long userId){
         List<ProductResponseDTO> products = this.productService.findProductsByUserId(userId);
         if (products.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No products found for this user.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Khong tim thay san pham.");
         }
         return ResponseEntity.ok(products);
     }
